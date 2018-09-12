@@ -1,0 +1,12 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<h1>Not required get param = "name" if empty use default = "World"</h1>
+<h3>@RequestParam(name="name", required=false, defaultValue="World")</h3>
+<p th:text="'Hello, ' + ${name} + '!'" />
+</body>
+</html>

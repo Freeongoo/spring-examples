@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<h1>Display all get params</h1>
+
+    <h2>Iterate by keySet()</h2>
+    <ul>
+        <li th:each="key: ${requestParams.keySet()}">
+            <span th:text="${key}"></span> = <span th:text="${requestParams.get(key)}"></span>
+        </li>
+    </ul>
+
+    <h2>Iterate by key/value</h2>
+    <ul>
+        <li th:each="entry: ${requestParams}">
+            <span th:text="${entry.key}"></span> = <span th:text="${entry.value}"></span>
+        </li>
+    </ul>
+
+</body>
+</html>
