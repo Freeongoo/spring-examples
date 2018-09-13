@@ -7,8 +7,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="gs-serving-web-content" />
+        <module name="routes" />
         <module name="spring-examples" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="routes" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>

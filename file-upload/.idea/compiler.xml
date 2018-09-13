@@ -12,5 +12,8 @@
         <module name="spring-examples" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="file-upload" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>
