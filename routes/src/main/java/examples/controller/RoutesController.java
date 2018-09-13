@@ -9,6 +9,13 @@ import java.util.Map;
 @Controller
 public class RoutesController {
 
+    // return only text - not use template
+    // maps all HTTP operations by default
+    @RequestMapping("/hello")
+    public @ResponseBody String hello() {
+        return "Hello World";
+    }
+
     // GET simple - not params
     @GetMapping("/simple-get")
     public String simpleGet() {
