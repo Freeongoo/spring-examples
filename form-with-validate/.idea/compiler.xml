@@ -11,5 +11,8 @@
         <module name="spring-examples" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="form-with-validate" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>
