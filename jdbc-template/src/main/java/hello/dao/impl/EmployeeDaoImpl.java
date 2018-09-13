@@ -81,7 +81,7 @@ public class EmployeeDaoImpl extends JdbcDaoSupport implements EmployeeDao {
         List<Employee> result = new ArrayList<>();
         for (Map<String, Object> row : rows) {
             Employee emp = new Employee(
-                    toIntExact((Long)row.get("id")),
+                    toIntExact((Integer)row.get("id")),
                     (String)row.get("name"),
                     (String)row.get("email")
             );
