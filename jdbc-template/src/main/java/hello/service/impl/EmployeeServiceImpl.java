@@ -15,26 +15,38 @@ public class EmployeeServiceImpl implements EmployeeService {
     EmployeeDao employeeDao;
 
     @Override
-    public void insertEmployee(Employee employee) {
-        employeeDao.insertEmployee(employee);
+    public void insert(Employee employee) {
+        employeeDao.insert(employee);
     }
 
     @Override
-    public void insertEmployees(List<Employee> employees) {
-        employeeDao.insertEmployees(employees);
-    }
-
-    public void getAllEmployees() {
-        List<Employee> employees = employeeDao.getAllEmployees();
-        for (Employee employee : employees) {
-            System.out.println(employee.toString());
-        }
+    public int insertWithReturnInsertedId(Employee employee) {
+        return employeeDao.insertWithReturnInsertedId(employee);
     }
 
     @Override
-    public void getEmployeeById(String empId) {
-        Employee employee = employeeDao.getEmployeeById(empId);
-        System.out.println(employee);
+    public void insertList(List<Employee> employees) {
+        employeeDao.insertList(employees);
+    }
+
+    @Override
+    public List<Employee> getAll() {
+        return employeeDao.getAll();
+    }
+
+    @Override
+    public Employee getById(int employeeId) {
+        return employeeDao.getById(employeeId);
+    }
+
+    @Override
+    public Employee getByEmail(String email) {
+        return employeeDao.getByEmail(email);
+    }
+
+    @Override
+    public void delete(Employee employee) {
+        employeeDao.delete(employee);
     }
 
 }

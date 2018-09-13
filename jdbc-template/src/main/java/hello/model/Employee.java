@@ -3,32 +3,43 @@ package hello.model;
 import java.util.Objects;
 
 public class Employee {
+    private int id;
+    private String name;
+    private String email;
 
-    private String empId;
-    private String empName;
-
-    public String getEmpId() {
-        return empId;
+    public Employee(String name, String email) {
+        this.name = name;
+        this.email = email;
     }
 
-    public void setEmpId(String empId) {
-        this.empId = empId;
+    public Employee(int id, String name, String email) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
     }
 
-    public String getEmpName() {
-        return empName;
+    public int getId() {
+        return id;
     }
 
-    public void setEmpName(String empName) {
-        this.empName = empName;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    @Override
-    public String toString() {
-        return "Employee{" +
-                "empId='" + empId + '\'' +
-                ", empName='" + empName + '\'' +
-                '}';
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @Override
@@ -36,13 +47,22 @@ public class Employee {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Employee employee = (Employee) o;
-        return Objects.equals(empId, employee.empId) &&
-                Objects.equals(empName, employee.empName);
+        return id == employee.id &&
+                Objects.equals(name, employee.name) &&
+                Objects.equals(email, employee.email);
     }
 
     @Override
     public int hashCode() {
+        return Objects.hash(id, name, email);
+    }
 
-        return Objects.hash(empId, empName);
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                '}';
     }
 }

@@ -5,11 +5,17 @@ import hello.model.Employee;
 import java.util.List;
 
 public interface EmployeeDao {
-    void insertEmployee(Employee cus);
+    void insert(Employee employee);
 
-    void insertEmployees(List<Employee> employees);
+    int insertWithReturnInsertedId(Employee employee);
 
-    List<Employee> getAllEmployees();
+    void insertList(List<Employee> employees);
 
-    Employee getEmployeeById(String empId);
+    List<Employee> getAll();
+
+    Employee getById(int employeeId);
+
+    Employee getByEmail(String email);
+
+    void delete(Employee employee);
 }

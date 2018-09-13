@@ -1,25 +1,34 @@
 package hello.dao.impl;
 
+import hello.dao.EmployeeDao;
+import hello.model.Employee;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
+import org.springframework.jdbc.core.support.JdbcDaoSupport;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Repository;
+
+import javax.annotation.PostConstruct;
+import javax.sql.DataSource;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
-import javax.sql.DataSource;
-
-import hello.dao.EmployeeDao;
-import hello.model.Employee;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BatchPreparedStatementSetter;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.support.JdbcDaoSupport;
-import org.springframework.stereotype.Repository;
+import static java.lang.Math.toIntExact;
 
 @Repository
 public class EmployeeDaoImpl extends JdbcDaoSupport implements EmployeeDao {
+    private final String SQL_SELECT_ALL   = "SELECT * FROM employee";
+    private final String SQL_DELETE_BY_ID   = "DELETE FROM employee WHERE id = ?";
+    private final String SQL_SELECT_BY_ID = "SELECT * FROM employee WHERE id = ?";
+    private final String SQL_SELECT_BY_EMAIL = "SELECT * FROM employee WHERE email = ?";
+    private final String SQL_INSERT_NEW   = "INSERT INTO employee (name, email) VALUES (?, ?)";
 
     private final DataSource dataSource;
 
@@ -34,22 +43,30 @@ public class EmployeeDaoImpl extends JdbcDaoSupport implements EmployeeDao {
     }
 
     @Override
-    public void insertEmployee(Employee emp) {
-        String sql = "INSERT INTO employee " +
-                "(empId, empName) VALUES (?, ?)" ;
-        getJdbcTemplate().update(sql, new Object[]{
-                emp.getEmpId(), emp.getEmpName()
-        });
+    public void insert(Employee employee) {
+        getJdbcTemplate().update(SQL_INSERT_NEW, employee.getName(), employee.getEmail());
     }
 
     @Override
-    public void insertEmployees(final List<Employee> employees) {
-        String sql = "INSERT INTO employee " + "(empId, empName) VALUES (?, ?)";
-        getJdbcTemplate().batchUpdate(sql, new BatchPreparedStatementSetter() {
+    public int insertWithReturnInsertedId(Employee employee) {
+        KeyHolder key = new GeneratedKeyHolder();
+        getJdbcTemplate().update(connection -> {
+            final PreparedStatement ps = connection.prepareStatement(SQL_INSERT_NEW, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, employee.getName());
+            ps.setString(2, employee.getEmail());
+            return ps;
+        }, key);
+
+        return key.getKey().intValue();
+    }
+
+    @Override
+    public void insertList(final List<Employee> employees) {
+        getJdbcTemplate().batchUpdate(SQL_INSERT_NEW, new BatchPreparedStatementSetter() {
             public void setValues(PreparedStatement ps, int i) throws SQLException {
                 Employee employee = employees.get(i);
-                ps.setString(1, employee.getEmpId());
-                ps.setString(2, employee.getEmpName());
+                ps.setString(1, employee.getName());
+                ps.setString(2, employee.getEmail());
             }
 
             public int getBatchSize() {
@@ -59,15 +76,16 @@ public class EmployeeDaoImpl extends JdbcDaoSupport implements EmployeeDao {
 
     }
     @Override
-    public List<Employee> getAllEmployees(){
-        String sql = "SELECT * FROM employee";
-        List<Map<String, Object>> rows = getJdbcTemplate().queryForList(sql);
+    public List<Employee> getAll(){
+        List<Map<String, Object>> rows = getJdbcTemplate().queryForList(SQL_SELECT_ALL);
 
-        List<Employee> result = new ArrayList<Employee>();
-        for(Map<String, Object> row:rows){
-            Employee emp = new Employee();
-            emp.setEmpId((String)row.get("empId"));
-            emp.setEmpName((String)row.get("empName"));
+        List<Employee> result = new ArrayList<>();
+        for (Map<String, Object> row : rows) {
+            Employee emp = new Employee(
+                    toIntExact((Long)row.get("id")),
+                    (String)row.get("name"),
+                    (String)row.get("email")
+            );
             result.add(emp);
         }
 
@@ -75,16 +93,37 @@ public class EmployeeDaoImpl extends JdbcDaoSupport implements EmployeeDao {
     }
 
     @Override
-    public Employee getEmployeeById(String empId) {
-        String sql = "SELECT * FROM employee WHERE empId = ?";
-        return (Employee)getJdbcTemplate().queryForObject(sql, new Object[]{empId}, new RowMapper<Employee>(){
-            @Override
-            public Employee mapRow(ResultSet rs, int rwNumber) throws SQLException {
-                Employee emp = new Employee();
-                emp.setEmpId(rs.getString("empId"));
-                emp.setEmpName(rs.getString("empName"));
-                return emp;
-            }
-        });
+    public Employee getById(int employeeId) {
+        try {
+            return getEmployeeQueryForObject(SQL_SELECT_BY_ID, new Object[]{employeeId});
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public Employee getByEmail(String email) {
+        try {
+            return getEmployeeQueryForObject(SQL_SELECT_BY_EMAIL, new Object[]{email});
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public void delete(Employee employee) {
+        getJdbcTemplate().update(SQL_DELETE_BY_ID, employee.getId());
+    }
+
+    private Employee getEmployeeQueryForObject(String sql, @Nullable Object[] args) {
+        return getJdbcTemplate().queryForObject(
+                sql,
+                args,
+                (rs, rwNumber) -> new Employee(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("email")
+                )
+        );
     }
 }
