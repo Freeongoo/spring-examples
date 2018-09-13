@@ -1,6 +1,7 @@
 package hello.dao.impl;
 
 import hello.AppConfig;
+import hello.dao.EmployeeDao;
 import hello.model.Employee;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,30 +26,32 @@ import static org.junit.Assert.assertThat;
 })
 public class EmployeeDaoImplTest {
     @Autowired
-    EmployeeDaoImpl employeeDao;
+    EmployeeDao employeeDao;
 
     @Test
-    public void insertWithReturnInsertedId_WhenFirstEmployeeInsert() {
+    public void insert_WhenOneEmployee() {
         int expectedId = 1;
-        int expectedEmployeesCount = 1;
-        Employee newEmployee = new Employee("dd", "email@email.com");
+        Employee expectedEmployee = new Employee("dd", "email@email.com");
+
+        List<Employee> expectedList = new ArrayList<>();
+        expectedList.add(expectedEmployee);
 
         // check inserted id
-        int insertedId = employeeDao.insertWithReturnInsertedId(newEmployee);
-        assertThat(expectedId, equalTo(insertedId));
+        int insertedId = employeeDao.insertWithReturnInsertedId(expectedEmployee);
+        assertThat(insertedId, equalTo(expectedId));
 
         // check employee object
-        newEmployee.setId(insertedId); // need because when insert not need pass id - id autoincrement
-        Employee employeeExpected = employeeDao.getById(insertedId);
-        assertThat(newEmployee, equalTo(employeeExpected));
+        expectedEmployee.setId(insertedId); // need because when insert not need pass id - id autoincrement
+        Employee employeeActual = employeeDao.getById(insertedId);
+        assertThat(employeeActual, equalTo(expectedEmployee));
 
         // check all employees;
         List<Employee> list = employeeDao.getAll();
-        assertThat(expectedEmployeesCount, equalTo(list.size()));
+        assertThat(list, containsInAnyOrder(expectedList.toArray()));
     }
 
     @Test
-    public void insertWithReturnInsertedId_WhenTwoEmployeesInserted() {
+    public void insert_WhenTwoEmployees() {
         int expectedId = 2;
 
         Employee employee1 = new Employee(1, "dd", "email@email.com");
@@ -63,15 +66,15 @@ public class EmployeeDaoImplTest {
 
         // check inserted id
         int secondInsertedId = employeeDao.insertWithReturnInsertedId(employee2);
-        assertThat(expectedId, equalTo(secondInsertedId));
+        assertThat(secondInsertedId, equalTo(expectedId));
 
         // check all employees;
         List<Employee> list = employeeDao.getAll();
-        assertThat(expectedList, containsInAnyOrder(list.toArray()));
+        assertThat(list, containsInAnyOrder(expectedList.toArray()));
     }
 
     @Test(expected = DuplicateKeyException.class)
-    public void insertWithReturnInsertedId_WhenInsertSameEmails() {
+    public void insert_WhenSameEmails() {
         Employee employee1 = new Employee(1, "dd", "email@email.com");
         Employee employee2 = new Employee(2, "dd2", "email@email.com");
 
