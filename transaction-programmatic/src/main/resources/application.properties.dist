@@ -1,0 +1,4 @@
+spring.datasource.url=jdbc:mysql://localhost/jdbc?verifyServerCertificate=false&useSSL=true
+spring.datasource.username=root
+spring.datasource.password=********
+spring.datasource.platform=mysql
