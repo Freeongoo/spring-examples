@@ -3,7 +3,6 @@ package hello.dao.impl;
 import hello.dao.EmployeeDao;
 import hello.model.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -94,20 +93,12 @@ public class EmployeeDaoImpl extends JdbcDaoSupport implements EmployeeDao {
 
     @Override
     public Employee getById(int employeeId) {
-        try {
-            return getEmployeeQueryForObject(SQL_SELECT_BY_ID, new Object[]{employeeId});
-        } catch (EmptyResultDataAccessException e) {
-            return null;
-        }
+        return getEmployeeQueryForObject(SQL_SELECT_BY_ID, new Object[]{employeeId});
     }
 
     @Override
     public Employee getByEmail(String email) {
-        try {
-            return getEmployeeQueryForObject(SQL_SELECT_BY_EMAIL, new Object[]{email});
-        } catch (EmptyResultDataAccessException e) {
-            return null;
-        }
+        return getEmployeeQueryForObject(SQL_SELECT_BY_EMAIL, new Object[]{email});
     }
 
     @Override

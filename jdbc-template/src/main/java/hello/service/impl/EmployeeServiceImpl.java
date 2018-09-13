@@ -6,6 +6,7 @@ import hello.dao.EmployeeDao;
 import hello.model.Employee;
 import hello.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -36,12 +37,20 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee getById(int employeeId) {
-        return employeeDao.getById(employeeId);
+        try {
+            return employeeDao.getById(employeeId);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     @Override
     public Employee getByEmail(String email) {
-        return employeeDao.getByEmail(email);
+        try {
+            return employeeDao.getByEmail(email);
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     @Override
