@@ -1,6 +1,7 @@
-package com.concretepage.controller;
+package hello.controller;
 import java.util.List;
 
+import hello.entity.Article;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -15,8 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.concretepage.entity.Article;
-import com.concretepage.service.IArticleService;
+import hello.service.IArticleService;
 
 @Controller
 @RequestMapping("user")

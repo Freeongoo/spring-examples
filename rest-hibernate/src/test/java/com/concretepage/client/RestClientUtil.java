@@ -9,7 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-import com.concretepage.entity.Article;
+import hello.entity.Article;
 
 public class RestClientUtil {
     public void getArticleByIdDemo() {

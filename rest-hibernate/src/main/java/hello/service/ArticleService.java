@@ -1,12 +1,12 @@
-package com.concretepage.service;
+package hello.service;
 
 import java.util.List;
 
+import hello.dao.IArticleDAO;
+import hello.entity.Article;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.concretepage.dao.IArticleDAO;
-import com.concretepage.entity.Article;
 @Service
 public class ArticleService implements IArticleService {
 	@Autowired
