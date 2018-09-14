@@ -16,7 +16,7 @@ public class RestClientUtil {
     	HttpHeaders headers = new HttpHeaders();
     	headers.setContentType(MediaType.APPLICATION_JSON);
         RestTemplate restTemplate = new RestTemplate();
-	    String url = "http://localhost:8080/user/article/{id}";
+	    String url = "http://localhost:8080/articles/{id}";
         HttpEntity<String> requestEntity = new HttpEntity<String>(headers);
         ResponseEntity<Article> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, Article.class, 1);
         Article article = responseEntity.getBody();
@@ -27,7 +27,7 @@ public class RestClientUtil {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
         RestTemplate restTemplate = new RestTemplate();
-	    String url = "http://localhost:8080/user/articles";
+	    String url = "http://localhost:8080/articles";
         HttpEntity<String> requestEntity = new HttpEntity<String>(headers);
         ResponseEntity<Article[]> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, Article[].class);
         Article[] articles = responseEntity.getBody();
@@ -40,7 +40,7 @@ public class RestClientUtil {
     	HttpHeaders headers = new HttpHeaders();
     	headers.setContentType(MediaType.APPLICATION_JSON);
         RestTemplate restTemplate = new RestTemplate();
-	    String url = "http://localhost:8080/user/article";
+	    String url = "http://localhost:8080/articles";
 	    Article objArticle = new Article();
 	    objArticle.setTitle("Spring REST Security using Hibernate2");
 	    objArticle.setCategory("Spring2");
@@ -52,7 +52,7 @@ public class RestClientUtil {
     	HttpHeaders headers = new HttpHeaders();
     	headers.setContentType(MediaType.APPLICATION_JSON);
         RestTemplate restTemplate = new RestTemplate();
-	    String url = "http://localhost:8080/user/article";
+	    String url = "http://localhost:8080/articles";
 	    Article objArticle = new Article();
 	    objArticle.setArticleId(2);
 	    objArticle.setTitle("Update:Java Concurrency");
@@ -64,7 +64,7 @@ public class RestClientUtil {
     	HttpHeaders headers = new HttpHeaders();
     	headers.setContentType(MediaType.APPLICATION_JSON);
         RestTemplate restTemplate = new RestTemplate();
-	    String url = "http://localhost:8080/user/article/{id}";
+	    String url = "http://localhost:8080/articles/{id}";
         HttpEntity<Article> requestEntity = new HttpEntity<Article>(headers);
         restTemplate.exchange(url, HttpMethod.DELETE, requestEntity, Void.class, 4);        
     }

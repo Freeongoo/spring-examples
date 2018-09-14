@@ -1,61 +1,53 @@
 package hello.controller;
-import java.util.List;
 
 import hello.entity.Article;
+import hello.service.IArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import hello.service.IArticleService;
+import java.util.List;
 
 @Controller
-@RequestMapping("user")
 public class ArticleController {
 	@Autowired
 	private IArticleService articleService;
 
-	@GetMapping("article/{id}")
+	@GetMapping("articles/{id}")
 	public ResponseEntity<Article> getArticleById(@PathVariable("id") Integer id) {
 		Article article = articleService.getArticleById(id);
-		return new ResponseEntity<Article>(article, HttpStatus.OK);
+		return new ResponseEntity<>(article, HttpStatus.OK);
 	}
 
 	@GetMapping("articles")
 	public ResponseEntity<List<Article>> getAllArticles() {
 		List<Article> list = articleService.getAllArticles();
-		return new ResponseEntity<List<Article>>(list, HttpStatus.OK);
+		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 
-	@PostMapping("article")
+	@PostMapping("articles")
 	public ResponseEntity<Void> addArticle(@RequestBody Article article, UriComponentsBuilder builder) {
-        boolean flag = articleService.addArticle(article);
-        if (flag == false) {
-        	return new ResponseEntity<Void>(HttpStatus.CONFLICT);
-        }
+        if (!articleService.addArticle(article))
+        	return new ResponseEntity<>(HttpStatus.CONFLICT);
+
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(builder.path("/article/{id}").buildAndExpand(article.getArticleId()).toUri());
-        return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+        return new ResponseEntity<>(headers, HttpStatus.CREATED);
 	}
 
-	@PutMapping("article")
+	@PutMapping("articles")
 	public ResponseEntity<Article> updateArticle(@RequestBody Article article) {
 		articleService.updateArticle(article);
-		return new ResponseEntity<Article>(article, HttpStatus.OK);
+		return new ResponseEntity<>(article, HttpStatus.OK);
 	}
 
-	@DeleteMapping("article/{id}")
+	@DeleteMapping("articles/{id}")
 	public ResponseEntity<Void> deleteArticle(@PathVariable("id") Integer id) {
 		articleService.deleteArticle(id);
-		return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}	
 } 
