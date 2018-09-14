@@ -1,5 +1,7 @@
 package examples.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import examples.model.Employee;
 import examples.service.EmployeeService;
 import org.junit.Test;
@@ -15,8 +17,11 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyObject;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -86,6 +91,31 @@ public class RestControllerEmployeeTest {
                 .andExpect(jsonPath("$[1].id", is(id2)))
                 .andExpect(jsonPath("$[1].name", is(name2)))
                 .andExpect(jsonPath("$[1].email", is(email2)));
+    }
+
+    @Test
+    public void createEmployee() throws Exception {
+        int id = 1;
+        String name = "Aha";
+        String email = "aha@mail.com";
+        Employee expectedEmployee = new Employee(id, name, email);
+
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        String json = ow.writeValueAsString(expectedEmployee);
+
+        when(service.create(any())).thenReturn(1);
+
+        this.mockMvc.perform(post("/employees")
+                .contentType("application/json;charset=UTF-8")
+                .content(json))
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    public void createEmployee_WhenNotPassedData() throws Exception {
+        this.mockMvc.perform(post("/employees")
+                .contentType("application/json;charset=UTF-8"))
+                .andExpect(status().isBadRequest());
     }
 
     @Test

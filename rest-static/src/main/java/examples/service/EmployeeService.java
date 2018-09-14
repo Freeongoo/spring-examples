@@ -9,4 +9,6 @@ public interface EmployeeService {
     Employee getById(int id);
 
     List<Employee> getAll();
+
+    int create(Employee employee);
 }

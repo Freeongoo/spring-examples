@@ -26,4 +26,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         return employeeList;
     }
+
+    @Override
+    public int create(Employee employee) {
+        return 1;
+    }
 }
