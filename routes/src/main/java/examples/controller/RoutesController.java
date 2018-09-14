@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @Controller
+// @RequestMapping("api/v1") - add if need additionally add prefix for all routes in current controller
 public class RoutesController {
 
     // return only text - not use template
