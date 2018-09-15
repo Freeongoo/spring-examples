@@ -1,13 +1,12 @@
 package hello.dao;
 
-import java.util.List;
+import hello.entity.Article;
+import org.springframework.stereotype.Repository;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-import hello.entity.Article;
+import java.util.List;
 
-@Transactional
 @Repository
 public class ArticleDAO implements IArticleDAO {
 	@PersistenceContext	
