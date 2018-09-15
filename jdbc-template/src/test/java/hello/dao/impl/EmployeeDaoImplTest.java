@@ -1,6 +1,5 @@
 package hello.dao.impl;
 
-import hello.AppConfig;
 import hello.dao.EmployeeDao;
 import hello.model.Employee;
 import org.junit.Test;
@@ -10,7 +9,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +18,8 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.assertThat;
 
-@ContextConfiguration(classes = AppConfig.class)
-@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = EmployeeDaoImplTestConfig.class)
+@RunWith(SpringRunner.class)
 @SqlGroup({
     @Sql("/db.sql"),
 })

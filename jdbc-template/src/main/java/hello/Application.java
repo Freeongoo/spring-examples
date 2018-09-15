@@ -3,23 +3,24 @@ package hello;
 import hello.model.Employee;
 import hello.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ConfigurableApplicationContext;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootApplication
-public class Application {
+public class Application implements CommandLineRunner {
     @Autowired
     EmployeeService employeeService;
 
     public static void main(String[] args) {
-        ApplicationContext context = SpringApplication.run(Application.class, args);
-        EmployeeService employeeService = context.getBean(EmployeeService.class);
+        SpringApplication.run(Application.class, args);
+    }
 
+    @Override
+    public void run(String... args) throws Exception {
         // create new and get from inserted id
         Employee employee = new Employee("Free", "test@test.com");
         int insertedId = employeeService.insertWithReturnInsertedId(employee);
@@ -49,7 +50,5 @@ public class Application {
         // show all employees
         List<Employee> list = employeeService.getAll();
         list.forEach(System.out::println);
-
-        ((ConfigurableApplicationContext) context).close();
     }
 }
