@@ -23,11 +23,11 @@ import static java.lang.Math.toIntExact;
 
 @Repository
 public class EmployeeDaoImpl extends JdbcDaoSupport implements EmployeeDao {
-    private final String SQL_SELECT_ALL   = "SELECT * FROM employee";
-    private final String SQL_DELETE_BY_ID   = "DELETE FROM employee WHERE id = ?";
-    private final String SQL_SELECT_BY_ID = "SELECT * FROM employee WHERE id = ?";
+    private final String SQL_SELECT_ALL      = "SELECT * FROM employee";
+    private final String SQL_DELETE_BY_ID    = "DELETE FROM employee WHERE id = ?";
+    private final String SQL_SELECT_BY_ID    = "SELECT * FROM employee WHERE id = ?";
     private final String SQL_SELECT_BY_EMAIL = "SELECT * FROM employee WHERE email = ?";
-    private final String SQL_INSERT_NEW   = "INSERT INTO employee (name, email) VALUES (?, ?)";
+    private final String SQL_INSERT_NEW      = "INSERT INTO employee (name, email) VALUES (?, ?)";
 
     private final DataSource dataSource;
 
