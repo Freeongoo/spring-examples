@@ -4,10 +4,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 @Controller
-// @RequestMapping("api/v1") - add if need additionally add prefix for all routes in current controller
+// @RequestMapping("/api/v1") - add if need additionally add prefix for all routes in current controller
 public class RoutesController {
 
     // return only text - not use template
@@ -21,6 +23,23 @@ public class RoutesController {
     @GetMapping("/simple-get")
     public String simpleGet() {
         return "simple-get";
+    }
+
+    // cookie
+
+    @RequestMapping(value = "/cookie", method = RequestMethod.GET)
+    public String cookie(@CookieValue("name") String name, Model model) {
+        model.addAttribute("name", name);
+        return "cookie";
+    }
+
+    @RequestMapping(value = "/set-cookie", method = RequestMethod.GET)
+    public @ResponseBody String cookie(@RequestParam(name="name") String name, @RequestParam(name="value") String value, HttpServletResponse response) {
+        Cookie foo = new Cookie(name, value); //bake cookie
+        foo.setMaxAge(1000); //set expire time to 1000 sec
+
+        response.addCookie(foo); //put cookie in response
+        return "cookie created";
     }
 
     // GET simple - not params - use @RequestMapping
@@ -40,7 +59,6 @@ public class RoutesController {
     public String simpleFormForDisplayPost() {
         return "simple-form-for-display-post";
     }
-
 
     // GET with param - "new"
     // example /only-get-param?new

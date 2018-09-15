@@ -8,18 +8,25 @@
     <h1>Welcome to learn routes in Spring!</h1>
     <ul>
         <li><a href="/static.html">Static html file - not route, not controller</a></li>
+        <li>&nbsp;</li>
         <li><a href="/hello">Return string without template</a></li>
+        <li>&nbsp;</li>
         <li><a href="/simple-get">simple-get</a></li>
         <li><a href="/only-get">only-get</a></li>
         <li><a href="/only-get-param?new">only-get-param</a></li>
         <li><a href="/post">POST route - not available by get - use form below for display</a></li>
         <li><a href="/simple-form-for-display-post">simple-form-for-display-post</a></li>
+        <li>&nbsp;</li>
+        <li><a href="/cookie">Show url if set cookie "name", see below for set cookie</a></li>
+        <li><a href="/set-cookie?name=name&value=cookieValue">Set cookie "name" and value = "cookieValue"</a></li>
+        <li>&nbsp;</li>
         <li><a href="/with-required-get-params?name=vasya">with-required-get-params</a></li>
         <li><a href="/with-not-required-get-params">with-not-required-get-params</a></li>
         <li><a href="/with-not-required-get-params?name=petya">with-not-required-get-params (params)</a></li>
         <li><a href="/with-two-not-required-and-not-required-get-params?name=petya&age=20">two get params</a></li>
         <li><a href="/display-all-get-params?name=petya&data=trulala&apa=opa">Display all get params</a></li>
         <li><a href="/display-get-params?name=petya&age=22">Display get params</a></li>
+        <li>&nbsp;</li>
         <li><a href="/owners/123">URI Template Patterns - param in url</a></li>
         <li><a href="/owners/123/pets/432">URI Template Patterns - two params in url</a></li>
     </ul>
