@@ -8,9 +8,6 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-/**
- * Created by rajeevkumarsingh on 21/11/17.
- */
 @Entity
 @Table(name = "comments")
 public class Comment extends AuditModel {
@@ -23,8 +20,13 @@ public class Comment extends AuditModel {
     private String text;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "post_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "post_id", nullable = false) // use separate field "post_id" for connect
+    // @PrimaryKeyJoinColumn for use primary key Post for connect
+    // @JoinTable(name = "comment_post",
+    //     joinColumns = @JoinColumn(name="comment_id"),
+    //     inverseJoinColumns = @JoinColumn(name="post_id")
+    // )
     @JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
     @JsonIdentityReference(alwaysAsId=true)
     @JsonProperty("post_id")
