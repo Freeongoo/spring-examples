@@ -1,0 +1,13 @@
+# DATASOURCE (DataSourceAutoConfiguration & DataSourceProperties)
+spring.datasource.url=jdbc:mysql://localhost:3306/manytomany?verifyServerCertificate=false&useSSL=true
+spring.datasource.username=root
+spring.datasource.password=root
+
+spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.MySQL5InnoDBDialect
+spring.jpa.properties.hibernate.id.new_generator_mappings = false
+spring.jpa.properties.hibernate.format_sql = true
+spring.jpa.hibernate.ddl-auto = create-drop
+spring.jpa.show-sql = true
+
+logging.level.org.hibernate.SQL = DEBUG
+
