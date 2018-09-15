@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -18,13 +19,10 @@ import java.util.List;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyObject;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(RestControllerEmployee.class)
@@ -57,7 +55,7 @@ public class RestControllerEmployeeTest {
 
         this.mockMvc.perform(get("/employees/" + id))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json;charset=UTF-8"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("id", is(1)))
                 .andExpect(jsonPath("name", is(name)))
                 .andExpect(jsonPath("email", is(email)));
@@ -83,7 +81,7 @@ public class RestControllerEmployeeTest {
 
         this.mockMvc.perform(get("/employees/"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json;charset=UTF-8"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].id", is(id1)))
                 .andExpect(jsonPath("$[0].name", is(name1)))
@@ -106,7 +104,7 @@ public class RestControllerEmployeeTest {
         when(service.create(any())).thenReturn(1);
 
         this.mockMvc.perform(post("/employees")
-                .contentType("application/json;charset=UTF-8")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(json))
                 .andExpect(status().isCreated());
     }
@@ -114,7 +112,7 @@ public class RestControllerEmployeeTest {
     @Test
     public void createEmployee_WhenNotPassedData() throws Exception {
         this.mockMvc.perform(post("/employees")
-                .contentType("application/json;charset=UTF-8"))
+                .contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isBadRequest());
     }
 
