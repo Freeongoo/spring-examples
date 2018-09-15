@@ -4,7 +4,7 @@
 	
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.concretepage</groupId>
-	<artifactId>jpa-one-to-many</artifactId>
+	<artifactId>jpa-one-to-many-bidirectional</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>spring-demo</name>

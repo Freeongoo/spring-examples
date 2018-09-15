@@ -36,12 +36,13 @@ public class ApplicationConsole implements CommandLineRunner {
         Comment comment2 = new Comment("Really helpful Post. Thanks a lot!");
         comment2.setPost(post);
 
+        post.getComments().add(comment1);
+        post.getComments().add(comment2);
+
         comment1.setPost(post);
         comment2.setPost(post);
 
         postRepository.save(post);
-        commentRepository.save(comment1);
-        commentRepository.save(comment2);
     }
 
 }
