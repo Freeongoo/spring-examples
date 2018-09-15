@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/jpa-one-to-many.iml" filepath="$PROJECT_DIR$/jpa-one-to-many.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jpa-one-to-many-unidirectional.iml" filepath="$PROJECT_DIR$/jpa-one-to-many-unidirectional.iml" />
     </modules>
   </component>
 </project>
