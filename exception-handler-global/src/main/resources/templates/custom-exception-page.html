@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+    <h1>Custom page exception</h1>
+    <h2>Handle by GlobalControllerExceptionHandler by @ControllerAdvice</h2>
+    <p>exception occurred</p>
+    <p th:if="${url}">
+        <b>Page:</b> <span th:text="${url}">Page URL</span>
+    </p>
+
+    <div th:if="${ex} or ${exception} or (${message} and ${message.length() != 0})">
+        <b>Cause:</b> <span th:if="${ex}" th:text="${ex}">exception ...</span>
+        <span th:if="${exception}" th:text="${exception}">exception ...</span>
+        <span th:if="${message} and ${message.length() != 0}"
+              th:text="${message}">message ...</span>
+        <blockquote>
+            <i>Note: You would never generate a page that displays a Java
+                exception to an end-user in a real application</i>
+        </blockquote>
+    </div>
+
+    <div th:if="${ex_trace}">
+        <b>Exception trace:</b>
+        <pre th:text="${ex_trace}"></pre>
+    </div>
+</body>
+</html>

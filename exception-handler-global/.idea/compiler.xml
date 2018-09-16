@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="exception-handler-controller" />
+        <module name="exception-handler-global" />
+        <module name="gs-serving-web-content" />
+        <module name="logging" />
+        <module name="routes" />
+        <module name="spring-examples" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="exception-handler-controller" target="1.8" />
+      <module name="exception-handler-global" target="1.8" />
+      <module name="logging" target="1.8" />
+      <module name="routes" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

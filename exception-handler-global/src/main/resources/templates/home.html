@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+    <h1>Welcome to handle exception in controller with @ExceptionHandler</h1>
+    <ul>
+        <li>
+            <a href="/some-exception-unchecked">
+                Handle unchecked exception, handle local controller handler with only logging - nothing happenings. See logs
+            </a>
+        </li>
+        <li>
+            <a href="/some-exception-checked">
+                Handle by GlobalControllerExceptionHandler
+            </a>
+        </li>
+        <li>
+            <a href="/other-exception-unchecked-with-status">
+                Handle by spring default global handler - because set @ResponseStatus. See logic in GlobalControllerExceptionHandler
+            </a>
+        </li>
+        <li>
+            <a href="/exception-custom-page">
+                Handle by GlobalControllerExceptionHandler
+            </a>
+        </li>
+        <li>
+            <a href="/exception-custom-page-response-entity">
+                Handle by GlobalControllerExceptionHandler
+            </a>
+        </li>
+    </ul>
+</body>
+</html>
