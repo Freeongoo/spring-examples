@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @ControllerAdvice
 public class GlobalControllerExceptionHandler {
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(ExceptionHandlingController.class);
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(GlobalControllerExceptionHandler.class);
 
 
     // handle for all exception
