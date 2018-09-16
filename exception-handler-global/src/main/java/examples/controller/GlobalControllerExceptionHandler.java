@@ -18,6 +18,8 @@ public class GlobalControllerExceptionHandler {
     // handle for all exception
     // except exception with annotation @ResponseStatus - handle by spring exception handler
     @ExceptionHandler(value = Exception.class)
+    // we can set only some exceptions:
+    // @ExceptionHandler(ThereIsNoSuchUserException.class)
     public ModelAndView
     defaultErrorHandler(HttpServletRequest req, Exception e) throws Exception {
         // If the exception is annotated with @ResponseStatus rethrow it and let
