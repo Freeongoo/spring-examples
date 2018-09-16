@@ -1,12 +1,10 @@
 package examples.controller;
 
-import examples.exception.CheckedException;
-import examples.exception.OtherOtherRuntimeException;
-import examples.exception.OtherRuntimeException;
-import examples.exception.SomeRuntimeException;
+import examples.exception.*;
 import examples.util.ExceptionUtil;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -70,7 +68,7 @@ public class ExceptionHandlingController {
     }
 
     // handle exception SomeRuntimeException - logging
-    // and show custom exception page
+    // and show custom exception page template
     @ExceptionHandler(OtherOtherRuntimeException.class)
     public ModelAndView handleOtherOtherRuntimeException(HttpServletRequest req, Exception ex) {
         logger.error("Request: " + req.getRequestURL() + " raised " + ex);
@@ -84,5 +82,19 @@ public class ExceptionHandlingController {
         modelAndView.addObject("ex_trace", stacktrace);
 
         return modelAndView;
+    }
+
+
+    // Unchecked exception
+    @RequestMapping("/exception-custom-page-response-entity")
+    public void throwInfoRuntimeException() {
+        throw new InfoRuntimeException("info exception");
+    }
+
+    // handle exception SomeRuntimeException - logging
+    // and show custom exception page template
+    @ExceptionHandler(InfoRuntimeException.class)
+    public ResponseEntity<?> handleInfoRuntimeException(HttpServletRequest req, Exception ex) {
+        return new ResponseEntity<>(ex, HttpStatus.NOT_FOUND);
     }
 }
