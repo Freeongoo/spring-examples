@@ -27,7 +27,7 @@ public class Post extends AuditModel {
     private String content;
 
     @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER,
+            fetch = FetchType.LAZY,
             mappedBy = "post")
     private Set<Comment> comments = new HashSet<>();
 
