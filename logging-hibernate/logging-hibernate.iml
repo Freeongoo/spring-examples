@@ -105,5 +105,7 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-jcl:5.0.7.RELEASE" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework:spring-test:5.0.7.RELEASE" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.xmlunit:xmlunit-core:2.5.1" level="project" />
+    <orderEntry type="library" name="Maven: p6spy:p6spy:3.7.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: com.h2database:h2:1.4.197" level="project" />
   </component>
 </module>

@@ -1,4 +1,6 @@
+/app.log
 /src/main/resources/application.properties
+/src/main/resources/spy.properties
 /target
 /node_modules
 .gradle
