@@ -3,6 +3,7 @@ package examples;
 import examples.model.User;
 import examples.service.GitHubLookupCompletableFutureService;
 import examples.service.SimpleVoidService;
+import examples.service.UserCreatorFutureService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -11,6 +12,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 @SpringBootApplication
 @EnableAsync
@@ -20,10 +23,16 @@ public class ApplicationConsole implements CommandLineRunner {
 
     private final GitHubLookupCompletableFutureService gitHubLookupCompletableFutureService;
     private final SimpleVoidService simpleVoidService;
+    private final UserCreatorFutureService userCreatorFutureService;
 
-    public ApplicationConsole(GitHubLookupCompletableFutureService gitHubLookupCompletableFutureService, SimpleVoidService simpleVoidService) {
+    public ApplicationConsole(
+            GitHubLookupCompletableFutureService gitHubLookupCompletableFutureService,
+            SimpleVoidService simpleVoidService,
+            UserCreatorFutureService userCreatorFutureService
+    ) {
         this.simpleVoidService = simpleVoidService;
         this.gitHubLookupCompletableFutureService = gitHubLookupCompletableFutureService;
+        this.userCreatorFutureService = userCreatorFutureService;
     }
 
     public static void main(String[] args) {
@@ -33,8 +42,8 @@ public class ApplicationConsole implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         runVoidAsync();
-
         checkGitHubWithCompletableFuture();
+        createAndReturnUserTest();
     }
 
     // run and forget - nothing return :)
@@ -61,5 +70,18 @@ public class ApplicationConsole implements CommandLineRunner {
         logger.info("--> " + page1.get());
         logger.info("--> " + page2.get());
         logger.info("--> " + page3.get());
+    }
+
+    private void createAndReturnUserTest() throws ExecutionException, InterruptedException {
+        // Start the clock
+        long start = System.currentTimeMillis();
+        Future<User> futureUser = userCreatorFutureService.createAndReturnUser();
+
+        // wait until get user
+        User user = futureUser.get();
+
+        // Print results, including elapsed time
+        logger.info("Elapsed time: " + (System.currentTimeMillis() - start));
+        logger.info("Created user --> " + user);
     }
 }

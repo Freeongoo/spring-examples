@@ -9,8 +9,9 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import java.util.concurrent.Executor;
 
 // Global config executor but rewriting by local method set @see SimpleVoidService
+// if not set executor for method like this: @Async("localThreadPoolTaskExecutor") then run this global executor
 @Configuration
-public class AsyncConfig implements AsyncConfigurer {
+public class GlobalAsyncConfig implements AsyncConfigurer {
 
     @Override
     public Executor getAsyncExecutor() {
@@ -18,7 +19,7 @@ public class AsyncConfig implements AsyncConfigurer {
         executor.setCorePoolSize(7);
         executor.setMaxPoolSize(42);
         executor.setQueueCapacity(11);
-        executor.setThreadNamePrefix("MyExecutor-");
+        executor.setThreadNamePrefix("GlobExecutor-");
         executor.initialize();
         return executor;
     }
