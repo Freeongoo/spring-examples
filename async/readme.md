@@ -17,10 +17,10 @@ By default, Spring uses a SimpleAsyncTaskExecutor to actually run these methods 
 
 ### Config by application level
 
-See AsyncConfig.java
+See GlobalAsyncConfig.java
 
 Set type of executor and config. And set exception handler for Exception Async
 
 ### Config by method level
 
-See SimpleVoidService
+See local config LocalAsyncConfig.java and see SimpleVoidService.java how to use

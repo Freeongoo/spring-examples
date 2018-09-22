@@ -41,8 +41,11 @@ public class ApplicationConsole implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        // run void async with local config executor
         runVoidAsync();
+        // run async with CompletableFuture
         checkGitHubWithCompletableFuture();
+        // run async with Future
         createAndReturnUserTest();
     }
 
