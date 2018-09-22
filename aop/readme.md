@@ -18,3 +18,8 @@ See tests for understand how aspects in spring work.
 ```
 "execution(* example.aop.method.User.getPassword())"
 ```
+
+* For annotation "RangeValidate"
+```
+"@annotation(example.customannotation.RangeValidate)"
+```
