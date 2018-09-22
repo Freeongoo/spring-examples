@@ -24,8 +24,8 @@ public class LoggingDeveloperAspect {
 
     @After("selectAllMethodsAvailable()")
     public void afterAdvice(JoinPoint joinPoint) {
-        logger.info("Inside beforeAdvice() method...");
-        logger.info("@Before : " + joinPoint.getSignature().getName());
+        logger.info("Inside afterAdvice() method...");
+        logger.info("@After : " + joinPoint.getSignature().getName());
     }
 
     @AfterReturning(pointcut = "selectAllMethodsAvailable()", returning = "someValue")
