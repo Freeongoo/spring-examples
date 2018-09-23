@@ -17,8 +17,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
-                .antMatchers("/", "/home").permitAll()
-                .anyRequest().authenticated()
+                .antMatchers("/", "/home")
+                .permitAll()
+            .antMatchers("/admin")
+                .hasRole("ADMIN")
+            .anyRequest()
+                .authenticated()
                 .and()
             .formLogin()
                 .loginPage("/login")
@@ -26,6 +30,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
             .logout()
                 .permitAll();
+
+        // for handle 403 when not access
+        http.exceptionHandling().accessDeniedPage("/403");
     }
 
     @Bean
@@ -38,6 +45,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .roles("USER")
                 .build();
 
-        return new InMemoryUserDetailsManager(user);
+        UserDetails userAdmin =
+            User.withDefaultPasswordEncoder()
+                .username("admin")
+                .password("password")
+                .roles("ADMIN")
+                .build();
+
+        return new InMemoryUserDetailsManager(user, userAdmin);
     }
 }
