@@ -1,11 +1,19 @@
 package hello.model;
 
+import org.springframework.stereotype.Component;
+
 import java.util.Objects;
 
+@Component
 public class Employee {
     private int id;
     private String name;
     private String email;
+
+    // for spring
+    public Employee() {
+
+    }
 
     public Employee(String name, String email) {
         this.name = name;

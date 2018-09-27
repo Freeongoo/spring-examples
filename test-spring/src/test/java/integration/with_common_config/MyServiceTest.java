@@ -1,4 +1,4 @@
-package spring_integration_with_common_config;
+package integration.with_common_config;
 
 import commonconfig.CommonConfig;
 import hello.simplelogic.MyService;

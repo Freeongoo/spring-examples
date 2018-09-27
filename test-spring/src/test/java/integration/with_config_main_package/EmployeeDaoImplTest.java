@@ -1,4 +1,4 @@
-package spring_integration_with_config_main_package;
+package integration.with_config_main_package;
 
 import hello.dao.EmployeeDao;
 import hello.model.Employee;

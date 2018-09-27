@@ -1,4 +1,4 @@
-package spring_integration_with_config_local;
+package integration.with_config_local;
 
 import hello.simplelogic.MyService;
 import org.junit.Test;

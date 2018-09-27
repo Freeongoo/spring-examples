@@ -8,14 +8,21 @@ Configuration db
 
 1. create database see `src/main/resources/db.sql`
 2. `cp src/main/resources/application.properties.dist src/main/resources/application.properties`
-3. `cp src/test/resources/application.properties.dist src/test/resources/application.properties` for spring_integration_with_config_main_package testing
+3. `cp src/test/resources/application.properties.dist src/test/resources/application.properties`
 4. set db config in application.properties
 
-## Test without Spring - bare jUnit, Mockito (no Spring config, no @Autowired)
+## Unit testing POJO component - bare jUnit, Mockito (no Spring config, no @Autowired)
 
 see Test:
 ```
 /src/test/java/junit/EmployeeTest.java
+```
+
+## Unit testing with Spring annotation (ex.: @Autowired) but with mocking
+
+see Test:  
+```
+/src/test/java/mockito_with_spring/MyServiceTest.java
 ```
 
 ## Integration test without mocking - get dependencies from Spring
@@ -39,11 +46,11 @@ public class MyServiceTestConfig {
 
 #### Local package scan Config
 
-see `/src/test/java/spring_integration_with_config_local/MyServiceTest.java`
+see `/src/test/java/integration.with_config_local/MyServiceTest.java`
 
 #### Global package scan Config
 
-see `/src/test/java/spring_integration_with_config_main_package/EmployeeDaoImplTest.java`
+see `/src/test/java/integration.with_config_main_package/EmployeeDaoImplTest.java`
 
 #### Use main Application for scan (without ConfigClass)
 
@@ -55,4 +62,4 @@ Don't do this - not works with others tests!
 So as not to create different configuration files for all tests - you can create common for many tests.   
 Or create an abstract test class with a configuration class
 
-see `/src/test/java/spring_integration_with_common_config/MyServiceTest.java`
+see `/src/test/java/integration.spring_integration_with_common_config/MyServiceTest.java`
