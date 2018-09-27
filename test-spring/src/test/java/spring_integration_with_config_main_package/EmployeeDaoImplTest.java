@@ -21,7 +21,7 @@ import static org.junit.Assert.assertThat;
 @ContextConfiguration(classes = EmployeeDaoImplTestConfig.class)
 @RunWith(SpringRunner.class)
 @SqlGroup({
-    @Sql("/db.sql"),
+        @Sql("/db.sql"),
 })
 public class EmployeeDaoImplTest {
     @Autowired

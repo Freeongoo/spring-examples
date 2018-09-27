@@ -11,14 +11,14 @@ Configuration db
 3. `cp src/test/resources/application.properties.dist src/test/resources/application.properties` for spring_integration_with_config_main_package testing
 4. set db config in application.properties
 
-## Test without Spring - bare jUnit (no Spring config, no @Autowired)
+## Test without Spring - bare jUnit, Mockito (no Spring config, no @Autowired)
 
 see Test:
 ```
 /src/test/java/junit/EmployeeTest.java
 ```
 
-## Integration test
+## Integration test without mocking - get dependencies from Spring
 
 For create test with spring features:
 1. `@RunWith(SpringRunner.class)` is used to provide a bridge between Spring Boot test features and JUnit. Whenever we are using any Spring Boot testing features in out JUnit tests, this annotation will be required.
@@ -36,8 +36,6 @@ public class MyServiceTestConfig {
     }
 }
 ```
-
-### Integration test
 
 #### Local package scan Config
 
