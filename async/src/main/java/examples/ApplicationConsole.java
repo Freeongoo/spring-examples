@@ -1,9 +1,9 @@
 package examples;
 
 import examples.model.User;
-import examples.service.GitHubLookupCompletableFutureService;
-import examples.service.SimpleVoidService;
-import examples.service.UserCreatorFutureService;
+import examples.multithreads.service.GitHubLookupCompletableFutureService;
+import examples.multithreads.service.SimpleVoidService;
+import examples.multithreads.service.UserCreatorFutureService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;

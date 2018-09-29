@@ -13,9 +13,9 @@ public class LocalAsyncConfig {
     @Bean(name = "localThreadPoolTaskExecutor")
     public Executor threadPoolTaskExecutor() {
         ThreadPoolTaskExecutor myOnMethod = new ThreadPoolTaskExecutor();
-        myOnMethod.setCorePoolSize(1);
-        myOnMethod.setMaxPoolSize(1);
-        myOnMethod.setQueueCapacity(1);
+        myOnMethod.setCorePoolSize(2);
+        myOnMethod.setMaxPoolSize(2);
+        myOnMethod.setQueueCapacity(2);
         myOnMethod.setThreadNamePrefix("LocExecutor-");
         return myOnMethod;
     }

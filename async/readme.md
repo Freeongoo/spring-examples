@@ -24,3 +24,12 @@ Set type of executor and config. And set exception handler for Exception Async
 ### Config by method level
 
 See local config LocalAsyncConfig.java and see SimpleVoidService.java how to use
+
+# Testing
+
+Compare time execution for multi threads and single thread in test.
+
+## Note
+
+When testing is very difficult to work with asynchronous methods, so we need to make the execution synchronous. To do this, we used the method of creating profiles   
+

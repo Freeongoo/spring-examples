@@ -1,4 +1,4 @@
-package examples.service;
+package examples.multithreads.service;
 
 import examples.model.User;
 import org.slf4j.Logger;
