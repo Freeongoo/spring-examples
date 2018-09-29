@@ -1,5 +1,7 @@
 # Testing (without @SpringBootTest)
 
+@RunWith(SpringRunner.class) is used to provide a bridge between Spring Boot test features and JUnit. Whenever we are using any Spring Boot testing features in out JUnit tests, this annotation will be required.
+
 Difference: 
 - @ContextConfiguration is an annotation from the Spring Test Framework, which is suitable for every Spring application, 
 - (removed) @SpringApplicationConfiguration is from Spring Boot and is actually a composite annotation, which includes ContextConfiguration with the custom SpringApplicationContextLoader as loader.
