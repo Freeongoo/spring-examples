@@ -21,7 +21,7 @@ import java.util.Map;
 
 import static java.lang.Math.toIntExact;
 
-@Repository
+@Repository("EmployeeDao")
 public class EmployeeDaoImpl extends JdbcDaoSupport implements EmployeeDao {
     private final String SQL_SELECT_ALL      = "SELECT * FROM employee";
     private final String SQL_DELETE_BY_ID    = "DELETE FROM employee WHERE id = ?";
@@ -29,12 +29,8 @@ public class EmployeeDaoImpl extends JdbcDaoSupport implements EmployeeDao {
     private final String SQL_SELECT_BY_EMAIL = "SELECT * FROM employee WHERE email = ?";
     private final String SQL_INSERT_NEW      = "INSERT INTO employee (name, email) VALUES (?, ?)";
 
-    private final DataSource dataSource;
-
     @Autowired
-    public EmployeeDaoImpl(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
+    DataSource dataSource;
 
     @PostConstruct
     private void initialize(){
