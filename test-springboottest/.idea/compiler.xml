@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="file-upload" />
+        <module name="file-upload-simple" />
+        <module name="form-with-validate" />
+        <module name="gs-serving-web-content" />
+        <module name="jdbc-template" />
+        <module name="spring-examples" />
+        <module name="test-springboottest" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="jdbc-template" target="1.8" />
+      <module name="test-springboottest" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
