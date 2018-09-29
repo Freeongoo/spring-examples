@@ -34,14 +34,14 @@ see Test:
 /src/test/java/unit.mockito_junit_runner/MyServiceTest.java
 ```
 
-#### Set mock in config bean with scan
+#### Set manual mock in config bean with scan
 
 see Test:
 ```
 /src/test/java/unit/mockito_bean_with_scan/MyServiceTest.java
 ```
 
-#### Set mock in config bean without scan
+#### Set manual mock in config bean without scan
 
 see Test:
 ```
