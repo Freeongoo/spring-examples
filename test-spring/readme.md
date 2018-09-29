@@ -20,7 +20,14 @@ see Test:
 
 ## Unit testing with Spring annotation (ex.: @Autowired) but with mocking
 
-#### Use @RunWith(MockitoJUnitRunner.class)
+#### Use @RunWith(SpringRunner.class) with @Mock
+
+see Test:  
+```
+/src/test/java/unit/mockito_spring_runner/MyServiceTest.java
+```
+
+#### Use @RunWith(MockitoJUnitRunner.class) with @Mock
 
 see Test:  
 ```
