@@ -1,4 +1,4 @@
-package mockito_with_spring;
+package unit.mockito_junit_runner;
 
 import hello.simplelogic.MyService;
 import hello.simplelogic.data.Data;

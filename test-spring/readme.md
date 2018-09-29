@@ -15,14 +15,30 @@ Configuration db
 
 see Test:
 ```
-/src/test/java/junit/EmployeeTest.java
+/src/test/java/bare_junit/EmployeeTest.java
 ```
 
 ## Unit testing with Spring annotation (ex.: @Autowired) but with mocking
 
+#### Use @RunWith(MockitoJUnitRunner.class)
+
 see Test:  
 ```
-/src/test/java/mockito_with_spring/MyServiceTest.java
+/src/test/java/unit.mockito_junit_runner/MyServiceTest.java
+```
+
+#### Set mock in config bean with scan
+
+see Test:
+```
+/src/test/java/unit/mockito_bean_with_scan/MyServiceTest.java
+```
+
+#### Set mock in config bean without scan
+
+see Test:
+```
+/src/test/java/unit/mockito_bean_without_scan/MyServiceTest.java
 ```
 
 ## Integration test without mocking - get dependencies from Spring
@@ -44,6 +60,10 @@ public class MyServiceTestConfig {
 }
 ```
 
+#### Use main Application for scan (without ConfigClass)
+
+`@ContextConfiguration(classes = Application.class)`
+
 #### Local package scan Config
 
 see `/src/test/java/integration.with_config_local/MyServiceTest.java`
@@ -51,11 +71,6 @@ see `/src/test/java/integration.with_config_local/MyServiceTest.java`
 #### Global package scan Config
 
 see `/src/test/java/integration.with_config_main_package/EmployeeDaoImplTest.java`
-
-#### Use main Application for scan (without ConfigClass)
-
-Don't do this - not works with others tests!
-`@ContextConfiguration(classes = Application.class)`
 
 #### Import common config file 
 
