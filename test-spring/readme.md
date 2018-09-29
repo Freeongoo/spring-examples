@@ -2,7 +2,7 @@
 
 Difference: 
 - @ContextConfiguration is an annotation from the Spring Test Framework, which is suitable for every Spring application, 
-- @SpringApplicationConfiguration is from Spring Boot and is actually a composite annotation, which includes ContextConfiguration with the custom SpringApplicationContextLoader as loader.
+- (removed) @SpringApplicationConfiguration is from Spring Boot and is actually a composite annotation, which includes ContextConfiguration with the custom SpringApplicationContextLoader as loader.
 
 Configuration db
 
@@ -69,7 +69,8 @@ public class MyServiceTestConfig {
 
 #### Use main Application for scan (without ConfigClass)
 
-`@ContextConfiguration(classes = Application.class)`
+`@ContextConfiguration(classes = Application.class)`  
+see `/src/test/java/integration/with_config_main_package/EmployeeDaoImplTest.java`
 
 #### Local package scan Config
 

@@ -8,6 +8,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsNot.not;
 
+// nothing from spring - POJO test
 public class EmployeeTest {
     private Employee employee;
 

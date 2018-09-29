@@ -1,5 +1,6 @@
 package integration.with_config_main_package;
 
+import hello.Application;
 import hello.dao.EmployeeDao;
 import hello.model.Employee;
 import org.junit.Test;
@@ -18,7 +19,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.assertThat;
 
-@ContextConfiguration(classes = EmployeeDaoImplTestConfig.class)
+@ContextConfiguration(classes = Application.class)
 @RunWith(SpringRunner.class)
 @SqlGroup({
         @Sql("/db.sql"),

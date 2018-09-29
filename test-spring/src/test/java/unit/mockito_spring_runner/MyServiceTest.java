@@ -15,6 +15,7 @@ import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
 // old version - use @RunWith(MockitoJUnitRunner.class)
+// with @RunWith(MockitoJUnitRunner.class) not need invoke - MockitoAnnotations.initMocks(this);
 @RunWith(SpringRunner.class)
 public class MyServiceTest {
     @Mock
