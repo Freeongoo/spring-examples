@@ -27,7 +27,7 @@ see Test:
 /src/test/java/unit/mockito_spring_runner/MyServiceTest.java
 ```
 
-#### Use @RunWith(MockitoJUnitRunner.class) with @Mock
+#### Use @RunWith(MockitoJUnitRunner.class) with @Mock (the best)
 
 see Test:  
 ```
