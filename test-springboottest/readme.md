@@ -1,4 +1,6 @@
-# Testing with @SpringBootTest
+# Integration Testing with @SpringBootTest
+
+It's mean than we don't mock anything.
 
 The @SpringBootTest annotation can be used when we need to bootstrap the entire container. The annotation works by creating the ApplicationContext that will be utilized in our tests.
 
@@ -22,9 +24,15 @@ Provides the following features over and above the regular Spring TestContext Fr
 
 see `/src/test/java/hello/ApplicationTest.java`
 
+#### Testing API with MockMvc
+
+(better use @WebMvcTest(RestController.class) but this is for example)
+
+see `/src/test/java/hello/MvcMockTest.java`
+
 #### Testing API with TestRestTemplate
 
-see `/src/test/java/hello/RestEmployeeTest.java`
+see `/src/test/java/hello/TestRestTemplateTest.java`
 
 #### Testing DAO 
 

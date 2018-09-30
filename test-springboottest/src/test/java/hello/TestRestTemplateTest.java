@@ -26,7 +26,7 @@ import static org.junit.Assert.assertEquals;
 @SqlGroup({
         @Sql("/db.sql"),
 })
-public class RestEmployeeTest {
+public class TestRestTemplateTest {
     private String url;
 
     @LocalServerPort
