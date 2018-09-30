@@ -31,5 +31,9 @@ Compare time execution for multi threads and single thread in test.
 
 ## Note
 
-When testing is very difficult to work with asynchronous methods, so we need to make the execution synchronous. To do this, we used the method of creating profiles   
+When testing is very difficult to work with asynchronous methods, so we need to make the execution synchronous. 
+
+To do this:
+* we used the method of creating profiles @Profile("non-async") for override global executor config `/src/test/java/examples/GlobalSyncConfig.java`
+* for override local config bean name executor (see `/src/main/java/examples/configasync/LocalAsyncConfig.java`) we must create own test @SpringBootApplication class see `/src/test/java/examples/TestApplication.java`
 

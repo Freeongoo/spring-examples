@@ -1,5 +1,6 @@
 package examples.onethread.service;
 
+import examples.ClassTestConfig;
 import examples.model.User;
 import examples.multithreads.service.GitHubLookupCompletableFutureService;
 import org.junit.Test;
