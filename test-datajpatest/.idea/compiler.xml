@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="jpa-one-to-many" />
+        <module name="jpa-one-to-many-bidirectional" />
+        <module name="jpa-one-to-many-unidirectional" />
+        <module name="jpa-one-to-one" />
+        <module name="logging-hibernate" />
+        <module name="rest-hibernate" />
+        <module name="rest-jpa" />
+        <module name="spring-boot-demo" />
+        <module name="test-datajpatest" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="jpa-one-to-many" target="1.8" />
+      <module name="jpa-one-to-many-bidirectional" target="1.8" />
+      <module name="jpa-one-to-many-unidirectional" target="1.8" />
+      <module name="jpa-one-to-one" target="1.8" />
+      <module name="logging-hibernate" target="1.8" />
+      <module name="rest-hibernate" target="1.8" />
+      <module name="rest-jpa" target="1.8" />
+      <module name="spring-boot-demo" target="1.8" />
+      <module name="test-datajpatest" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
