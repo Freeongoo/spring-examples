@@ -1,5 +1,6 @@
-package hello.dao;
+package hello.nothingmocking.dao;
 
+import hello.dao.EmployeeDao;
 import hello.model.Employee;
 import org.junit.Test;
 import org.junit.runner.RunWith;
