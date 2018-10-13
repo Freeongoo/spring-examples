@@ -19,9 +19,7 @@ public class BarServiceTest {
     private GeneralDao<Bar> barDao;
 
     @InjectMocks
-    private BarService barService;
-    //TODO: not work, why?
-    //private GeneralService<Bar> barService;
+    private GeneralService<Bar> barService = new BarService();
 
     @Test
     public void get() {
