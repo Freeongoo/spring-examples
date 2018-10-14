@@ -23,18 +23,14 @@ import static java.lang.Math.toIntExact;
 
 @Repository
 public class EmployeeDaoImpl extends JdbcDaoSupport implements EmployeeDao {
-    private final String SQL_SELECT_ALL   = "SELECT * FROM employee";
-    private final String SQL_DELETE_BY_ID   = "DELETE FROM employee WHERE id = ?";
-    private final String SQL_SELECT_BY_ID = "SELECT * FROM employee WHERE id = ?";
+    private final String SQL_SELECT_ALL      = "SELECT * FROM employee";
+    private final String SQL_DELETE_BY_ID    = "DELETE FROM employee WHERE id = ?";
+    private final String SQL_SELECT_BY_ID    = "SELECT * FROM employee WHERE id = ?";
     private final String SQL_SELECT_BY_EMAIL = "SELECT * FROM employee WHERE email = ?";
-    private final String SQL_INSERT_NEW   = "INSERT INTO employee (name, email) VALUES (?, ?)";
-
-    private final DataSource dataSource;
+    private final String SQL_INSERT_NEW      = "INSERT INTO employee (name, email) VALUES (?, ?)";
 
     @Autowired
-    public EmployeeDaoImpl(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
+    DataSource dataSource;
 
     @PostConstruct
     private void initialize(){
@@ -81,7 +77,7 @@ public class EmployeeDaoImpl extends JdbcDaoSupport implements EmployeeDao {
         List<Employee> result = new ArrayList<>();
         for (Map<String, Object> row : rows) {
             Employee emp = new Employee(
-                    toIntExact((Long)row.get("id")),
+                    toIntExact((Integer)row.get("id")),
                     (String)row.get("name"),
                     (String)row.get("email")
             );

@@ -1,4 +1,5 @@
 /src/main/resources/application.properties
+/src/test/resources/application.properties
 /target
 /node_modules
 .gradle
