@@ -30,7 +30,7 @@ public class UserIgnoreUnknownTest {
     }
 
     @Test(expected = UnrecognizedPropertyException.class)
-    public void jsonIgnoreProperties_WhenNotIgnore() throws IOException {
+    public void deserialization_WhenNothingIgnore() throws IOException {
         User user = new User("first", "last");
 
         JsonObject userJsonObject = new JsonObject();
