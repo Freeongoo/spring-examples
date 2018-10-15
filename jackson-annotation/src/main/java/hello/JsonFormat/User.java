@@ -2,12 +2,10 @@ package hello.JsonFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import javax.persistence.Entity;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
-@Entity
 public class User implements Serializable {
     private static final long serialVersionUID = 9002348285302873688L;
     public static final String DATE_FORMAT = "dd-MM-yyyy hh:mm:ss";

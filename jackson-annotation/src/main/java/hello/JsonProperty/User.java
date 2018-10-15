@@ -2,11 +2,9 @@ package hello.JsonProperty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.persistence.Entity;
 import java.io.Serializable;
 import java.util.Objects;
 
-@Entity
 public class User implements Serializable {
     private static final long serialVersionUID = 9180949792819321186L;
 

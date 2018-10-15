@@ -1,6 +1,6 @@
-package hello.JsonAlias;
+package hello.JsonCreator;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
@@ -10,17 +10,17 @@ public class User implements Serializable {
     private static final long serialVersionUID = 9180949792819321186L;
 
     @JsonProperty("first_name")
-    @JsonAlias({"first", "fn"})
     private String firstName;
 
     @JsonProperty("last_name")
-    @JsonAlias({"last", "ln"})
     private String lastName;
 
-    public User() {
-    }
+    public User() { }
 
-    public User(String firstName, String lastName) {
+    @JsonCreator
+    public User(
+            @JsonProperty("first_some_name") String firstName,
+            @JsonProperty("last_some_name") String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
     }
