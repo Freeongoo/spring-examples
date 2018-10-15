@@ -14,7 +14,7 @@ gradle-app.setting
 # Cache of project
 .gradletasknamecache
 
-# User-specific stuff:
+# UserIgnoreUnknown-specific stuff:
 .idea/**/workspace.xml
 .idea/**/tasks.xml
 .idea/dictionaries
