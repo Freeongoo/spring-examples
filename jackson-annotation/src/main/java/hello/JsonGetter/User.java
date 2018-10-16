@@ -1,29 +1,26 @@
-package hello.JsonIgnoreProperties;
+package hello.JsonGetter;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonGetter;
 
 import java.io.Serializable;
 import java.util.Objects;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class UserIgnoreUnknown implements Serializable {
+public class User implements Serializable {
     private static final long serialVersionUID = 9180949792819321186L;
 
-    @JsonProperty("first_name")
     private String firstName;
 
-    @JsonProperty("last_name")
     private String lastName;
 
-    public UserIgnoreUnknown() {
+    public User() {
     }
 
-    public UserIgnoreUnknown(String firstName, String lastName) {
+    public User(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
     }
 
+    @JsonGetter("first")
     public String getFirstName() {
         return firstName;
     }
@@ -32,6 +29,7 @@ public class UserIgnoreUnknown implements Serializable {
         this.firstName = firstName;
     }
 
+    @JsonGetter("last")
     public String getLastName() {
         return lastName;
     }
@@ -44,9 +42,9 @@ public class UserIgnoreUnknown implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UserIgnoreUnknown userIgnoreUnknown = (UserIgnoreUnknown) o;
-        return Objects.equals(firstName, userIgnoreUnknown.firstName) &&
-                Objects.equals(lastName, userIgnoreUnknown.lastName);
+        User user = (User) o;
+        return Objects.equals(firstName, user.firstName) &&
+                Objects.equals(lastName, user.lastName);
     }
 
     @Override
@@ -57,7 +55,7 @@ public class UserIgnoreUnknown implements Serializable {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("UserIgnoreUnknown{");
+        final StringBuilder sb = new StringBuilder("User{");
         sb.append("firstName='").append(firstName).append('\'');
         sb.append(", lastName='").append(lastName).append('\'');
         sb.append('}');
