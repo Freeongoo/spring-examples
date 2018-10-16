@@ -24,7 +24,7 @@ public class UserTest {
 
         // serialization
         String json = new ObjectMapper().writeValueAsString(user);
-        System.out.println(json);
+        System.out.println(json); // {"name":"MyName","key1":"value1","key2":"value2"}
         assertThat(json, containsString("name"));
         assertThat(json, containsString("key1"));
         assertThat(json, containsString("key2"));
@@ -43,7 +43,7 @@ public class UserTest {
 
         // serialization
         String json = new ObjectMapper().writeValueAsString(user);
-        System.out.println(json);
+        System.out.println(json); // {"properties":{"key1":"value1","key2":"value2"},"name":"MyName"}
         assertThat(json, containsString("name"));
         assertThat(json, containsString("key1"));
         assertThat(json, containsString("key2"));

@@ -7,3 +7,5 @@
 * `@JsonRawValue` -  is used to instruct the Jackson to serialize a property exactly as is.
 * `@JsonRootName` -  is used – if wrapping is enabled – to specify the name of the root wrapper to be used.
 * `@JsonCreator` - is used to tune the constructor/factory used in deserialization.
+* `@JsonIgnoreProperties` - one of the most common annotations in Jackson - is used to mark a property or a list of properties to be ignored at the class level.
+* `@JsonIgnore` - is used to mark a property to be ignored at the field level.

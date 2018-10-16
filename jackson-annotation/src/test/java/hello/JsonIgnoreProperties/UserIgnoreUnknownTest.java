@@ -13,7 +13,7 @@ import static org.junit.Assert.*;
 public class UserIgnoreUnknownTest {
 
     @Test
-    public void jsonIgnoreProperties() throws IOException {
+    public void jsonIgnoreProperties_WhenIgnoreUnknown() throws IOException {
         UserIgnoreUnknown userIgnoreUnknown = new UserIgnoreUnknown("first", "last");
 
         JsonObject userJsonObject = new JsonObject();
@@ -27,6 +27,22 @@ public class UserIgnoreUnknownTest {
         UserIgnoreUnknown actualUserIgnoreUnknown = mapper.readValue(json, UserIgnoreUnknown.class);
         System.out.println(actualUserIgnoreUnknown);
         assertThat(actualUserIgnoreUnknown, equalTo(userIgnoreUnknown));
+    }
+
+    @Test
+    public void jsonIgnoreProperties_WhenIgnoreFirstName() throws IOException {
+        UserIgnoreFirstName userIgnoreFirstName = new UserIgnoreFirstName(null, "last");
+
+        JsonObject userJsonObject = new JsonObject();
+        userJsonObject.addProperty("first_name", "first");
+        userJsonObject.addProperty("last_name", "last");
+        String json = userJsonObject.toString();
+
+        // deserialization
+        ObjectMapper mapper = new ObjectMapper();
+        UserIgnoreFirstName actualUserIgnoreFirstName = mapper.readValue(json, UserIgnoreFirstName.class);
+        System.out.println(actualUserIgnoreFirstName); // UserIgnoreUnknown{firstName='null', lastName='last'}
+        assertThat(actualUserIgnoreFirstName, equalTo(userIgnoreFirstName));
     }
 
     @Test(expected = UnrecognizedPropertyException.class)
