@@ -1,5 +1,6 @@
 package examples.aspect;
 
+import examples.exceptions.AccessDeniedException;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -20,7 +21,7 @@ public class AccessByRouteAspect {
 
         for (String route: routeValues) {
             if (route.equals("/secret"))
-                throw new RuntimeException("Access denied");
+                throw new AccessDeniedException("Access denied");
         }
     }
 
