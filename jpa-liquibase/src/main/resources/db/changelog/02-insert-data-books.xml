@@ -6,7 +6,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-    <changeSet id="03" author="freeongoo">
+    <changeSet id="3" author="freeongoo">
         <comment>Inserting Books</comment>
         <insert tableName="books">
             <column name="id" valueNumeric="1"/>
@@ -33,5 +33,8 @@
             <column name="name" value="book_01_a_05"/>
             <column name="author" valueNumeric="05"/>
         </insert>
+        <rollback>
+            DELETE FROM books;
+        </rollback>
     </changeSet>
 </databaseChangeLog>

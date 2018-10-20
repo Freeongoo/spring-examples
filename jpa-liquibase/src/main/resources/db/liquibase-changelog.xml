@@ -9,4 +9,6 @@
   <include file="changelog/01-create-books-and-author-schema.xml" relativeToChangelogFile="true"/>
   <include file="changelog/02-insert-data-authors.xml" relativeToChangelogFile="true"/>
   <include file="changelog/02-insert-data-books.xml" relativeToChangelogFile="true"/>
+  <include file="changelog/03-create-release-tag-1.xml" relativeToChangelogFile="true"/>
+  <include file="changelog/04-create-new-table.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>
