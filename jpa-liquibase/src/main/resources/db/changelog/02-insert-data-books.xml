@@ -6,7 +6,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-    <changeSet id="03" author="hhimanshu">
+    <changeSet id="03" author="freeongoo">
         <comment>Inserting Books</comment>
         <insert tableName="books">
             <column name="id" valueNumeric="1"/>
