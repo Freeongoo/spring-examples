@@ -40,3 +40,4 @@ See for more details:
 * mvn liquibase:dropAll 
 * mvn liquibase:rollback -Dliquibase.rollbackCount=1
 * mvn liquibase:rollback -Dliquibase.rollbackTag=release_version_1
+* mvn liquibase:update -Dliquibase.toTag=release_version_1
