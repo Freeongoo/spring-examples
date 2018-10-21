@@ -27,11 +27,19 @@ See for more details:
     <version>3.4.2</version>
     <configuration>
         <driver>com.mysql.jdbc.Driver</driver>
-        <changeLogFile>src/main/resources/db/liquibase-changelog.xml</changeLogFile>
         <propertyFile>src/main/resources/liquibase.properties</propertyFile>
         <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
     </configuration>
 </plugin>
+```
+
+add `liquibase.properties` for maven plugin:
+
+```
+liquibase.url=jdbc:mysql://localhost:3306/liquibase?useSSL=false
+liquibase.username=root
+liquibase.password=****
+liquibase.change-log=classpath:/db/changelog/liquibase-changelog.xml
 ```
 
 ### Commands

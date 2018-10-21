@@ -35,6 +35,10 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
         <dependency>
@@ -66,7 +70,6 @@
                 <version>3.4.2</version>
                 <configuration>
                     <driver>com.mysql.jdbc.Driver</driver>
-                    <changeLogFile>src/main/resources/db/liquibase-changelog.xml</changeLogFile>
                     <propertyFile>src/main/resources/liquibase.properties</propertyFile>
                     <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
                 </configuration>
