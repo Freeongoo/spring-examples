@@ -1,5 +1,5 @@
 /src/main/resources/application.properties
-/target
+target
 /node_modules
 .gradle
 /build/
