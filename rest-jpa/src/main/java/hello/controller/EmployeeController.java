@@ -5,6 +5,7 @@ import java.util.List;
 import hello.entity.Employee;
 import hello.exception.EmployeeNotFoundException;
 import hello.repository.EmployeeRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,13 +20,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 public class EmployeeController {
-    private final EmployeeRepository repository;
 
-    EmployeeController(EmployeeRepository repository) {
-        this.repository = repository;
-    }
-
-    // Aggregate root
+    @Autowired
+    private EmployeeRepository repository;
 
     @GetMapping("/employees")
     List<Employee> all() {
@@ -40,8 +37,6 @@ public class EmployeeController {
         headers.setLocation(ucBuilder.path("/employees/{id}").buildAndExpand(employeeSaved.getId()).toUri());
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
-
-    // Single item
 
     @GetMapping("/employees/{id}")
     Employee one(@PathVariable Long id) {
