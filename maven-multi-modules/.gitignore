@@ -4,7 +4,6 @@ target
 .gradle
 /build/
 /yarn-error.log
-.idea/**/Project_Default.xml
 
 # Ignore Gradle GUI config
 gradle-app.setting
@@ -29,6 +28,7 @@ gradle-app.setting
 .idea/**/sqlDataSources.xml
 .idea/**/dynamic.xml
 .idea/**/uiDesigner.xml
+.idea/inspectionProfiles
 
 # Gradle:
 .idea/**/gradle.xml

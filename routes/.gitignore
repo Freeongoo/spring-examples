@@ -27,7 +27,7 @@ gradle-app.setting
 .idea/**/sqlDataSources.xml
 .idea/**/dynamic.xml
 .idea/**/uiDesigner.xml
-.idea/**/Project_Default.xml
+.idea/inspectionProfiles
 
 # Gradle:
 .idea/**/gradle.xml
