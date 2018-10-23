@@ -5,7 +5,9 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import hello.controller.EmployeeController;
+import hello.controller.advice.EmployeeNotFoundAdvice;
 import hello.entity.Employee;
+import hello.exception.EmployeeNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,7 +47,9 @@ public class EmployeeControllerTest {
 
     @Before
     public void setup() {
-        this.mockMvc = standaloneSetup(this.employeeController).build(); // Standalone context
+        this.mockMvc = standaloneSetup(this.employeeController)
+                .setControllerAdvice(new EmployeeNotFoundAdvice())
+                .build(); // Standalone context
     }
 
     @Test
@@ -89,6 +93,14 @@ public class EmployeeControllerTest {
                 .andExpect(jsonPath("id", is(1)))
                 .andExpect(jsonPath("name", is("John")))
                 .andExpect(jsonPath("role", is("admin")));
+    }
+
+    @Test
+    public void one_WhenNotExist() throws Exception {
+        int idNotExist = -1;
+
+        this.mockMvc.perform(get("/employees/" + idNotExist))
+                .andExpect(status().isNotFound());
     }
 
     @Test
