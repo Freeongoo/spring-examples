@@ -5,9 +5,11 @@
 
 ## With MockMvc
 
-### Without @SpringBootTest
+### Without @SpringBootTest but with @DataJpaTest
 
 See example: `/src/test/java/hello/mock_mvc/spring_runner/EmployeeControllerTest.java`
+
+Important! With @DataJpaTest add connect to H2 auto - not see in application.properties
 
 Add @ContextConfiguration for scan packages:
 
@@ -23,8 +25,10 @@ and config file:
 public class ConfigTest { }
 ```
 
-### With @SpringBootTest
+### With @SpringBootTest  but without @DataJpaTest
 
 See example: `/src/test/java/hello/mock_mvc/spring_boot_test/EmployeeControllerTest.java`
+
+Important! Add configuration to connect to H2 from application.properties
 
 Remove @ContextConfiguration and not need config file, only add `@SpringBootTest`
