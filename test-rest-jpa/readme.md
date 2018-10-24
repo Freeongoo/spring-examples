@@ -1,5 +1,8 @@
 # Testing Spring Boot REST Jpa Repository
 
+1. `cp src/main/resources/application.properties.dist src/main/resources/application.properties`
+2. `cp src/test/resources/application.properties.dist src/test/resources/application.properties`
+
 ## With MockMvc
 
 ### Without @SpringBootTest
