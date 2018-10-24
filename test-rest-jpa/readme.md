@@ -1,5 +1,14 @@
 # Testing Spring Boot REST Jpa Repository
 
+For testing use:
+
+* DBUnit for insert data before test
+* JpaRepository for get data from DB
+* MockMvc - for test REST controller
+* RestTemplate - for test REST endpoints with full start application
+
+## Config
+
 1. `cp src/main/resources/application.properties.dist src/main/resources/application.properties`
 2. `cp src/test/resources/application.properties.dist src/test/resources/application.properties`
 
