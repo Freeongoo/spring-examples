@@ -32,3 +32,7 @@ See example: `/src/test/java/hello/mock_mvc/spring_boot_test/EmployeeControllerT
 Important! Add configuration to connect to H2 from application.properties
 
 Remove @ContextConfiguration and not need config file, only add `@SpringBootTest`
+
+## With TestRestTemplate
+
+See example: `/src/test/java/hello/rest_template/RandomPortTestRestTemplateExampleTest.java`
