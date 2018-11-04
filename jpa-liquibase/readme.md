@@ -8,6 +8,7 @@ Do not forget for inserting data or using usual sql queries add tag `<rollback>`
 2. `cp src/main/resources/application.properties.dist src/main/resources/application.properties`
 3. create db for mysql and set correct user and password
 4. `cp src/test/resources/application.properties.dist src/test/resources/application.properties`
+5. `cp src/test/resources/application_without_liquibase.properties.dist src/test/resources/application_without_liquibase.properties`
 
 ## Important changes in boot 2.x
 
@@ -49,3 +50,24 @@ liquibase.change-log=classpath:/db/changelog/liquibase-changelog.xml
 * mvn liquibase:rollback -Dliquibase.rollbackCount=1
 * mvn liquibase:rollback -Dliquibase.rollbackTag=release_version_1
 * mvn liquibase:update -Dliquibase.toTag=release_version_1
+
+# How run tests without autoload liquibase?
+
+Two way:  
+1. set in properties file: `spring.liquibase.enabled=false`
+
+See example property: `application_without_liquibase.properties.dist`  
+And test Application Context load: `ApplicationWithoutLiquibaseTest`
+
+2. create config file with annotation @Configuration and bean:
+```
+@Bean
+public SpringLiquibase liquibase() {
+    SpringLiquibase liquibase = new SpringLiquibase();
+    liquibase.setShouldRun(false);
+    return liquibase;
+}
+```
+
+See example: `/src/test/java/custom_config/ConfigWithoutLiquibase.java`  
+And test Application Context load: `ApplicationTestWithoutLiquibaseByConfigClassTest`

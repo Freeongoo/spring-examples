@@ -1,5 +1,6 @@
 /src/main/resources/application.properties
 /src/test/resources/application.properties
+/src/test/resources/application_without_liquibase.properties
 /src/main/resources/liquibase.properties
 /target
 /node_modules
