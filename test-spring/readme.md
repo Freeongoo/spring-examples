@@ -24,12 +24,63 @@ see Test:
 
 #### Use @RunWith(SpringRunner.class) with @Mock
 
+!Important, when use SpringRunner.class - spring context will be loaded
+
 see Test:  
 ```
 /src/test/java/unit/mockito_spring_runner/MyServiceTest.java
 ```
 
+```
+@Mock
+private Data mockData;
+
+@InjectMocks
+private MyService service;
+
+@Before
+public void setUp() {
+    MockitoAnnotations.initMocks(this);
+}
+
+@Test
+public void getMainData() {
+    when(mockData.getInfo()).thenReturn("ahaha");
+    String info = service.getMainData();
+    assertThat(info, is("ahaha"));
+}
+```
+
+but if in your service there are @Autowired classes that you do not want to get wet - 
+then you need to remember to add @Autowired for @InjectMocks.
+
+See example: `/src/test/java/unit/mockito_spring_runner/MyServiceWithTwoDepsTest.java`  
+When use class ConcatStr for non-mocking
+
+```
+@Mock
+private Data mockData;
+
+@Autowired
+@InjectMocks
+private MyServiceWithTwoDeps service;
+
+@Before
+public void setUp() {
+    MockitoAnnotations.initMocks(this);
+}
+
+@Test
+public void getMainData() {
+    when(mockData.getInfo()).thenReturn("ahaha");
+    String info = service.getMainData();
+    assertThat(info, is("ahaha"));
+}
+```
+
 #### Use @RunWith(MockitoJUnitRunner.class) with @Mock (the best)
+
+!Important, when use MockitoJUnitRunner.class - spring context will not be loaded
 
 see Test:  
 ```

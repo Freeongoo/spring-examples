@@ -1,7 +1,7 @@
 package unit.mockito_spring_runner;
 
 import commonconfig.CommonConfig;
-import hello.simplelogic.MyService;
+import hello.simplelogic.MyServiceWithTwoDeps;
 import hello.simplelogic.data.Data;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -19,13 +20,13 @@ import static org.mockito.Mockito.when;
 // when use SpringRunner.class - it's work @Autowiring
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = CommonConfig.class)
-public class MyServiceTest {
-
+public class MyServiceWithTwoDepsTest {
     @Mock
     private Data mockData;
 
+    @Autowired
     @InjectMocks
-    private MyService service;
+    private MyServiceWithTwoDeps service;
 
     @Before
     public void setUp() {
