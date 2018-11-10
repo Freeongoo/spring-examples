@@ -4,7 +4,7 @@
 
 Spring boot focuses on using JPA to persist data in relational db and it has ability to create repository implementations automatically, at runtime, from a repository interface. But here we are trying to use hibernate as a JPA provider
 
-Use EntityManagerFactory for get session in DAO. Example:
+### Use EntityManagerFactory for get session in DAO. Example:
 
 ```
 @Component
@@ -21,6 +21,27 @@ public class UserDaoImpl implements UserDao {
 		criteria.select(contactRoot);
 		return session.createQuery(criteria).getResultList();
 	}
+
+}
+```
+
+### Use EntityManager for get session in DAO. Example:
+
+```
+@Component
+public class UserDaoImpl implements UserDao {
+
+	@Autowired
+    private EntityManager em;
+
+    public List getUserDetails() {
+        Session session = em.unwrap(Session.class);
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery criteria = builder.createQuery(UserDetails.class);
+        Root contactRoot = criteria.from(UserDetails.class);
+        criteria.select(contactRoot);
+        return session.createQuery(criteria).getResultList();
+    }
 
 }
 ```
