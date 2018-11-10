@@ -3,19 +3,20 @@ package example.dao;
 import org.hibernate.Criteria;
 import org.hibernate.ReplicationMode;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.io.Serializable;
 import java.util.List;
 
 @Transactional
+@Repository
 public abstract class AbstractDao<PK extends Serializable, T> implements Dao<PK, T> {
 
     @Autowired
-    private EntityManagerFactory entityManagerFactory;
+    private EntityManager entityManager;
 
 	protected abstract Class<T> getPersistentClass();
 
@@ -29,7 +30,7 @@ public abstract class AbstractDao<PK extends Serializable, T> implements Dao<PK,
 	}
 
 	protected Session getSession() {
-		return entityManagerFactory.unwrap(SessionFactory.class).getCurrentSession();
+		return entityManager.unwrap(Session.class);
 	}
 
 	public T getByKey(PK key) {

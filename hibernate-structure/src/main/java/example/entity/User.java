@@ -24,6 +24,17 @@ public class User extends BaseEntityImpl {
     private String password;
     private Boolean activated;
 
+    public User() { }
+
+    public User(String firstName, String lastName, String email, String userName, String password, Boolean activated) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.userName = userName;
+        this.password = password;
+        this.activated = activated;
+    }
+
     public long getId() {
         return id;
     }

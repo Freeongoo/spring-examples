@@ -9,4 +9,5 @@ public interface Dao<PK extends Serializable,T> {
 	void persist(T entity);
 	void saveOrUpdate(T entity);
 	void delete(T entity);
+	void flush();
 }

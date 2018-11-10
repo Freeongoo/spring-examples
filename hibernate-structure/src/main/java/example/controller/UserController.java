@@ -3,7 +3,9 @@ package example.controller;
 import example.entity.User;
 import example.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,13 +22,15 @@ public class UserController {
 	private UserService userService;
 
     @GetMapping("/users")
-    Collection<User> all() {
-        return userService.getAllUsers();
+    public ResponseEntity<Collection<User>> all() {
+        Collection<User> allUsers = userService.getAllUsers();
+        return new ResponseEntity<>(allUsers, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/users", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public User newUser(@RequestBody String body, UriComponentsBuilder ucBuilder) throws Exception {
-        return userService.create(body);
+    public ResponseEntity<User> newUser(@RequestBody String body, UriComponentsBuilder ucBuilder) throws Exception {
+        User user = userService.create(body);
+        return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
     // Single item
