@@ -11,14 +11,15 @@ import javax.persistence.Table;
 @Table(name = "authors")
 public class Author {
 
+    @Column
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
     @Column(nullable = false, unique = true)
     private String name;
 
-    protected Author() {
+    public Author() {
         // for JPA
     }
 
@@ -31,8 +32,16 @@ public class Author {
         return id;
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override

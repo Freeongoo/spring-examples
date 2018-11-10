@@ -9,23 +9,18 @@
     <changeSet id="2" author="freeongoo">
         <comment>Inserting Authors</comment>
         <insert tableName="authors">
-            <column name="id" valueNumeric="1"/>
             <column name="name" value="author_01"/>
         </insert>
         <insert tableName="authors">
-            <column name="id" valueNumeric="2"/>
             <column name="name" value="author_02"/>
         </insert>
         <insert tableName="authors">
-            <column name="id" valueNumeric="3"/>
             <column name="name" value="author_03"/>
         </insert>
         <insert tableName="authors">
-            <column name="id" valueNumeric="4"/>
             <column name="name" value="author_04"/>
         </insert>
         <insert tableName="authors">
-            <column name="id" valueNumeric="5"/>
             <column name="name" value="author_05"/>
         </insert>
         <rollback>

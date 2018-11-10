@@ -9,7 +9,7 @@
     <!-- just for example -->
     <changeSet id="5" author="freeongoo">
         <createTable tableName="ahahah">
-            <column name="name" type="varchar(255)"></column>
+            <column name="name" type="varchar(255)"/>
         </createTable>
     </changeSet>
 </databaseChangeLog>
