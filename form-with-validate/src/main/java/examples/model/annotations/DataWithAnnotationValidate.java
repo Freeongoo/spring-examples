@@ -1,8 +1,8 @@
-package examples;
+package examples.model.annotations;
 
 import javax.validation.constraints.*;
 
-public class Data {
+public class DataWithAnnotationValidate {
 
     @Min(value = 1L, message = "The value must be more than zero")
     @NotNull(message="id cannot be null.")

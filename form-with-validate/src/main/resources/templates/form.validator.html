@@ -6,9 +6,9 @@
 </head>
 <body>
 
-    <h1>Form with Annotation Validate</h1>
+    <h1>Form with Validator</h1>
 
-    <form action="#" th:action="@{/}" th:object="${data}" method="post">
+    <form action="#" th:action="@{/validator}" th:object="${data}" method="post">
         <p>Id: <input type="text" th:field="*{id}"/></p>
         <p style="color: red" th:if="${#fields.hasErrors('id')}" th:errors="*{id}">Error Id</p>
 
