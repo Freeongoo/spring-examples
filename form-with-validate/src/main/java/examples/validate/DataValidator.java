@@ -23,15 +23,15 @@ public class DataValidator implements Validator {
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "id", "empty.id");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "content", "empty.content");
 
-        Data user = (Data) target;
+        Data data = (Data) target;
 
-        if (user.getId() <= 0L)
+        if (data.getId() <= 0L)
             errors.rejectValue("id", "not_zero.id");
 
-        if (user.getContent().length() < 1 || user.getContent().length() > 20)
+        if (data.getContent().length() < 1 || data.getContent().length() > 20)
             errors.rejectValue("content", "invalid_length.content");
 
-        if (!PATTERN_CONTEXT.matcher(user.getContent()).matches())
+        if (!PATTERN_CONTEXT.matcher(data.getContent()).matches())
             errors.rejectValue("content", "invalid_data.content");
     }
 }
