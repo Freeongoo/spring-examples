@@ -1,0 +1,14 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<h1>Not required get param = only set in method params values</h1>
+<h3>@GetMapping("/with-not-required-get-params-simple")</h3>
+<h3>public String withNotRequiredGetParamsSimple(String name, String error, Model model)</h3>
+
+<p th:text="'Hello, ' + ${name} + '!'" />
+</body>
+</html>

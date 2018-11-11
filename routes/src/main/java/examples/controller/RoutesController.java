@@ -84,6 +84,17 @@ public class RoutesController {
         return "with-not-required-get-params";
     }
 
+    // Simple way - just only set in method params: "String name, String error" - and this vars inserted from GET params
+    // GET url with not request get params "name":
+    // examples: "/greeting" or "greeting?name=petya"
+    // must be set defaultValue - if not set - be null
+    @GetMapping("/with-not-required-get-params-simple")
+    public String withNotRequiredGetParamsSimple(String name, String error, Model model) {
+        model.addAttribute("name", name);
+        model.addAttribute("error", error);
+        return "with-not-required-get-params-simple";
+    }
+
     // GET url with not request get param "name" and not required - "age":
     // examples: "/with-two-not-required-and-not-required-get-params?name=petya&age=20"
     // must be set defaultValue - if not set - be null
