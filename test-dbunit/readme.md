@@ -67,3 +67,29 @@
         DbUnitTestExecutionListener.class
 })
 ```
+
+### Config connect to DB if custom connect
+
+If use custom bean for connect, like this:
+```
+@Configuration
+public class DBConfiguration {
+
+	@Bean
+	public DataSource getDataSource() throws PropertyVetoException {
+		ComboPooledDataSource dataSource = new ComboPooledDataSource();
+		dataSource.setDriverClass(env.getProperty("spring.datasource.dataSourceClassName"));
+		dataSource.setJdbcUrl(env.getProperty("spring.datasource.url"));
+		dataSource.setUser(env.getProperty("spring.datasource.username"));
+		dataSource.setPassword(env.getProperty("spring.datasource.password"));
+		return dataSource;
+	}
+```
+
+You must manually config connect in test for DBUnit, like this:
+
+```
+@DbUnitConfiguration(databaseConnection="getDataSource")
+```
+
+where `getDataSource` - name of bean
