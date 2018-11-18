@@ -63,3 +63,14 @@ public class AppConfig implements WebMvcConfigurer {
 ```
 
 And then when we will pass the GET parameter: `?lang=fr` language will be changed to transmitted
+
+## How get message from message_code?
+
+Use MessageSource method `getMessage`  
+
+```
+@RequestMapping("/trulala")
+public String trulala(Locale locale) {
+    return messageSource.getMessage("trulala", null, locale);
+}
+```
