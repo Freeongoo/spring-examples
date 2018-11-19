@@ -10,4 +10,5 @@ spring.jpa.hibernate.ddl-auto = create-drop
 
 logging.level.org.hibernate.SQL = DEBUG
 logging.level.org.hibernate.type = TRACE
+spring.jackson.time-zone=Europe/Moscow
 

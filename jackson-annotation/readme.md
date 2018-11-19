@@ -1,3 +1,4 @@
+
 # Jackson Annotation Examples
 
 * `@JsonAnyGetter` -  allows the flexibility of using a Map field as standard properties.
@@ -10,3 +11,8 @@
 * `@JsonIgnoreProperties` - one of the most common annotations in Jackson - is used to mark a property or a list of properties to be ignored at the class level.
 * `@JsonIgnore` - is used to mark a property to be ignored at the field level.
 * `@JsonInclude` - is used to exclude properties with empty/null/default values.
+
+##  Create Json 
+
+* by string : `/src/test/java/createJson/CreateJsonByStringTest.java`
+* by jackson : `/src/test/java/createJson/CreateJsonByJacksonTest.java`

@@ -40,6 +40,8 @@ public class User implements Serializable {
     }
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT)
+    // set timezone
+    // @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = DATE_FORMAT, timezone = "GMT+3")
     public Date getCreatedDate() {
         return createdDate;
     }
