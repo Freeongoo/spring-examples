@@ -49,7 +49,7 @@ public class ScheduledTasks {
     // |     |     +--------- day of month (1 - 31)
     // |     +----------- hour (0 - 23)
     // +------------- min (0 - 59)
-    @Scheduled(cron = "0 * * * * ?")
+    @Scheduled(cron = "* * * * * ?")
     public void scheduleTaskWithCronExpression() {
         logger.info("Cron Task :: Execution Time - {}", dateTimeFormatter.format(LocalDateTime.now()));
     }
