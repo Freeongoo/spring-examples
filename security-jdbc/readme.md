@@ -2,7 +2,10 @@
 
 For demonstration use.
 
-Save user in MySQL with jdbc.
+## Features:
+* use static html pages
+* use jdbc without Hibernate or JPA
+* database: MySQL
 
 ## Config
 
