@@ -13,26 +13,43 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
         http
+            // run config
             .authorizeRequests()
-                .antMatchers("/", "/home")
+
+            // when try access to routes "/" or "/home" - allow all
+            .antMatchers("/", "/home")
                 .permitAll()
+
+            // when try access to route "/admin" - must have role "ADMIN"
             .antMatchers("/admin")
                 .hasRole("ADMIN")
+
+            // for all routes - required authentication
             .anyRequest()
                 .authenticated()
-                .and()
+
+            .and()
+
+            // config page login
             .formLogin()
                 .loginPage("/login")
                 .permitAll()
-                .and()
+
+            .and()
+
+            // config page logout (default "logout")
             .logout()
                 .permitAll();
 
         // for handle 403 when not access
-        http.exceptionHandling().accessDeniedPage("/403");
+        http
+            .exceptionHandling()
+            .accessDeniedPage("/403");
     }
 
     @Bean
