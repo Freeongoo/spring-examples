@@ -20,6 +20,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**
      * Add query request to database for get info user by username and authorities by username
+     * from wrapper doing like realize UserDetailsService.loadUserByUsername
      *
      * @param auth
      * @throws Exception
