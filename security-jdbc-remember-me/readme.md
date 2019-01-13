@@ -21,7 +21,7 @@ Run util PasswordEncoderUtil.java for generate new password
 
 Two way:
 1. in cookie 
-2. in db
+2. in db (use table name "persistent_logins" - it's default name for store token @see `JdbcTokenRepositoryImpl` in Spring)
 
 See comments in WebSecurityConfig to see how it's work
 

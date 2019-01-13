@@ -13,6 +13,7 @@ CREATE TABLE user_roles (
   KEY fk_username_idx (username),
   CONSTRAINT fk_username FOREIGN KEY (username) REFERENCES users (username));
 
+-- for remember-me use default name table, @see JdbcTokenRepositoryImpl
 create table persistent_logins (
   username varchar(20) not null,
   series varchar(64) primary key,
