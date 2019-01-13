@@ -14,36 +14,60 @@ import javax.sql.DataSource;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
     @Autowired
     DataSource dataSource;
 
+    /**
+     * Add query request to database for get info user by username and authorities by username
+     *
+     * @param auth
+     * @throws Exception
+     */
     @Autowired
     public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
-        auth.jdbcAuthentication().dataSource(dataSource)
-                .usersByUsernameQuery("select username,password, enabled from users where username=?")
-                .authoritiesByUsernameQuery("select username, role from user_roles where username=?");
+        auth
+            .jdbcAuthentication()
+            .dataSource(dataSource)
+            .usersByUsernameQuery("select username, password, enabled from users where username = ?")
+            .authoritiesByUsernameQuery("select username, role from user_roles where username = ?");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+            // run config
             .authorizeRequests()
-                .antMatchers("/", "/home")
+
+            // when try access to routes "/" or "/home" - allow all
+            .antMatchers("/", "/home")
                 .permitAll()
+
+            // when try access to route "/admin" - must have role "ADMIN"
             .antMatchers("/admin")
                 .hasRole("ADMIN")
+
+            // for all routes - required authentication
             .anyRequest()
                 .authenticated()
-                .and()
+
+            .and()
+
+            // config page login
             .formLogin()
                 .loginPage("/login")
                 .permitAll()
-                .and()
+
+            .and()
+
+            // config page logout (default "logout")
             .logout()
                 .permitAll();
 
         // for handle 403 when not access
-        http.exceptionHandling().accessDeniedPage("/403");
+        http
+            .exceptionHandling()
+            .accessDeniedPage("/403");
     }
 
     @Bean
