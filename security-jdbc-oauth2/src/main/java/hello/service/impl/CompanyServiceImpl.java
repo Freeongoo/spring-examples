@@ -3,6 +3,7 @@ package hello.service.impl;
 import hello.entity.Company;
 import hello.repository.CompanyRepository;
 import hello.service.CompanyService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,6 +14,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     private CompanyRepository repository;
 
+    @Autowired
     public CompanyServiceImpl(CompanyRepository repository) {
         this.repository = repository;
     }
