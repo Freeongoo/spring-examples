@@ -9,7 +9,8 @@
     <changeSet id="1" author="freeongoo">
 
         <createTable tableName="company"
-                     remarks="A table to contain all books">
+                     remarks="Create table company">
+
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints nullable="false" unique="true" primaryKey="true"/>
             </column>
