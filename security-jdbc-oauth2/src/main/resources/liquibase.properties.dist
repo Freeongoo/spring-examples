@@ -1,4 +1,0 @@
-url=jdbc:mysql://localhost:3306/company?useSSL=false
-username=root
-password=root
-change-log=classpath:/db/changelog/liquibase-changelog.xml
