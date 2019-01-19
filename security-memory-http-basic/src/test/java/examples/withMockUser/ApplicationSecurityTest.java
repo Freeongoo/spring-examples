@@ -20,8 +20,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 public class ApplicationSecurityTest {
 
-    private static String DOMAIN = "http://localhost";
-
     @Autowired
     private WebApplicationContext context;
 
@@ -58,6 +56,13 @@ public class ApplicationSecurityTest {
         mvc.perform(get("/admin")
                 .with(httpBasic("admin", "password")))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void givenAuthRequestOnPrivateAdminServiceWithAdminByHttpBasicInvalidPassword_shouldUnauthorized401() throws Exception {
+        mvc.perform(get("/admin")
+                .with(httpBasic("admin", "invalidPassword")))
+                .andExpect(status().isUnauthorized());
     }
 
     @Test
