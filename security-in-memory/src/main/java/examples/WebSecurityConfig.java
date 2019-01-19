@@ -8,7 +8,11 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+
+import java.util.function.Function;
 
 @Configuration
 @EnableWebSecurity
@@ -29,7 +33,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/admin")
                 .hasRole("ADMIN")
 
-            // for all routes - required authentication
+            // for all routes - required authentication - it's means redirect to login page
             .anyRequest()
                 .authenticated()
 
@@ -37,7 +41,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
             // config page login
             .formLogin()
-                .loginPage("/login")
+                .loginPage("/login") // default is too "/login" - only for demonstration
                 .permitAll()
 
             .and()
@@ -53,18 +57,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(4);
+    }
+
+    @Bean
     @Override
     public UserDetailsService userDetailsService() {
-        UserDetails user =
-            User.withDefaultPasswordEncoder()
-                .username("user")
+        Function<String, String> encoder = p -> passwordEncoder().encode(p);
+
+        UserDetails user = User.withUsername("user")
+                .passwordEncoder(encoder)
                 .password("password")
                 .roles("USER")
                 .build();
 
-        UserDetails userAdmin =
-            User.withDefaultPasswordEncoder()
-                .username("admin")
+        UserDetails userAdmin = User.withUsername("admin")
+                .passwordEncoder(encoder)
                 .password("password")
                 .roles("ADMIN")
                 .build();
