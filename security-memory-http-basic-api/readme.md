@@ -24,10 +24,6 @@ The userName and password is encoded in the format `username:password`. This is 
 
 In case of basic authentication, the username and password is only encoded with Base64, but not encrypted or hashed in any way. Hence, it can be compromised by any man in the middle. Hence, it is always recommended to authenticate rest API calls by this header over a ssl connection.
 
-## Config Http Basic 
-
-Add custom authentication entry point, see: `AuthenticationEntryPoint.java`
-
 ## Testing 
 
 See integration tests.
