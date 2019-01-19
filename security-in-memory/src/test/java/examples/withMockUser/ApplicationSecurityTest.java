@@ -11,8 +11,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -58,6 +61,27 @@ public class ApplicationSecurityTest {
     public void givenOnPublicLoginUrl_shouldSucceedWith200() throws Exception {
         mvc.perform(get("/login"))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void givenOnPostLoginUrlWithoutCsrf_shouldForbiddenWith403() throws Exception {
+        mvc.perform(post("/login"))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    public void givenOnPostLoginUrlWithCsrfWithoutUser_shouldRedirect302_ToErrorUrl() throws Exception {
+        mvc.perform(post("/login").with(csrf()))
+                .andExpect(redirectedUrl("/login?error"))
+                .andExpect(status().isFound());
+    }
+
+    @WithMockUser(username="admin",password="password")
+    @Test
+    public void givenOnPostLoginUrlSuccess_shouldRedirect302_ToRootUrl() throws Exception {
+        mvc.perform(formLogin("/login"))
+                .andExpect(redirectedUrl("/"))
+                .andExpect(status().isFound());
     }
 
     @WithMockUser(username="admin",roles={"ADMIN"})

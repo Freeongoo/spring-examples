@@ -39,7 +39,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
             .and()
 
-            // config page login
+            // config using form login (we create ourselves form)
             .formLogin()
                 .loginPage("/login") // default is too "/login" - only for demonstration
                 .permitAll()
@@ -48,12 +48,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
             // config page logout (default "logout")
             .logout()
-                .permitAll();
+                .permitAll()
 
-        // for handle 403 when not access
-        http
+            .and()
+
+            // for handle 403 when not access
             .exceptionHandling()
-            .accessDeniedPage("/403");
+                .accessDeniedPage("/403");
     }
 
     @Bean

@@ -1,4 +1,6 @@
-# Spring Security
+# Spring Security With "formLogin"
+
+Simple web app with html templates.
 
 Base on article: https://spring.io/guides/gs/securing-web/
 
