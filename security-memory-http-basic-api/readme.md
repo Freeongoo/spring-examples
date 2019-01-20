@@ -26,4 +26,5 @@ In case of basic authentication, the username and password is only encoded with 
 
 ## Testing 
 
-See integration tests.
+1. Testing integration test by controller without security: `CompanyControllerTest`
+2. Testing permission with security: `CompanyControllerSecurityTest` (there is no need to test the returned data, it is enough to check only the status: allowed or prohibited)

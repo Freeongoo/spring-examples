@@ -7,15 +7,15 @@ import java.util.Optional;
 
 public interface CompanyService {
 
-    Optional<Company> get(Long id);
+    Company get(Long id);
 
-    Optional<Company> get(String name);
+    Company get(String name);
 
     List<Company> getAll();
 
-    void create(Company company);
+    Company create(Company company);
 
-    Company update(Company company);
+    Company update(Long id, Company company);
 
     void delete(Long id);
 

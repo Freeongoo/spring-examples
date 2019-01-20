@@ -12,17 +12,17 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@Transactional
 public class CompanyControllerTest {
 
     private static final String API_COMPANY = "/api/company/";
@@ -36,13 +36,12 @@ public class CompanyControllerTest {
     public void setup() {
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(context)
-                .apply(springSecurity())
                 .build();
     }
 
     @Test
-    public void all_WhenValidAdminUser() throws Exception {
-        this.mockMvc.perform(get(API_COMPANY).with(httpBasic("admin", "admin")))
+    public void getAll() throws Exception {
+        this.mockMvc.perform(get(API_COMPANY))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$", hasSize(2)))
@@ -53,50 +52,40 @@ public class CompanyControllerTest {
     }
 
     @Test
-    public void all_WhenInvalidAdminUserPassword() throws Exception {
-        this.mockMvc.perform(get(API_COMPANY).with(httpBasic("admin", "invalidPassword")))
-                .andExpect(status().isUnauthorized());
-    }
-
-    /*@Test
-    public void newEmployee() throws Exception {
+    public void create() throws Exception {
         String name = "Yahoo";
         Company company = new Company(name);
 
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String json = ow.writeValueAsString(company);
 
-        this.mockMvc.perform(post("/api/company/")
+        this.mockMvc.perform(post(API_COMPANY)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(json))
-                .andExpect(status().isCreated())
-                .andExpect(header().string("location", "http://localhost" + API_COMPANY + 3));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name", is(name)));
     }
 
     @Test
-    public void one() throws Exception {
+    public void getById() throws Exception {
         int id = 1;
 
-        this.mockMvc.perform(get("/employees/" + id))
+        this.mockMvc.perform(get(API_COMPANY + id))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("id", is(1)));
     }
 
     @Test
-    public void one_WhenNotExist() throws Exception {
+    public void getById_WhenNotExist() throws Exception {
         int idNotExist = -1;
 
-        this.mockMvc.perform(get("/employees/" + idNotExist))
+        this.mockMvc.perform(get(API_COMPANY + idNotExist))
                 .andExpect(status().isNotFound());
     }
 
     @Test
-    public void replaceEmployee() {
-    }
-
-    @Test
-    public void deleteEmployee() throws Exception {
+    public void deleteById() throws Exception {
         int idForDelete = 1;
 
         this.mockMvc.perform(delete(API_COMPANY + idForDelete))
@@ -106,5 +95,45 @@ public class CompanyControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$", hasSize(1)));
-    }*/
+    }
+
+    @Test
+    public void deleteById_WhenNotExist() throws Exception {
+        int idForDelete = -1;
+
+        this.mockMvc.perform(delete(API_COMPANY + idForDelete))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void update() throws Exception {
+        String name = "Yahoo";
+        Company company = new Company(name);
+
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        String json = ow.writeValueAsString(company);
+
+        int companyId = 1;
+        this.mockMvc.perform(patch(API_COMPANY + companyId)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(json))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("id", is(1)))
+                .andExpect(jsonPath("name", is(name)));
+    }
+
+    @Test
+    public void update_WhenNotExistId() throws Exception {
+        String name = "Yahoo";
+        Company company = new Company(name);
+
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        String json = ow.writeValueAsString(company);
+
+        int companyId = -1;
+        this.mockMvc.perform(patch(API_COMPANY + companyId)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(json))
+                .andExpect(status().isNotFound());
+    }
 }

@@ -1,6 +1,8 @@
 package hello.service.impl;
 
 import hello.entity.Company;
+import hello.exception.ERROR_CODES;
+import hello.exception.NotFoundException;
 import hello.repository.CompanyRepository;
 import hello.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +22,21 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public Optional<Company> get(Long id) {
-        return repository.findById(id);
+    public Company get(Long id) {
+        Optional<Company> company = repository.findById(id);
+        if (!company.isPresent()) {
+            throw new NotFoundException("Cannot find company by id: " + id, ERROR_CODES.OBJECT_NOT_FOUND);
+        }
+        return company.get();
     }
 
     @Override
-    public Optional<Company> get(String name) {
-        return repository.findByName(name);
+    public Company get(String name) {
+        Optional<Company> company = repository.findByName(name);
+        if (!company.isPresent()) {
+            throw new NotFoundException("Cannot find company by name: " + name, ERROR_CODES.OBJECT_NOT_FOUND);
+        }
+        return company.get();
     }
 
     @Override
@@ -35,18 +45,30 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public void create(Company company) {
-        repository.save(company);
+    public Company create(Company company) {
+        return repository.save(company);
     }
 
     @Override
-    public Company update(Company company) {
+    public Company update(Long id, Company company) {
+        validateExistId(id);
+
+        company.setId(id);
         return repository.save(company);
     }
 
     @Override
     public void delete(Long id) {
+        validateExistId(id);
+
         repository.deleteById(id);
+    }
+
+    private void validateExistId(Long id) {
+        Optional<Company> company = repository.findById(id);
+        if (!company.isPresent()) {
+            throw new NotFoundException("Cannot find company by id: " + id, ERROR_CODES.OBJECT_NOT_FOUND);
+        }
     }
 
     @Override
