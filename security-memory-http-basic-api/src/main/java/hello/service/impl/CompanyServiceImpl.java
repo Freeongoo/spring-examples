@@ -24,19 +24,15 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public Company get(Long id) {
         Optional<Company> company = repository.findById(id);
-        if (!company.isPresent()) {
-            throw new NotFoundException("Cannot find company by id: " + id, ERROR_CODES.OBJECT_NOT_FOUND);
-        }
-        return company.get();
+        return company
+                .orElseThrow(() -> new NotFoundException("Cannot find company by id: " + id, ERROR_CODES.OBJECT_NOT_FOUND));
     }
 
     @Override
     public Company get(String name) {
         Optional<Company> company = repository.findByName(name);
-        if (!company.isPresent()) {
-            throw new NotFoundException("Cannot find company by name: " + name, ERROR_CODES.OBJECT_NOT_FOUND);
-        }
-        return company.get();
+        return company
+                .orElseThrow(() -> new NotFoundException("Cannot find company by name: " + name, ERROR_CODES.OBJECT_NOT_FOUND));
     }
 
     @Override
@@ -66,9 +62,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     private void validateExistId(Long id) {
         Optional<Company> company = repository.findById(id);
-        if (!company.isPresent()) {
-            throw new NotFoundException("Cannot find company by id: " + id, ERROR_CODES.OBJECT_NOT_FOUND);
-        }
+        company.orElseThrow(() -> new NotFoundException("Cannot find company by id: " + id, ERROR_CODES.OBJECT_NOT_FOUND));
     }
 
     @Override
