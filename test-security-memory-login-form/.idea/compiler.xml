@@ -12,6 +12,7 @@
         <module name="security-in-memory" />
         <module name="security-memory-login-form" />
         <module name="spring-examples" />
+        <module name="test-security-memory-login-form" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -19,12 +20,14 @@
       <module name="securing-memory" target="1.8" />
       <module name="security-in-memory" target="1.8" />
       <module name="security-memory-login-form" target="1.8" />
+      <module name="test-security-memory-login-form" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="security-in-memory" options="-parameters" />
       <module name="security-memory-login-form" options="-parameters" />
+      <module name="test-security-memory-login-form" options="-parameters" />
     </option>
   </component>
 </project>
