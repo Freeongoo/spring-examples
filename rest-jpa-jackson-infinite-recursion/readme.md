@@ -11,6 +11,12 @@ And set configuration params
 
 # Solution
 
+## Use @JsonIgnore
+
+The easiest option. 
+
+For fields that we don’t want to serialize - add this annotation: `@JsonIgnore`
+
 ## Use @JsonView
 
 Create class:
