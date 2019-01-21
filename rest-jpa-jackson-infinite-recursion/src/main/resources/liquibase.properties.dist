@@ -1,4 +1,4 @@
-url=jdbc:mysql://localhost:3306/company?useSSL=false
+url=jdbc:mysql://localhost:3306/infinity?useSSL=false&serverTimezone=UTC
 username=root
 password=root
 change-log=classpath:/db/changelog/liquibase-changelog.xml

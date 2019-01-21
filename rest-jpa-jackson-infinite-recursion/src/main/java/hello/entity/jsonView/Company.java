@@ -8,6 +8,7 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -28,7 +29,7 @@ public class Company {
     @LazyCollection(LazyCollectionOption.TRUE)
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
     @JsonView({CompanyViews.GetOne.class, CompanyViews.List.class})
-    private Set<Product> products;
+    private List<Product> products;
 
     public Company() {
     }
@@ -53,11 +54,11 @@ public class Company {
         this.name = name;
     }
 
-    public Set<Product> getProducts() {
+    public List<Product> getProducts() {
         return products;
     }
 
-    public void setProducts(Set<Product> products) {
+    public void setProducts(List<Product> products) {
         this.products = products;
     }
 }
