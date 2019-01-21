@@ -88,4 +88,45 @@
                                  referencedTableName="post"/>
     </changeSet>
 
+    <changeSet id="7" author="freeongoo">
+        <createTable tableName="catalog" remarks="All posts">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" unique="true" primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+        <modifySql dbms="mysql">
+            <append value="engine=innodb DEFAULT CHARSET=utf8"/>
+        </modifySql>
+    </changeSet>
+
+    <changeSet id="8" author="freeongoo">
+        <createTable tableName="good" remarks="All comments">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" unique="true" primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="catalog_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <modifySql dbms="mysql">
+            <append value="engine=innodb DEFAULT CHARSET=utf8"/>
+        </modifySql>
+    </changeSet>
+
+    <changeSet id="9" author="freeongoo">
+        <addForeignKeyConstraint baseColumnNames="catalog_id"
+                                 baseTableName="good"
+                                 constraintName="fk_good_catalog_id"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="catalog"/>
+    </changeSet>
+
 </databaseChangeLog>

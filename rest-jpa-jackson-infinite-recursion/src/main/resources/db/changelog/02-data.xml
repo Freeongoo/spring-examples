@@ -62,4 +62,32 @@
         </rollback>
     </changeSet>
 
+    <changeSet id="5" author="freeongoo">
+        <comment>Inserting catalogs</comment>
+        <insert tableName="catalog">
+            <column name="id" valueNumeric="1"/>
+            <column name="name" value="Catalog Name"/>
+        </insert>
+        <rollback>
+            DELETE FROM catalog;
+        </rollback>
+    </changeSet>
+
+    <changeSet id="6" author="freeongoo">
+        <comment>Inserting goods</comment>
+        <insert tableName="good">
+            <column name="id" valueNumeric="1"/>
+            <column name="name" value="Apple"/>
+            <column name="catalog_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="good">
+            <column name="id" valueNumeric="2"/>
+            <column name="name" value="Pumpkin"/>
+            <column name="catalog_id" valueNumeric="1"/>
+        </insert>
+        <rollback>
+            DELETE FROM good;
+        </rollback>
+    </changeSet>
+
 </databaseChangeLog>

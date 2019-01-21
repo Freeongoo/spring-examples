@@ -89,6 +89,51 @@ Examples:
 
 Can preserve the Bidirectional-Relationships when deserialize string with relations
 
+## 4. Use @JsonIdentityInfo
+
+Examples
+- `/hello/entity/jsonIdentityInfo/Catalog.java`
+- `/hello/entity/jsonIdentityInfo/Good.java`
+
+Catalog:
+```
+[{
+  "id": 1,
+  "name": "Catalog Name",
+  "goods": [{
+    "id": 2,
+    "name": "Pumpkin",
+    "catalog": 1
+  }, {
+    "id": 1,
+    "name": "Apple",
+    "catalog": 1
+  }]
+}]
+```
+
+Good:
+```
+[
+    {
+        "id": 1,
+        "name": "Apple",
+        "catalog":
+        {
+            "id": 1,
+            "name": "Catalog Name",
+            "goods": [1,
+            {
+                "id": 2,
+                "name": "Pumpkin",
+                "catalog": 1
+            }]
+        }
+    },
+    2
+]
+```
+
 # Testing 
 
 See controller tests
