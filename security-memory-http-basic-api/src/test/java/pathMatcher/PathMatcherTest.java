@@ -47,6 +47,15 @@ public class PathMatcherTest {
     }
 
     @Test
+    public void oneCharOrMany_WhenManyWithSlesh() {
+        String pattern = "/?*/";
+        String sample = "/a1sfdsd23123/";
+
+        Assert.assertTrue(pathMatcher.match(pattern, sample));
+
+    }
+
+    @Test
     public void oneCharOrMany_WhenManyWithDirs() {
         String pattern = "/?*";
         String sample = "/a123123/23/2";
