@@ -1,4 +1,4 @@
-package hello.controller.jsonView;
+package hello.controller.jsonReference;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -21,9 +21,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional
-public class CompanyControllerTest {
-
-    private static final String API_COMPANY = "/api/companies/";
+public class PostControllerTest {
+    private static final String API_POST = "/api/posts/";
 
     @Autowired
     private WebApplicationContext context;
@@ -39,38 +38,38 @@ public class CompanyControllerTest {
 
     @Test
     public void getAll() throws Exception {
-        this.mockMvc.perform(get(API_COMPANY))
+        this.mockMvc.perform(get(API_POST))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].id", is(1)))
-                .andExpect(jsonPath("$[0].name", is("Google")))
-                .andExpect(jsonPath("$[0].products", hasSize(2)))
-                .andExpect(jsonPath("$[0].products[*].id", containsInAnyOrder(1, 2)))
-                .andExpect(jsonPath("$[0].products[*].name", containsInAnyOrder("search engine", "adv.")))
-                .andExpect(jsonPath("$[0].products[*].company").doesNotExist());
+                .andExpect(jsonPath("$[0].name", is("Daily News")))
+                .andExpect(jsonPath("$[0].comments", hasSize(2)))
+                .andExpect(jsonPath("$[0].comments[*].id", containsInAnyOrder(1, 2)))
+                .andExpect(jsonPath("$[0].comments[*].name", containsInAnyOrder("fake news", "again fake news")))
+                .andExpect(jsonPath("$[0].comments[*].post").doesNotExist());
     }
 
     @Test
     public void getById() throws Exception {
         int id = 1;
 
-        this.mockMvc.perform(get(API_COMPANY + id))
+        this.mockMvc.perform(get(API_POST + id))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("id", is(1)))
-                .andExpect(jsonPath("$.name", is("Google")))
-                .andExpect(jsonPath("$.products", hasSize(2)))
-                .andExpect(jsonPath("$.products[*].id", containsInAnyOrder(1, 2)))
-                .andExpect(jsonPath("$.products[*].name", containsInAnyOrder("search engine", "adv.")))
-                .andExpect(jsonPath("$.products[*].company").doesNotExist());
+                .andExpect(jsonPath("$.name", is("Daily News")))
+                .andExpect(jsonPath("$.comments", hasSize(2)))
+                .andExpect(jsonPath("$.comments[*].id", containsInAnyOrder(1, 2)))
+                .andExpect(jsonPath("$.comments[*].name", containsInAnyOrder("fake news", "again fake news")))
+                .andExpect(jsonPath("$.comments[*].post").doesNotExist());
     }
 
     @Test
     public void getById_WhenNotExist() throws Exception {
         int idNotExist = -1;
 
-        this.mockMvc.perform(get(API_COMPANY + idNotExist))
+        this.mockMvc.perform(get(API_POST + idNotExist))
                 .andExpect(status().isNotFound());
     }
 }

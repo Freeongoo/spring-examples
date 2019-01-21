@@ -34,4 +34,32 @@
         </rollback>
     </changeSet>
 
+    <changeSet id="3" author="freeongoo">
+        <comment>Inserting posts</comment>
+        <insert tableName="post">
+            <column name="id" valueNumeric="1"/>
+            <column name="name" value="Daily News"/>
+        </insert>
+        <rollback>
+            DELETE FROM post;
+        </rollback>
+    </changeSet>
+
+    <changeSet id="4" author="freeongoo">
+        <comment>Inserting comments</comment>
+        <insert tableName="comment">
+            <column name="id" valueNumeric="1"/>
+            <column name="name" value="fake news"/>
+            <column name="post_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="comment">
+            <column name="id" valueNumeric="2"/>
+            <column name="name" value="again fake news"/>
+            <column name="post_id" valueNumeric="1"/>
+        </insert>
+        <rollback>
+            DELETE FROM comment;
+        </rollback>
+    </changeSet>
+
 </databaseChangeLog>

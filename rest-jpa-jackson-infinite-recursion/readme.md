@@ -64,4 +64,11 @@ In result of company `/api/company`:
 
 The product’s link field is not displayed (`private Company company;`)
 
-## Testing 
+## Use @JsonManagedReference, @JsonBackReference
+
+- @JsonManagedReference: a part with the annotation will be serialized normally.
+- @JsonBackReference: a part with the annotation will be omitted from serialization.
+
+# Testing 
+
+See controller tests

@@ -1,7 +1,7 @@
-package hello.controller.jsonView;
+package hello.controller.jsonReference;
 
-import hello.entity.jsonView.Product;
-import hello.service.jsonView.ProductService;
+import hello.entity.jsonReference.Post;
+import hello.service.jsonReference.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -9,23 +9,23 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/products")
-public class ProductController {
+@RequestMapping("/api/posts")
+public class PostController {
 
-    private final ProductService service;
+    private final PostService service;
 
     @Autowired
-    public ProductController(ProductService service) {
+    public PostController(PostService service) {
         this.service = service;
     }
 
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody List<Product> getAll() {
+    public @ResponseBody List<Post> getAll() {
         return service.getAll();
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody Product get(@PathVariable Long id) {
+    public @ResponseBody Post get(@PathVariable Long id) {
         return service.get(id);
     }
 }

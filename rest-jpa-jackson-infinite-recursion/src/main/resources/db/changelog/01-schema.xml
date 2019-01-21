@@ -40,11 +40,52 @@
     <changeSet id="3" author="freeongoo">
         <addForeignKeyConstraint baseColumnNames="company_id"
                                  baseTableName="product"
-                                 constraintName="fk_RESTRICT"
+                                 constraintName="fk_product_company_id"
                                  onDelete="CASCADE"
                                  onUpdate="RESTRICT"
                                  referencedColumnNames="id"
                                  referencedTableName="company"/>
+    </changeSet>
+
+    <changeSet id="4" author="freeongoo">
+        <createTable tableName="post" remarks="All posts">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" unique="true" primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+        <modifySql dbms="mysql">
+            <append value="engine=innodb DEFAULT CHARSET=utf8"/>
+        </modifySql>
+    </changeSet>
+
+    <changeSet id="5" author="freeongoo">
+        <createTable tableName="comment" remarks="All comments">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" unique="true" primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="post_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <modifySql dbms="mysql">
+            <append value="engine=innodb DEFAULT CHARSET=utf8"/>
+        </modifySql>
+    </changeSet>
+
+    <changeSet id="6" author="freeongoo">
+        <addForeignKeyConstraint baseColumnNames="post_id"
+                                 baseTableName="comment"
+                                 constraintName="fk_comment_post_id"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="post"/>
     </changeSet>
 
 </databaseChangeLog>

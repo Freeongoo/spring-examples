@@ -1,7 +1,7 @@
-package hello.controller.jsonView;
+package hello.controller.jsonReference;
 
-import hello.entity.jsonView.Product;
-import hello.service.jsonView.ProductService;
+import hello.entity.jsonReference.Comment;
+import hello.service.jsonReference.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -9,23 +9,23 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/products")
-public class ProductController {
+@RequestMapping("/api/comments")
+public class CommentController {
 
-    private final ProductService service;
+    private final CommentService service;
 
     @Autowired
-    public ProductController(ProductService service) {
+    public CommentController(CommentService service) {
         this.service = service;
     }
 
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody List<Product> getAll() {
+    public @ResponseBody List<Comment> getAll() {
         return service.getAll();
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody Product get(@PathVariable Long id) {
+    public @ResponseBody Comment get(@PathVariable Long id) {
         return service.get(id);
     }
 }
