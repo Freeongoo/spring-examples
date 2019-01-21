@@ -11,13 +11,17 @@ And set configuration params
 
 # Solution
 
-## Use @JsonIgnore
+## 1. Use @JsonIgnore
 
 The easiest option. 
 
 For fields that we don’t want to serialize - add this annotation: `@JsonIgnore`
 
-## Use @JsonView
+## 2. Use @JsonView
+
+Examples:
+- `/hello/entity/jsonView/Company.java`
+- `/hello/entity/jsonView/Product.java`
 
 Create class:
 
@@ -70,10 +74,14 @@ In result of company `/api/company`:
 
 The product’s link field is not displayed (`private Company company;`)
 
-## Use @JsonManagedReference, @JsonBackReference
+## 3. Use @JsonManagedReference, @JsonBackReference
 
 - @JsonManagedReference: a part with the annotation will be serialized normally.
 - @JsonBackReference: a part with the annotation will be omitted from serialization.
+
+Examples:
+- `/hello/entity/jsonReference/Comment.java`
+- `/hello/entity/jsonReference/Post.java`
 
 # Testing 
 
