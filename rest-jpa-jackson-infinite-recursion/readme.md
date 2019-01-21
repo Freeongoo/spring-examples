@@ -17,6 +17,8 @@ The easiest option.
 
 For fields that we don’t want to serialize - add this annotation: `@JsonIgnore`
 
+Can not preserve the Bidirectional-Relationships when deserialize string with relations
+
 ## 2. Use @JsonView
 
 Examples:
@@ -74,6 +76,8 @@ In result of company `/api/company`:
 
 The product’s link field is not displayed (`private Company company;`)
 
+Can not preserve the Bidirectional-Relationships when deserialize string with relations
+
 ## 3. Use @JsonManagedReference, @JsonBackReference
 
 - @JsonManagedReference: a part with the annotation will be serialized normally.
@@ -82,6 +86,8 @@ The product’s link field is not displayed (`private Company company;`)
 Examples:
 - `/hello/entity/jsonReference/Comment.java`
 - `/hello/entity/jsonReference/Post.java`
+
+Can preserve the Bidirectional-Relationships when deserialize string with relations
 
 # Testing 
 
