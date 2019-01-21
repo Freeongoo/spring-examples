@@ -13,4 +13,9 @@
       <module name="spring-boot-liquibase" target="1.8" />
     </bytecodeTargetLevel>
   </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="spring-boot-liquibase" options="-parameters" />
+    </option>
+  </component>
 </project>
