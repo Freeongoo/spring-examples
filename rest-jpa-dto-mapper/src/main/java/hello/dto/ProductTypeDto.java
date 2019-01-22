@@ -1,5 +1,8 @@
 package hello.dto;
 
+/**
+ * Remove collection: Set<Product> products;
+ */
 public class ProductTypeDto {
     private Long id;
     private String name;

@@ -4,7 +4,7 @@ import hello.entity.Product;
 
 import java.util.List;
 
-public interface ProductService {
+public interface ProductService extends BaseService<Product> {
 
     Product get(Long id);
 
