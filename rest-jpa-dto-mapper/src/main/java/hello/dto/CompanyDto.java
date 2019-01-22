@@ -8,7 +8,7 @@ import java.util.Set;
 public class CompanyDto {
     private Long id;
     private String name;
-    private Set<ProductTypeDto> productTypes;
+    private Set<ProductTypeDto> productTypes; // important! Changed type collection to "ProductTypeDto" instead of "ProductType"
 
     public Long getId() {
         return id;
