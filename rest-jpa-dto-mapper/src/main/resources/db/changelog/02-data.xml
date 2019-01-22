@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="1" author="freeongoo">
+        <comment>Inserting Company</comment>
+        <insert tableName="company">
+            <column name="id" valueNumeric="1"/>
+            <column name="name" value="Amazon"/>
+        </insert>
+        <rollback>
+            DELETE FROM company;
+        </rollback>
+    </changeSet>
+
+    <changeSet id="2" author="freeongoo">
+        <comment>Inserting Product Type </comment>
+        <insert tableName="product_type">
+            <column name="id" valueNumeric="1"/>
+            <column name="name" value="electronics"/>
+            <column name="company_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="product_type">
+            <column name="id" valueNumeric="2"/>
+            <column name="name" value="household"/>
+            <column name="company_id" valueNumeric="1"/>
+        </insert>
+        <rollback>
+            DELETE FROM product_type;
+        </rollback>
+    </changeSet>
+
+    <changeSet id="3" author="freeongoo">
+        <comment>Inserting product</comment>
+        <insert tableName="product">
+            <column name="id" valueNumeric="1"/>
+            <column name="name" value="iPhone X"/>
+            <column name="product_type_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="product">
+            <column name="id" valueNumeric="2"/>
+            <column name="name" value="Samsung Galaxy"/>
+            <column name="product_type_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="product">
+            <column name="id" valueNumeric="3"/>
+            <column name="name" value="Table"/>
+            <column name="product_type_id" valueNumeric="2"/>
+        </insert>
+        <insert tableName="product">
+            <column name="id" valueNumeric="4"/>
+            <column name="name" value="Sofa"/>
+            <column name="product_type_id" valueNumeric="2"/>
+        </insert>
+        <rollback>
+            DELETE FROM product;
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
