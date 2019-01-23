@@ -1,4 +1,4 @@
-# Spring REST Mapper
+# Spring REST Mapping DTO
 
 ## Configuration
 
