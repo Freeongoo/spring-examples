@@ -1,4 +1,4 @@
-package hello.controller.mapper;
+package hello.controller.manual;
 
 import hello.dto.CompanyDto;
 import hello.entity.Company;

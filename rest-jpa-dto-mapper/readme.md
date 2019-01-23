@@ -59,7 +59,7 @@ Mapping is used to solve this problem.
 
 ## Solutions
 
-#### Model Mapper
+### Model Mapper
 
 Install dependencies:
 
@@ -83,6 +83,17 @@ public class Config {
     }
 }
 ```
+
+#### Manual Mode
+
+Do the conversion yourself.
+
+- Create DTO: `CompanyDto`
+- Create facade for convert Entity to DTO: `CompanyFacade`
+- Use facade in controller: `CompanyMapperController`
+
+# Testing 
+
 Result `/api/mapper/companies`:
 
 ```
@@ -101,6 +112,3 @@ Result `/api/mapper/companies`:
     }]
 }]
 ```
-
-# Testing 
-
