@@ -92,9 +92,49 @@ Do the conversion yourself.
 - Create facade for convert Entity to DTO: `CompanyFacade`
 - Use facade in controller: `CompanyMapperController`
 
+#### Auto Mode (using annotation)
+
+Using annotations for auto convert Entity to DTO
+
+- Create DTO: `CompanyDto`
+- Create annotation: `Dto`
+- Create `ControllerAdvice`: `DtoMapperResponseBodyAdvice`
+- Create controller for annotation: `CompanyMapperAnnotationController` extended from `AbstractMappingJacksonResponseBodyAdvice`
+- Add in controller in method annotation with Dto for convert:
+```
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @Dto(CompanyDto.class)
+    public @ResponseBody Company get(@PathVariable Long id) {
+        return service.get(id);
+    }
+```
+
 # Testing 
 
+### Manual converting
+
 Result `/api/mapper/companies`:
+
+```
+[
+{
+    "id": 1,
+    "name": "Amazon",
+    "productTypes": [
+    {
+        "id": 1,
+        "name": "electronics"
+    },
+    {
+        "id": 2,
+        "name": "household"
+    }]
+}]
+```
+
+### Auto converting
+
+Result `/api/mapper-annotation/companies`:
 
 ```
 [

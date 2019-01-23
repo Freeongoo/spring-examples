@@ -1,4 +1,4 @@
-package hello;
+package hello.util;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;

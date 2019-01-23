@@ -1,6 +1,6 @@
 package hello.facade;
 
-import hello.ObjectMapperUtils;
+import hello.util.ObjectMapperUtils;
 import hello.service.BaseService;
 
 import java.util.Collection;
