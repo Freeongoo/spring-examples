@@ -84,6 +84,18 @@ public class Config {
 }
 ```
 
+### How to create DTO for mapper?
+
+1. Create separated class with same fields and setter, getter - and remove some fields that not need. Example: `CompanyDto`
+2. For some reasons if need only ignore serialization some fields, you can only extend original Entity - and ignore field, example:
+
+```
+    @JsonIgnoreProperties("products")
+    public class ProductTypeDto extends ProductType {
+    
+    }
+```
+
 #### Manual Mode
 
 Do the conversion yourself.

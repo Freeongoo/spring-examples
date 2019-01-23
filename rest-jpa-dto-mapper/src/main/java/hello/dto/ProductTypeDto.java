@@ -1,25 +1,12 @@
 package hello.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import hello.entity.ProductType;
+
 /**
- * Remove collection: Set<Product> products;
+ * Ignore collection: Set<Product> products;
  */
-public class ProductTypeDto {
-    private Long id;
-    private String name;
+@JsonIgnoreProperties("products")
+public class ProductTypeDto extends ProductType {
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }

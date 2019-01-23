@@ -11,14 +11,7 @@ import java.util.Set;
 @Table(name = "company")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Company {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(nullable = false, unique = true)
-    private String name;
+public class Company extends AbstractEntity {
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
     @JsonManagedReference
@@ -28,22 +21,6 @@ public class Company {
     }
 
     public Company(String name) {
-        this.name = name;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
         this.name = name;
     }
 

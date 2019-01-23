@@ -1,30 +1,14 @@
 package hello.dto;
 
+import hello.entity.AbstractEntity;
+
 import java.util.Set;
 
 /**
- * If you need to hide some field, you just need to remove this field from here.
+ * Change collection type field "productTypes" to "ProductTypeDto" instead "ProductType"
  */
-public class CompanyDto {
-    private Long id;
-    private String name;
+public class CompanyDto extends AbstractEntity {
     private Set<ProductTypeDto> productTypes; // important! Changed type collection to "ProductTypeDto" instead of "ProductType"
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public Set<ProductTypeDto> getProductTypes() {
         return productTypes;

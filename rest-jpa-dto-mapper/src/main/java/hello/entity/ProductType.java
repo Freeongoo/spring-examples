@@ -12,14 +12,7 @@ import java.util.Set;
 @Table(name = "product_type")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ProductType {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(nullable = false, unique = true)
-    private String name;
+public class ProductType extends AbstractEntity {
 
     @ManyToOne
     @JoinColumn(name = "company_id", nullable = false)
@@ -29,22 +22,6 @@ public class ProductType {
     @OneToMany(mappedBy = "productType", cascade = CascadeType.ALL)
     @JsonManagedReference
     private Set<Product> products;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public Company getCompany() {
         return company;
