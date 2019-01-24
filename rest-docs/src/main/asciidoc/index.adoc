@@ -1,3 +1,5 @@
+:source-highlighter: highlightjs
+
 = Getting Started With Spring REST Docs
 
 This is an example output for a service running at http://localhost:8080:

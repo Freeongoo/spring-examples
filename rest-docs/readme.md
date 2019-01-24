@@ -12,15 +12,38 @@
 </dependency>
 ```
 
-2. Create source index docs:
-`/src/main/asciidoc/index.adoc`
+2. Create source index docs: `/src/main/asciidoc/index.adoc`
 
-3. Add custom dir for docs in tests:
-```
-@AutoConfigureRestDocs(outputDir = "target/snippets")
-```
+Using `:source-highlighter: highlightjs` soo cool!
 
-See `/src/test/java/examples/controller/HomeControllerTest.java`
+3. Create test with Docs
+
+3.1. Create integration test with MvcMock: `HomeControllerTest`
+
+3.2. Add custom dir for docs in tests:
+```
+    @AutoConfigureRestDocs(outputDir = "target/snippets")
+```
+3.3. Add in test when response - generate docs:
+```
+    ResultActions resultActions = this.mockMvc
+            .perform(
+                    get("/")
+                            .accept(APPLICATION_JSON)
+            )
+            .andExpect(status().isOk())
+            .andExpect(content().string(containsString("Hello World")))
+            .andDo(print());
+
+    // added for rest docs !!!
+    resultActions
+            .andDo(document("home", responseFields(
+                    fieldWithPath("message").description("The welcome message for the user.")
+            )));
+```
+(where `home` - identificator for name folder)
+
+3.4. Check dir with snippets: `/target/generated-snippets/home`
 
 4. Add mvn plugin and config with out custom dirs:
 
