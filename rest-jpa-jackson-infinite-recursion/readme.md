@@ -21,55 +21,74 @@ Can not preserve the Bidirectional-Relationships when deserialize string with re
 
 ## 2. Use @JsonView
 
-Examples:
+Use `@JsonView` to filter fields depending on the context of serialization.
+Only those fields that are marked `@JsonView` with this annotation will be serialized.
+
+But we have a problem in that we have common entity fields that are in an abstract class: `AbstractEntity`
+To solve this problem you need to use the following views classes:
+
+- public interface CompanyViews {}
+- public interface ProductViews {}
+- public interface CommonViews {}
+- public interface CompanyAndCommonViews extends CompanyViews, CommonViews {}
+- public interface ProductAndCommonViews extends ProductViews, CommonViews {}
+
+Entities:
 - `/hello/entity/jsonView/Company.java`
 - `/hello/entity/jsonView/Product.java`
 
-Create class:
+Next add views classes to controllers.
 
+In product controller:
 ```
-public class CompanyViews {
-
-    public static class List {
-    }
-
-    public static class GetOne {
-    }
-}
-```
-
-Add this class in controller:
-
-```
-@JsonView({CompanyViews.List.class})
+@JsonView({CompanyAndCommonViews.List.class})
 @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 public @ResponseBody List<Company> getAll() {
     return service.getAll();
 }
+```
 
-@JsonView({CompanyViews.GetOne.class})
-@RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-public @ResponseBody Company get(@PathVariable Long id) {
-    return service.get(id);
+In company controller:
+```
+@JsonView({ProductAndCommonViews.List.class})
+@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+public @ResponseBody List<Company> getAll() {
+    return service.getAll();
 }
 ```
 
-Further above each field, where we want it to be displayed during serialization, we add the class we need
+In result `/api/products`:
 
-In our case, we add all fields, except for the field of communication of the product with the company
+```
+[{
+  "id": 1,
+  "name": "search engine",
+  "company": {
+    "id": 1,
+    "name": "Google"
+  }
+}, {
+  "id": 2,
+  "name": "adv.",
+  "company": {
+    "id": 1,
+    "name": "Google"
+  }
+}]
+```
 
-In result of company `/api/company`:
+In result `/api/companies`:
 
 ```
 [{
   "id": 1,
   "name": "Google",
   "products": [{
-    "id": 2,
-    "name": "adv."
-  }, {
     "id": 1,
     "name": "search engine"
+  }, {
+    "id": 2,
+    "name": "adv."
   }]
 }]
 ```

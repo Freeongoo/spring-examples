@@ -3,44 +3,24 @@ package hello.entity.jsonView;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonView;
-import hello.view.CompanyViews;
+import hello.entity.AbstractEntity;
+import hello.view.ProductViews;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "product")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Product {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView({CompanyViews.GetOne.class, CompanyViews.List.class})
-    private Long id;
-
-    @Column(nullable = false, unique = true)
-    @JsonView({CompanyViews.GetOne.class, CompanyViews.List.class})
-    private String name;
+public class Product extends AbstractEntity {
 
     @ManyToOne
     @JoinColumn(name = "company_id", nullable = false)
+    @JsonView({ProductViews.class})
     private Company company;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public Company getCompany() {
         return company;
