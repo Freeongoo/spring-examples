@@ -1,8 +1,8 @@
 # Spring REST Docs
 
-## Generate
+## Generation
 
-1. Install deps
+### 1. Install deps
 
 ```
 <dependency>
@@ -12,19 +12,19 @@
 </dependency>
 ```
 
-2. Create source index docs: `/src/main/asciidoc/index.adoc`
+### 2. Create source index docs: `/src/main/asciidoc/index.adoc`
 
 Using `:source-highlighter: highlightjs` soo cool!
 
-3. Create test with Docs
+### 3. Create test with Docs
 
-3.1. Create integration test with MvcMock: `HomeControllerTest`
+#### 3.1. Create integration test with MvcMock: `HomeControllerTest`
 
-3.2. Add custom dir for docs in tests:
+#### 3.2. Add custom dir for docs in tests:
 ```
     @AutoConfigureRestDocs(outputDir = "target/snippets")
 ```
-3.3. Add in test when response - generate docs:
+#### 3.3. Add in test when response - generate docs:
 ```
     ResultActions resultActions = this.mockMvc
             .perform(
@@ -43,9 +43,9 @@ Using `:source-highlighter: highlightjs` soo cool!
 ```
 (where `home` - identificator for name folder)
 
-3.4. Check dir with snippets: `/target/generated-snippets/home`
+#### 3.4. Check dir with snippets: `/target/generated-snippets/home`
 
-4. Add mvn plugin and config with out custom dirs:
+### 4. Add mvn plugin and config with out custom dirs:
 
 ```
 <plugin>
@@ -70,9 +70,9 @@ Using `:source-highlighter: highlightjs` soo cool!
 </plugin>
 ```
 
-5. Run 
+### 5. Run 
 ```
 mvn package
 ```
 
-6. Open `/target/generated-docs/index.html`
+### 6. Open `/target/generated-docs/index.html`
