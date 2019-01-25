@@ -16,11 +16,18 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.Base64;
+
 import static org.hamcrest.Matchers.is;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -50,6 +57,20 @@ public class CompanyControllerSecurityTest {
     @Test
     public void getAll_WhenValidAdminUser() throws Exception {
         this.mockMvc.perform(get(API_COMPANY).with(httpBasicWithAdmin))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void getAll_WhenInvalid_WhenHardCodeSetToHeader() throws Exception {
+        this.mockMvc.perform(get(API_COMPANY).header("Authorization", "Basic dXNlcjpzZWNyZXQ="))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    public void getAll_WhenValidAdminUser_WhenHardCodeSetToHeader() throws Exception {
+        byte[] toEncode = ("admin" + ":" + "admin").getBytes("UTF-8");
+        this.mockMvc.perform(get(API_COMPANY)
+                .header("Authorization", "Basic " + new String(Base64.getEncoder().encode(toEncode))))
                 .andExpect(status().isOk());
     }
 
