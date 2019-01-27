@@ -53,7 +53,7 @@ Example: `/test/java/hello/mockMvc/webApplication/EmployeeControllerWebApplicati
     }
 ```
 
-## 2. Run all service and test by RestTemplate
+## 2. Run real server and test by RestTemplate
 
 ```
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)

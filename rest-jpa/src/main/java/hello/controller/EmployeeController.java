@@ -12,34 +12,37 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
+import static hello.controller.Route.EMPLOYEE_ROUTE;
+
 @RestController
+@RequestMapping(EMPLOYEE_ROUTE)
 public class EmployeeController {
 
     @Autowired
     private EmployeeRepository repository;
 
-    @GetMapping("/employees")
+    @GetMapping("")
     List<Employee> all() {
         return repository.findAll();
     }
 
-    @PostMapping("/employees")
+    @PostMapping("")
     ResponseEntity<Employee> newEmployee(@RequestBody Employee newEmployee, UriComponentsBuilder ucBuilder) {
         Employee employeeSaved = repository.save(newEmployee);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(ucBuilder.path("/employees/{id}").buildAndExpand(employeeSaved.getId()).toUri());
+        headers.setLocation(ucBuilder.path(EMPLOYEE_ROUTE + "/{id}").buildAndExpand(employeeSaved.getId()).toUri());
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
-    @GetMapping("/employees/{id}")
+    @GetMapping("/{id}")
     Employee one(@PathVariable Long id) {
         return repository
                 .findById(id)
                 .orElseThrow(() -> new EmployeeNotFoundException(id));
     }
 
-    @PutMapping("/employees/{id}")
+    @PutMapping("/{id}")
     ResponseEntity<Employee> replaceEmployee(@RequestBody Employee newEmployee, @PathVariable Long id, UriComponentsBuilder ucBuilder) {
         Employee updatedEmployee = repository.findById(id)
                 .map(employee -> {
@@ -57,7 +60,7 @@ public class EmployeeController {
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/employees/{id}")
+    @DeleteMapping("/{id}")
     ResponseEntity<?> deleteEmployee(@PathVariable Long id) {
         repository.deleteById(id);
         return ResponseEntity.noContent().build();

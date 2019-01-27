@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.jcabi.matchers.RegexMatchers.matchesPattern;
+import static hello.controller.Route.EMPLOYEE_ROUTE;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertEquals;
@@ -27,7 +28,7 @@ import static org.junit.Assert.assertEquals;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class EmployeeRestTemplateTest {
 
-    private String url;
+    private String employeeUrl;
 
     @LocalServerPort
     private int port;
@@ -40,11 +41,13 @@ public class EmployeeRestTemplateTest {
 
     @Before
     public void setUp() {
-        url = "http://localhost:" + port;
+        String url = "http://localhost:" + port;
+        employeeUrl = url + EMPLOYEE_ROUTE;
     }
 
     @After
     public void cleanUp() {
+        // manually clear db
         employeeRepository.deleteAll();
     }
 
@@ -52,15 +55,15 @@ public class EmployeeRestTemplateTest {
     public void getEmployeeById() {
         Employee employeeExpected = new Employee("Foo", "foo@foo.com");
 
-        restTemplate.postForEntity(url + "/employees", employeeExpected, Employee.class);
+        restTemplate.postForEntity(employeeUrl, employeeExpected, Employee.class);
 
-        ResponseEntity<Employee[]> responseObject = restTemplate.getForEntity(url + "/employees", Employee[].class);
+        ResponseEntity<Employee[]> responseObject = restTemplate.getForEntity(employeeUrl, Employee[].class);
         Employee[] employees = responseObject.getBody();
         Employee createdEmployee = employees[0];
         Long id = createdEmployee.getId();
         employeeExpected.setId(id);
 
-        ResponseEntity<Employee> responseEntity = restTemplate.getForEntity(url + "/employees/" + id, Employee.class);
+        ResponseEntity<Employee> responseEntity = restTemplate.getForEntity(employeeUrl + "/" + id, Employee.class);
         Employee employee = responseEntity.getBody();
 
         assertEquals(employeeExpected, employee);
@@ -68,7 +71,7 @@ public class EmployeeRestTemplateTest {
 
     @Test
     public void employeeList_WhenEmpty() {
-        ResponseEntity<Employee[]> responseObject = restTemplate.getForEntity(url + "/employees", Employee[].class);
+        ResponseEntity<Employee[]> responseObject = restTemplate.getForEntity(employeeUrl, Employee[].class);
         Object[] employees = responseObject.getBody();
         List<?> searchList = Arrays.asList(employees);
         assertEquals(0, searchList.size());
@@ -78,9 +81,9 @@ public class EmployeeRestTemplateTest {
     public void employeeList_WhenInserted() {
         // insert
         Employee employee = new Employee("Foo", "foo@foo.com");
-        restTemplate.postForEntity(url + "/employees", employee, Employee.class);
+        restTemplate.postForEntity(employeeUrl, employee, Employee.class);
 
-        ResponseEntity<Employee[]> responseObject = restTemplate.getForEntity(url + "/employees", Employee[].class);
+        ResponseEntity<Employee[]> responseObject = restTemplate.getForEntity(employeeUrl, Employee[].class);
         Employee[] employees = responseObject.getBody();
         Employee firstEmployee = employees[0];
 
@@ -91,31 +94,29 @@ public class EmployeeRestTemplateTest {
     @Test
     public void createEmployee_WhenFirst() {
         ResponseEntity<Employee> responseEntity =
-                restTemplate.postForEntity(url + "/employees", new Employee("Foo", "foo@foo.com"), Employee.class);
+                restTemplate.postForEntity(employeeUrl, new Employee("Foo", "foo@foo.com"), Employee.class);
         HttpHeaders headers = responseEntity.getHeaders();
         List<String> location = headers.get("Location");
-        String urlEmp = url + "/employees/";
 
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
 
         String actual = location.get(0);
-        assertThat(actual, matchesPattern(urlEmp + "\\d+"));
+        assertThat(actual, matchesPattern(employeeUrl + "/\\d+"));
     }
 
     @Test
     public void createEmployee_WhenSecond() {
         // First
-        restTemplate.postForEntity(url + "/employees", new Employee("Foo", "foo@foo.com"), Employee.class);
+        restTemplate.postForEntity(employeeUrl, new Employee("Foo", "foo@foo.com"), Employee.class);
 
         ResponseEntity<Employee> responseEntity =
-                restTemplate.postForEntity(url + "/employees", new Employee("Foo2", "foo2@foo.com"), Employee.class);
+                restTemplate.postForEntity(employeeUrl, new Employee("Foo2", "foo2@foo.com"), Employee.class);
         HttpHeaders headers = responseEntity.getHeaders();
         List<String> location = headers.get("Location");
-        String urlEmp = url + "/employees/";
 
         assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
 
         String actual = location.get(0);
-        assertThat(actual, matchesPattern(urlEmp + "\\d+"));
+        assertThat(actual, matchesPattern(employeeUrl + "/\\d+"));
     }
 }

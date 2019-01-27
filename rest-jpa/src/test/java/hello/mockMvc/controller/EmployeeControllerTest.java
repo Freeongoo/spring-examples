@@ -1,6 +1,5 @@
 package hello.mockMvc.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
@@ -24,6 +23,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import javax.transaction.Transactional;
 
 import static com.jcabi.matchers.RegexMatchers.matchesPattern;
+import static hello.controller.Route.EMPLOYEE_ROUTE;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -42,6 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class EmployeeControllerTest {
 
     private MockMvc mockMvc;
+    private static String employeeRouteWithParam = EMPLOYEE_ROUTE + "/{id}";
 
     @Autowired
     private EmployeeController employeeController;
@@ -55,7 +56,7 @@ public class EmployeeControllerTest {
 
     @Test
     public void all() throws Exception {
-        this.mockMvc.perform(get("/employees/"))
+        this.mockMvc.perform(get(EMPLOYEE_ROUTE))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$", hasSize(2)))
@@ -76,7 +77,7 @@ public class EmployeeControllerTest {
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String json = ow.writeValueAsString(expectedEmployee);
 
-        this.mockMvc.perform(post("/employees")
+        this.mockMvc.perform(post(EMPLOYEE_ROUTE)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(json))
                 .andExpect(status().isCreated())
@@ -87,7 +88,7 @@ public class EmployeeControllerTest {
     public void one() throws Exception {
         int id = 1;
 
-        this.mockMvc.perform(get("/employees/" + id))
+        this.mockMvc.perform(get(employeeRouteWithParam, id))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("id", is(1)))
@@ -99,7 +100,7 @@ public class EmployeeControllerTest {
     public void one_WhenNotExist() throws Exception {
         int idNotExist = -1;
 
-        this.mockMvc.perform(get("/employees/" + idNotExist))
+        this.mockMvc.perform(get(employeeRouteWithParam, idNotExist))
                 .andExpect(status().isNotFound());
     }
 
@@ -113,7 +114,7 @@ public class EmployeeControllerTest {
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String json = ow.writeValueAsString(expectedEmployee);
 
-        this.mockMvc.perform(put("/employees/" + id)
+        this.mockMvc.perform(put(employeeRouteWithParam, id)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(json))
                 .andExpect(status().isCreated())
@@ -124,10 +125,10 @@ public class EmployeeControllerTest {
     public void deleteEmployee() throws Exception {
         int idForDelete = 1;
 
-        this.mockMvc.perform(delete("/employees/" + idForDelete))
+        this.mockMvc.perform(delete(employeeRouteWithParam, idForDelete))
                 .andExpect(status().isNoContent());
 
-        this.mockMvc.perform(get("/employees/"))
+        this.mockMvc.perform(get(EMPLOYEE_ROUTE))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$", hasSize(1)))
