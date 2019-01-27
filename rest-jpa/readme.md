@@ -1,6 +1,17 @@
 # Example jpa rest
 
-## Testing
+## With only one entity Employee, without relations
+
+JPA Employee:
+
+```
+@Repository
+public interface EmployeeRepository extends JpaRepository<Employee, Long> {
+
+}
+```
+
+# Testing
 
 When try test exception handle don't forget add advice in MockMvc:
 
