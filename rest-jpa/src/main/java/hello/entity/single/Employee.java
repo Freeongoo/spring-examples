@@ -1,4 +1,4 @@
-package hello.entity;
+package hello.entity.single;
 
 import lombok.Data;
 

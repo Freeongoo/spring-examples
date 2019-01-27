@@ -1,8 +1,8 @@
-package hello.controller;
+package hello.controller.single;
 
-import hello.entity.Employee;
+import hello.entity.single.Employee;
 import hello.exception.EmployeeNotFoundException;
-import hello.repository.EmployeeRepository;
+import hello.repository.single.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

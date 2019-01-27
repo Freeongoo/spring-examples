@@ -1,7 +1,7 @@
 package hello.restTemplate;
 
-import hello.entity.Employee;
-import hello.repository.EmployeeRepository;
+import hello.entity.single.Employee;
+import hello.repository.single.EmployeeRepository;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

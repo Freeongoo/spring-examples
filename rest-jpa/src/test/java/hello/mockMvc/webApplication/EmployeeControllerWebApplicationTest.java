@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
-import hello.entity.Employee;
+import hello.entity.single.Employee;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
