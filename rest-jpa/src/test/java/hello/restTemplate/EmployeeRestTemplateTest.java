@@ -1,7 +1,7 @@
-package hello.nothingmocking;
+package hello.restTemplate;
 
-import hello.dao.EmployeeDao;
-import hello.model.Employee;
+import hello.entity.Employee;
+import hello.repository.EmployeeRepository;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,8 +13,6 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlGroup;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
@@ -27,10 +25,8 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@SqlGroup({
-        @Sql("/db.sql"),
-})
-public class TestRestTemplateTest {
+public class EmployeeRestTemplateTest {
+
     private String url;
 
     @LocalServerPort
@@ -40,7 +36,7 @@ public class TestRestTemplateTest {
     private TestRestTemplate restTemplate;
 
     @Autowired
-    private EmployeeDao employeeDao;
+    private EmployeeRepository employeeRepository;
 
     @Before
     public void setUp() {
@@ -49,7 +45,7 @@ public class TestRestTemplateTest {
 
     @After
     public void cleanUp() {
-        employeeDao.deleteAll();
+        employeeRepository.deleteAll();
     }
 
     @Test
@@ -61,7 +57,7 @@ public class TestRestTemplateTest {
         ResponseEntity<Employee[]> responseObject = restTemplate.getForEntity(url + "/employees", Employee[].class);
         Employee[] employees = responseObject.getBody();
         Employee createdEmployee = employees[0];
-        Integer id = createdEmployee.getId();
+        Long id = createdEmployee.getId();
         employeeExpected.setId(id);
 
         ResponseEntity<Employee> responseEntity = restTemplate.getForEntity(url + "/employees/" + id, Employee.class);
@@ -84,15 +80,12 @@ public class TestRestTemplateTest {
         Employee employee = new Employee("Foo", "foo@foo.com");
         restTemplate.postForEntity(url + "/employees", employee, Employee.class);
 
-        Employee[] expectedArrEmployee = new Employee[1];
-        expectedArrEmployee[0] = employee;
-
         ResponseEntity<Employee[]> responseObject = restTemplate.getForEntity(url + "/employees", Employee[].class);
         Employee[] employees = responseObject.getBody();
         Employee firstEmployee = employees[0];
 
         assertThat(firstEmployee.getName(), equalTo(employee.getName()));
-        assertThat(firstEmployee.getEmail(), equalTo(employee.getEmail()));
+        assertThat(firstEmployee.getRole(), equalTo(employee.getRole()));
     }
 
     @Test

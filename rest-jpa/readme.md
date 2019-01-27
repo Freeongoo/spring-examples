@@ -52,3 +52,14 @@ Example: `/test/java/hello/mockMvc/webApplication/EmployeeControllerWebApplicati
                 .build();
     }
 ```
+
+## 2. Run all service and test by RestTemplate
+
+```
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+```
+
+It is important to remember that in this case you need to clean the database 
+yourself after each method, since the `@Transaction` does not work here (not rollback).
+
+Example: `/test/java/hello/restTemplate/EmployeeRestTemplateTest.java`

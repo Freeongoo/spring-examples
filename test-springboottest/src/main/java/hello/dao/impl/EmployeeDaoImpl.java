@@ -25,6 +25,7 @@ import static java.lang.Math.toIntExact;
 public class EmployeeDaoImpl extends JdbcDaoSupport implements EmployeeDao {
     private final String SQL_SELECT_ALL      = "SELECT * FROM employee";
     private final String SQL_DELETE_BY_ID    = "DELETE FROM employee WHERE id = ?";
+    private final String SQL_DELETE_ALL      = "DELETE FROM employee";
     private final String SQL_SELECT_BY_ID    = "SELECT * FROM employee WHERE id = ?";
     private final String SQL_SELECT_BY_EMAIL = "SELECT * FROM employee WHERE email = ?";
     private final String SQL_INSERT_NEW      = "INSERT INTO employee (name, email) VALUES (?, ?)";
@@ -100,6 +101,11 @@ public class EmployeeDaoImpl extends JdbcDaoSupport implements EmployeeDao {
     @Override
     public void delete(Employee employee) {
         getJdbcTemplate().update(SQL_DELETE_BY_ID, employee.getId());
+    }
+
+    @Override
+    public void deleteAll() {
+        getJdbcTemplate().update(SQL_DELETE_ALL);
     }
 
     private Employee getEmployeeQueryForObject(String sql, @Nullable Object[] args) {

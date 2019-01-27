@@ -18,4 +18,6 @@ public interface EmployeeDao {
     Employee getByEmail(String email);
 
     void delete(Employee employee);
+
+    void deleteAll();
 }
