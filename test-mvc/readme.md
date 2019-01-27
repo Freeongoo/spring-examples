@@ -9,6 +9,10 @@ Example: `/test/java/hello/mockMvc/controller/EmployeeControllerTest.java`
 The disadvantage of this approach is that if we have a global interceptor (`EmployeeNotFoundAdvice`), we need to manually specify it in MockMvcBuilders
 
 ```
+@SpringBootTest
+@RunWith(SpringRunner.class)
+@Transactional
+public class EmployeeControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
@@ -20,6 +24,20 @@ The disadvantage of this approach is that if we have a global interceptor (`Empl
                 .setControllerAdvice(new EmployeeNotFoundAdvice()) // set advice Exception
                 .build();       
     }
+}
+```
+
+or more modern way:
+
+```
+@RunWith(SpringRunner.class)
+@WebMvcTest(AbstractApiController.class)
+@Transactional
+public class EmployeeControllerTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+}
 ```
 
 ### 1.2. MockMvc with WebApplication
