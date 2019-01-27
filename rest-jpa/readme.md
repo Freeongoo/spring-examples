@@ -11,25 +11,44 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 }
 ```
 
-# Testing
+# Testing MVC
 
-When try test exception handle don't forget add advice in MockMvc:
+## 1. MockMvc - not run all server - only web layer
 
-```
-@Before
-public void setup() {
-    this.mockMvc = standaloneSetup(this.employeeController)
-            .setControllerAdvice(new EmployeeNotFoundAdvice())
-            .build(); // Standalone context
-}
-```
+### 1.1. MockMvc with a specific controller
+
+Example: `/test/java/hello/mockMvc/controller/EmployeeControllerTest.java`
+
+The disadvantage of this approach is that if we have a global interceptor (`EmployeeNotFoundAdvice`), we need to manually specify it in MockMvcBuilders
 
 ```
-@Test
-public void one_WhenNotExist() throws Exception {
-    int idNotExist = -1;
+    private MockMvc mockMvc;
 
-    this.mockMvc.perform(get("/employees/" + idNotExist))
-            .andExpect(status().isNotFound());
-}
+    @Autowired
+    private EmployeeController employeeController;
+
+    @Before
+    public void setup() {
+        mockMvc = MockMvcBuilders.standaloneSetup(employeeController)
+                .setControllerAdvice(new EmployeeNotFoundAdvice()) // set advice Exception
+                .build();       
+    }
+```
+
+### 1.2. MockMvc with WebApplication
+
+Example: `/test/java/hello/mockMvc/webApplication/EmployeeControllerWebApplicationTest.java`
+
+```
+    private MockMvc mockMvc;
+
+    @Autowired
+    private WebApplicationContext context;
+
+    @Before
+    public void setup() {
+        mockMvc = MockMvcBuilders
+                .webAppContextSetup(context)
+                .build();
+    }
 ```

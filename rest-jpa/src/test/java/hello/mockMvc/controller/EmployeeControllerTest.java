@@ -1,9 +1,11 @@
-package hello.controller;
+package hello.mockMvc.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
+import hello.controller.EmployeeController;
+import hello.controller.advice.EmployeeNotFoundAdvice;
 import hello.entity.Employee;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,41 +19,36 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.context.WebApplicationContext;
+
+import javax.transaction.Transactional;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@DatabaseSetup("/data.xml")
-@RunWith(SpringRunner.class)
 @SpringBootTest
+@RunWith(SpringRunner.class)
 @Transactional
+// DBUnit config:
+@DatabaseSetup("/data.xml")
 @TestExecutionListeners({
         TransactionalTestExecutionListener.class,
         DependencyInjectionTestExecutionListener.class,
         DbUnitTestExecutionListener.class
 })
-public class EmployeeControllerWebApplicationTest {
-
-    @Autowired
-    private WebApplicationContext context;
+public class EmployeeControllerTest {
 
     private MockMvc mockMvc;
 
+    @Autowired
+    private EmployeeController employeeController;
+
     @Before
     public void setup() {
-        mockMvc = MockMvcBuilders
-                .webAppContextSetup(context)
+        mockMvc = MockMvcBuilders.standaloneSetup(employeeController)
+                .setControllerAdvice(new EmployeeNotFoundAdvice()) // set advice Exception
                 .build();
-    }
-
-    @Test
-    public void all_Ok() throws Exception {
-        this.mockMvc.perform(get("/employees/"))
-                .andExpect(status().isOk());
     }
 
     @Test

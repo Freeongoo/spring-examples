@@ -1,10 +1,9 @@
-package hello.controller;
+package hello.mockMvc.webApplication;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
-import hello.controller.advice.EmployeeNotFoundAdvice;
 import hello.entity.Employee;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,35 +17,42 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.WebApplicationContext;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@DatabaseSetup("/data.xml")
-@SpringBootTest
 @RunWith(SpringRunner.class)
+@SpringBootTest
+@Transactional
+// DBUnit config:
+@DatabaseSetup("/data.xml")
 @TestExecutionListeners({
         TransactionalTestExecutionListener.class,
         DependencyInjectionTestExecutionListener.class,
         DbUnitTestExecutionListener.class
 })
-@Transactional
-public class EmployeeControllerTest {
+public class EmployeeControllerWebApplicationTest {
+
+    @Autowired
+    private WebApplicationContext context;
 
     private MockMvc mockMvc;
 
-    @Autowired
-    private EmployeeController employeeController;
-
     @Before
     public void setup() {
-        mockMvc = MockMvcBuilders.standaloneSetup(employeeController)
-                .setControllerAdvice(new EmployeeNotFoundAdvice())
-                .build();       // Standalone context
+        mockMvc = MockMvcBuilders
+                .webAppContextSetup(context)
+                .build();
+    }
+
+    @Test
+    public void all_Ok() throws Exception {
+        this.mockMvc.perform(get("/employees/"))
+                .andExpect(status().isOk());
     }
 
     @Test
