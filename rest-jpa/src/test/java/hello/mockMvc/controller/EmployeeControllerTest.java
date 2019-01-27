@@ -1,5 +1,6 @@
 package hello.mockMvc.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
@@ -22,6 +23,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import javax.transaction.Transactional;
 
+import static com.jcabi.matchers.RegexMatchers.matchesPattern;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -67,7 +69,6 @@ public class EmployeeControllerTest {
 
     @Test
     public void newEmployee() throws Exception {
-        int expectedId = 3; // because exist DBUnit
         String name = "Aha";
         String role = "admin";
         Employee expectedEmployee = new Employee(name, role);
@@ -78,8 +79,8 @@ public class EmployeeControllerTest {
         this.mockMvc.perform(post("/employees")
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(json))
-                .andExpect(status().isCreated());
-                // .andExpect(header().string("location", "http://localhost/employees/" + expectedId));
+                .andExpect(status().isCreated())
+                .andExpect(header().string("location", matchesPattern("http://localhost/employees/\\d+")));
     }
 
     @Test
@@ -103,7 +104,20 @@ public class EmployeeControllerTest {
     }
 
     @Test
-    public void replaceEmployee() {
+    public void updateEmployee() throws Exception {
+        int id = 1;
+        String name = "AhaHa";
+        String role = "admin";
+        Employee expectedEmployee = new Employee(name, role);
+
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        String json = ow.writeValueAsString(expectedEmployee);
+
+        this.mockMvc.perform(put("/employees/" + id)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(json))
+                .andExpect(status().isCreated())
+                .andExpect(header().string("location", matchesPattern("http://localhost/employees/\\d+")));
     }
 
     @Test
