@@ -14,6 +14,10 @@ import java.util.List;
 
 import static hello.controller.Route.EMPLOYEE_ROUTE;
 
+/**
+ * Bad practices - need move logic from controller to service.
+ * See better example {@link hello.controller.oneToMany.PostController}
+ */
 @RestController
 @RequestMapping(EMPLOYEE_ROUTE)
 public class EmployeeController {

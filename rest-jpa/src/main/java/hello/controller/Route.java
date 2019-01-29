@@ -2,7 +2,11 @@ package hello.controller;
 
 public final class Route {
 
+    private Route() {} // cannot create instance :)
+
     public static final String EMPLOYEE_ROUTE = "/employees";
 
-    private Route() {}
+    public static final String POST_ROUTE = "/posts";
+
+    public static final String COMMENT_ROUTE = "/posts/{id}/comments";
 }

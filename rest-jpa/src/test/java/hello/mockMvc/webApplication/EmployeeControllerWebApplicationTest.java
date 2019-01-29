@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @Transactional
 // DBUnit config:
-@DatabaseSetup("/data.xml")
+@DatabaseSetup("/employee.xml")
 @TestExecutionListeners({
         TransactionalTestExecutionListener.class,
         DependencyInjectionTestExecutionListener.class,
