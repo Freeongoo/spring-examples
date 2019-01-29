@@ -8,5 +8,5 @@ public final class Route {
 
     public static final String POST_ROUTE = "/posts";
 
-    public static final String COMMENT_ROUTE = "/posts/{id}/comments";
+    public static final String COMMENT_ROUTE = "/posts/{postId}/comments";
 }

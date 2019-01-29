@@ -19,6 +19,10 @@ public class Comment implements BaseEntity<Long> {
     public Comment() {
     }
 
+    public Comment(String name) {
+        this.name = name;
+    }
+
     public Comment(String name, Post post) {
         this.name = name;
         this.post = post;
@@ -49,7 +53,7 @@ public class Comment implements BaseEntity<Long> {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
     @JsonIdentityReference(alwaysAsId = true)
-    @JsonProperty("post_id")
+    @JsonProperty("postId")
     public Post getPost() {
         return post;
     }
