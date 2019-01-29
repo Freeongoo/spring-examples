@@ -153,6 +153,10 @@ Good:
 ]
 ```
 
+## 5. Using DTO
+
+https://github.com/Freeongoo/spring-examples/tree/master/rest-jpa-dto-mapper
+
 # Testing 
 
 See controller tests
