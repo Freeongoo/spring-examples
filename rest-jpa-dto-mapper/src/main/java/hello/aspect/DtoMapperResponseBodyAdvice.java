@@ -14,6 +14,7 @@ import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.AbstractMappingJacksonResponseBodyAdvice;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 @ControllerAdvice
@@ -52,7 +53,13 @@ public class DtoMapperResponseBodyAdvice extends AbstractMappingJacksonResponseB
         if (value instanceof Page) {
             returnValue = ((Page<?>) value).map(it -> modelMapper.map(it, dtoType));
         } else if (value instanceof Collection) {
-            returnValue = ((Collection<?>) value).stream().map(it -> modelMapper.map(it, dtoType));
+            Collection<?> collection = (Collection<?>) value;
+            Collection<Object> objectCollection = new ArrayList<>();
+            for (Object val : collection) {
+                Object map = modelMapper.map(val, dtoType);
+                objectCollection.add(map);
+            }
+            returnValue = objectCollection;
         } else {
             returnValue = modelMapper.map(value, dtoType);
         }
