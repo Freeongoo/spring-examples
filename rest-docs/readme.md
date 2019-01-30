@@ -2,6 +2,18 @@
 
 ## Generation
 
+### Config
+
+Add in test `/src/test/resources/application.properties`
+
+```
+# for pretty json output - only for testing
+spring.jackson.serialization.indent_output=true
+```
+
+It is very important to add this parameter so that the result 
+is formatted for readability when generating documentation.
+
 ### 1. Install deps
 
 ```
