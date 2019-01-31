@@ -1,7 +1,7 @@
 package hello.controller.oneToMany;
 
 import hello.entity.oneToMany.Comment;
-import hello.service.CommentService;
+import hello.service.CommentWithPostIdService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -16,7 +16,7 @@ public class CommentController {
     public final static String PATH = "/posts/{postId}/comments";
 
     @Autowired
-    private CommentService service;
+    private CommentWithPostIdService service;
 
     @GetMapping("")
     Iterable<Comment> getAll(@PathVariable Long postId) {

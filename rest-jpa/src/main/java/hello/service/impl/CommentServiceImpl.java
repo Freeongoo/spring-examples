@@ -2,6 +2,7 @@ package hello.service.impl;
 
 import hello.entity.oneToMany.Comment;
 import hello.entity.oneToMany.Post;
+import hello.exception.NotValidParamsException;
 import hello.exception.ResourceNotFoundException;
 import hello.repository.oneToMany.CommentRepository;
 import hello.repository.oneToMany.PostRepository;
@@ -29,69 +30,24 @@ public class CommentServiceImpl extends AbstractService<Comment, Long> implement
     }
 
     @Override
-    public Iterable<Comment> getAll(Long postId) {
-        return repository.findAllByPostId(postId);
+    public Comment update(Long aLong, Comment entity) {
+        validatePost(entity);
+        return super.update(aLong, entity);
     }
 
     @Override
-    public Comment getById(Long postId, Long commentId) {
-        validatePostId(postId);
-        return getById(commentId);
+    public Comment save(Comment entity) {
+        validatePost(entity);
+        return super.save(entity);
     }
 
-    @Override
-    public Comment save(Long postId, Comment comment) {
-        Optional<Post> postFromDb = postRepository.findById(postId);
+    private void validatePost(Comment entity) {
+        if (isEmpty(entity.getPost())) {
+            throw new NotValidParamsException("cannot passed post");
+        }
 
-        return postFromDb.map(p -> {
-                comment.setPost(postFromDb.get());
-                return repository.save(comment);
-        }).orElseThrow(
-                () -> new ResourceNotFoundException("Cannot create comment because passed not existing post id: " + postId)
-        );
-    }
-
-    @Override
-    public Comment update(Long postId, Long commentId, Comment comment) {
-        validatePostId(postId);
-        validateEqualsPostId(postId, commentId);
-
-        return update(commentId, comment);
-    }
-
-    @Override
-    public void delete(Long postId, Long commentId) {
-        validatePostId(postId);
-        delete(commentId);
-    }
-
-    @Override
-    public void delete(Long postId, Comment comment) {
-        validatePostId(postId);
-        delete(comment);
-    }
-
-    private void validatePostId(Long postId) {
-        Optional<Post> postFromDb = postRepository.findById(postId);
+        Optional<Post> postFromDb = postRepository.findById(entity.getPost().getId());
         postFromDb.orElseThrow(
-                () -> new ResourceNotFoundException("Passed post id not existing: " + postId));
-    }
-
-    private void validateEqualsPostId(Long postId, Long commentId) {
-        Optional<Comment> commentFromDb = repository.findById(commentId);
-
-        if (!commentFromDb.isPresent()) {
-            throw new ResourceNotFoundException("Not exist comment by id: " + commentId);
-        }
-
-        Comment comment = commentFromDb.get();
-        Post post = comment.getPost();
-        if (isEmpty(post)) {
-            throw new ResourceNotFoundException("Comment not exist Post");
-        }
-
-        if (!postId.equals(post.getId())) {
-            throw new ResourceNotFoundException("Try update comment from other post");
-        }
+                () -> new ResourceNotFoundException("cannot find post"));
     }
 }

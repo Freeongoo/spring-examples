@@ -6,6 +6,8 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
+import static org.springframework.util.ObjectUtils.isEmpty;
+
 @Entity
 @Table(name = "comment")
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -58,7 +60,21 @@ public class Comment implements BaseEntity<Long> {
         return post;
     }
 
+    @JsonProperty("post")
     public void setPost(Post post) {
+        this.post = post;
+    }
+
+    // need for api when passed "postId" param
+    @Transient
+    @JsonProperty("postId")
+    public void setPostId(Long postId) {
+        if (isEmpty(postId)) {
+            return;
+        }
+
+        Post post = new Post();
+        post.setId(postId);
         this.post = post;
     }
 }

@@ -1,5 +1,6 @@
 package hello.controller.advice;
 
+import hello.exception.NotValidParamsException;
 import hello.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -13,7 +14,14 @@ public class CommonNotFoundAdvice {
     @ResponseBody
     @ExceptionHandler(ResourceNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    String employeeNotFoundHandler(ResourceNotFoundException ex) {
+    String notFound(ResourceNotFoundException ex) {
+        return ex.getMessage();
+    }
+
+    @ResponseBody
+    @ExceptionHandler(NotValidParamsException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    String bad(NotValidParamsException ex) {
         return ex.getMessage();
     }
 }
