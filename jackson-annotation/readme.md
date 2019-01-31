@@ -17,6 +17,10 @@
 * by string : `/src/test/java/createJson/CreateJsonByStringTest.java`
 * by jackson : `/src/test/java/createJson/CreateJsonByJacksonTest.java`
 
-##  Convert json string to java array
+##  Convert json string array to java list
+
+* by string : `/src/test/java/jsonList/JsonListTest.java`
+
+##  Convert json string array to java array
 
 * by string : `/src/test/java/jsonArray/JsonArrayTest.java`
