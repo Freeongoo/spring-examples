@@ -22,4 +22,9 @@
       <module name="spring-boot-demo" target="1.8" />
     </bytecodeTargetLevel>
   </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="jackson-annotation" options="-parameters" />
+    </option>
+  </component>
 </project>
