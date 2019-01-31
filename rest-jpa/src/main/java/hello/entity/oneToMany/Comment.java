@@ -65,7 +65,7 @@ public class Comment implements BaseEntity<Long> {
         this.post = post;
     }
 
-    // need for api when passed "postId" param
+    // hack needed for api when passed "postId" in json param
     @Transient
     @JsonProperty("postId")
     public void setPostId(Long postId) {

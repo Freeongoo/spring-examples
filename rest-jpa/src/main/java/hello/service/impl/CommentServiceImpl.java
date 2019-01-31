@@ -46,8 +46,9 @@ public class CommentServiceImpl extends AbstractService<Comment, Long> implement
             throw new NotValidParamsException("cannot passed post");
         }
 
-        Optional<Post> postFromDb = postRepository.findById(entity.getPost().getId());
+        Long postId = entity.getPost().getId();
+        Optional<Post> postFromDb = postRepository.findById(postId);
         postFromDb.orElseThrow(
-                () -> new ResourceNotFoundException("cannot find post"));
+                () -> new ResourceNotFoundException("cannot find post by id:" + postId));
     }
 }
