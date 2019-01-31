@@ -9,11 +9,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import static hello.controller.Route.COMMENT_ROUTE;
-
 @RestController
-@RequestMapping(COMMENT_ROUTE)
+@RequestMapping(CommentController.PATH)
 public class CommentController {
+
+    public final static String PATH = "/posts/{postId}/comments";
 
     @Autowired
     private CommentService service;
@@ -52,7 +52,7 @@ public class CommentController {
 
     private HttpHeaders getHttpHeaderWithLocation(UriComponentsBuilder ucBuilder, Long postId, Comment comment) {
         HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(ucBuilder.path(COMMENT_ROUTE + "/{id}").buildAndExpand(postId, comment.getId()).toUri());
+        headers.setLocation(ucBuilder.path(PATH + "/{id}").buildAndExpand(postId, comment.getId()).toUri());
         return headers;
     }
 }

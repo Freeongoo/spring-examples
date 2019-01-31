@@ -19,7 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.jcabi.matchers.RegexMatchers.matchesPattern;
-import static hello.controller.Route.EMPLOYEE_ROUTE;
+import static hello.controller.single.EmployeeController.PATH;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertEquals;
@@ -42,7 +42,7 @@ public class EmployeeRestTemplateTest {
     @Before
     public void setUp() {
         String url = "http://localhost:" + port;
-        employeeUrl = url + EMPLOYEE_ROUTE;
+        employeeUrl = url + PATH;
     }
 
     @After

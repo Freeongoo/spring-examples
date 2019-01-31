@@ -12,15 +12,15 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
-import static hello.controller.Route.EMPLOYEE_ROUTE;
-
 /**
  * Bad practices - need move logic from controller to service.
  * See better example {@link hello.controller.oneToMany.PostController}
  */
 @RestController
-@RequestMapping(EMPLOYEE_ROUTE)
+@RequestMapping(EmployeeController.PATH)
 public class EmployeeController {
+
+    public final static String PATH = "/employees";
 
     @Autowired
     private EmployeeRepository repository;
@@ -35,7 +35,7 @@ public class EmployeeController {
         Employee employeeSaved = repository.save(newEmployee);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(ucBuilder.path(EMPLOYEE_ROUTE + "/{id}").buildAndExpand(employeeSaved.getId()).toUri());
+        headers.setLocation(ucBuilder.path(PATH + "/{id}").buildAndExpand(employeeSaved.getId()).toUri());
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 

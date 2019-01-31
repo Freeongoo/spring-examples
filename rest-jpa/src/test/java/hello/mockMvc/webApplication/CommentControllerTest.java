@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
+import hello.controller.oneToMany.CommentController;
 import hello.entity.oneToMany.Comment;
 import hello.entity.oneToMany.Post;
 import org.junit.Before;
@@ -23,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import static com.jcabi.matchers.RegexMatchers.matchesPattern;
-import static hello.controller.Route.COMMENT_ROUTE;
+import static hello.controller.oneToMany.CommentController.PATH;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -45,7 +46,7 @@ public class CommentControllerTest {
     private WebApplicationContext context;
 
     private MockMvc mockMvc;
-    private static String commentRouteWithIdParam = COMMENT_ROUTE + "/{id}";
+    private static String commentRouteWithIdParam = PATH + "/{id}";
 
     @Before
     public void setup() {
@@ -56,13 +57,13 @@ public class CommentControllerTest {
 
     @Test
     public void getAll_WhenCheckOnlyStatus() throws Exception {
-        this.mockMvc.perform(get(COMMENT_ROUTE, 1))
+        this.mockMvc.perform(get(PATH, 1))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void getAll() throws Exception {
-        this.mockMvc.perform(get(COMMENT_ROUTE, 1))
+        this.mockMvc.perform(get(PATH, 1))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$", hasSize(2)))
@@ -82,7 +83,7 @@ public class CommentControllerTest {
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String json = ow.writeValueAsString(comment);
 
-        this.mockMvc.perform(post(COMMENT_ROUTE, 1)
+        this.mockMvc.perform(post(PATH, 1)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(json))
                 .andExpect(status().isCreated())
@@ -194,7 +195,7 @@ public class CommentControllerTest {
         this.mockMvc.perform(MockMvcRequestBuilders.delete(commentRouteWithIdParam, postId, idForDelete))
                 .andExpect(status().isNoContent());
 
-        this.mockMvc.perform(get(COMMENT_ROUTE, postId))
+        this.mockMvc.perform(get(PATH, postId))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$", hasSize(1)));

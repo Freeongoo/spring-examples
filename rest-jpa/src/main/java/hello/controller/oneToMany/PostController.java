@@ -9,11 +9,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import static hello.controller.Route.POST_ROUTE;
-
 @RestController
-@RequestMapping(POST_ROUTE)
+@RequestMapping(PostController.PATH)
 public class PostController {
+
+    public final static String PATH = "/posts";
 
     @Autowired
     private PostService service;
@@ -52,7 +52,7 @@ public class PostController {
 
     private HttpHeaders getHttpHeaderWithLocation(UriComponentsBuilder ucBuilder, Post post) {
         HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(ucBuilder.path(POST_ROUTE + "/{id}").buildAndExpand(post.getId()).toUri());
+        headers.setLocation(ucBuilder.path(PATH + "/{id}").buildAndExpand(post.getId()).toUri());
         return headers;
     }
 }

@@ -23,7 +23,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import javax.transaction.Transactional;
 
 import static com.jcabi.matchers.RegexMatchers.matchesPattern;
-import static hello.controller.Route.EMPLOYEE_ROUTE;
+import static hello.controller.single.EmployeeController.PATH;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -42,7 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class EmployeeControllerTest {
 
     private MockMvc mockMvc;
-    private static String employeeRouteWithParam = EMPLOYEE_ROUTE + "/{id}";
+    private static String employeeRouteWithParam = PATH + "/{id}";
 
     @Autowired
     private EmployeeController employeeController;
@@ -56,7 +56,7 @@ public class EmployeeControllerTest {
 
     @Test
     public void all() throws Exception {
-        this.mockMvc.perform(get(EMPLOYEE_ROUTE))
+        this.mockMvc.perform(get(PATH))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$", hasSize(2)))
@@ -77,7 +77,7 @@ public class EmployeeControllerTest {
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String json = ow.writeValueAsString(expectedEmployee);
 
-        this.mockMvc.perform(post(EMPLOYEE_ROUTE)
+        this.mockMvc.perform(post(PATH)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(json))
                 .andExpect(status().isCreated())
@@ -128,7 +128,7 @@ public class EmployeeControllerTest {
         this.mockMvc.perform(delete(employeeRouteWithParam, idForDelete))
                 .andExpect(status().isNoContent());
 
-        this.mockMvc.perform(get(EMPLOYEE_ROUTE))
+        this.mockMvc.perform(get(PATH))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$", hasSize(1)))

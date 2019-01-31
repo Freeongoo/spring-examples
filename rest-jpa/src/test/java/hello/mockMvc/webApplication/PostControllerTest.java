@@ -22,12 +22,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import static com.jcabi.matchers.RegexMatchers.matchesPattern;
-import static hello.controller.Route.POST_ROUTE;
+import static hello.controller.oneToMany.PostController.PATH;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -45,7 +44,7 @@ public class PostControllerTest {
     private WebApplicationContext context;
 
     private MockMvc mockMvc;
-    private static String postRouteWithParam = POST_ROUTE + "/{id}";
+    private static String postRouteWithParam = PATH + "/{id}";
 
     @Before
     public void setup() {
@@ -56,13 +55,13 @@ public class PostControllerTest {
 
     @Test
     public void getAll_WhenCheckOnlyStatus() throws Exception {
-        this.mockMvc.perform(get(POST_ROUTE))
+        this.mockMvc.perform(get(PATH))
                 .andExpect(status().isOk());
     }
 
     @Test
     public void getAll() throws Exception {
-        this.mockMvc.perform(get(POST_ROUTE))
+        this.mockMvc.perform(get(PATH))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$", hasSize(2)))
@@ -80,7 +79,7 @@ public class PostControllerTest {
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String json = ow.writeValueAsString(post);
 
-        this.mockMvc.perform(post(POST_ROUTE)
+        this.mockMvc.perform(post(PATH)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(json))
                 .andExpect(status().isCreated())
@@ -144,7 +143,7 @@ public class PostControllerTest {
         this.mockMvc.perform(MockMvcRequestBuilders.delete(postRouteWithParam, idForDelete))
                 .andExpect(status().isNoContent());
 
-        this.mockMvc.perform(get(POST_ROUTE))
+        this.mockMvc.perform(get(PATH))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$", hasSize(1)))
