@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
+import static hello.controller.jsonReference.PostController.PATH;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
@@ -22,7 +23,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @Transactional
 public class PostControllerTest {
-    private static final String API_POST = "/api/posts/";
+
+    private static final String PATH_WITH_ID = PATH + "/{id}";
 
     @Autowired
     private WebApplicationContext context;
@@ -38,7 +40,7 @@ public class PostControllerTest {
 
     @Test
     public void getAll() throws Exception {
-        this.mockMvc.perform(get(API_POST))
+        this.mockMvc.perform(get(PATH))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$", hasSize(1)))
@@ -54,7 +56,7 @@ public class PostControllerTest {
     public void getById() throws Exception {
         int id = 1;
 
-        this.mockMvc.perform(get(API_POST + id))
+        this.mockMvc.perform(get(PATH_WITH_ID, id))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("id", is(1)))
@@ -69,7 +71,7 @@ public class PostControllerTest {
     public void getById_WhenNotExist() throws Exception {
         int idNotExist = -1;
 
-        this.mockMvc.perform(get(API_POST + idNotExist))
+        this.mockMvc.perform(get(PATH_WITH_ID, idNotExist))
                 .andExpect(status().isNotFound());
     }
 }

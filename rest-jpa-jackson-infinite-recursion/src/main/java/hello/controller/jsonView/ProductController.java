@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/products")
+@RequestMapping(ProductController.PATH)
 public class ProductController {
+
+    public static final String PATH = "/api/products";
 
     private final ProductService service;
 

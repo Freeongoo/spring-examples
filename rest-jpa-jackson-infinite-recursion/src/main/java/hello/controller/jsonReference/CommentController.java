@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/comments")
+@RequestMapping(CommentController.PATH)
 public class CommentController {
+
+    public static final String PATH = "/api/comments";
 
     private final CommentService service;
 

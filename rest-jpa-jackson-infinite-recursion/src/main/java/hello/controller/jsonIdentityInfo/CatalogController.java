@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/catalogs")
+@RequestMapping(CatalogController.PATH)
 public class CatalogController {
+
+    public final static String PATH = "/api/catalogs";
 
     private final CatalogService service;
 

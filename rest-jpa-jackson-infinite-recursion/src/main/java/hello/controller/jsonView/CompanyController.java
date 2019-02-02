@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/companies")
+@RequestMapping(CompanyController.PATH)
 public class CompanyController {
+
+    public static final String PATH = "/api/companies";
 
     private final CompanyService service;
 

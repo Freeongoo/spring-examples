@@ -1,12 +1,7 @@
 package hello.service.jsonReference;
 
 import hello.entity.jsonReference.Post;
+import hello.service.Service;
 
-import java.util.List;
-
-public interface PostService {
-
-    Post get(Long id);
-
-    List<Post> getAll();
+public interface PostService extends Service<Post, Long> {
 }

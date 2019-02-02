@@ -1,18 +1,15 @@
 package hello.service.jsonView.impl;
 
 import hello.entity.jsonView.Product;
-import hello.exception.ERROR_CODES;
-import hello.exception.NotFoundException;
 import hello.repository.jsonView.ProductRepository;
+import hello.service.AbstractService;
 import hello.service.jsonView.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-
 @Service
-public class ProductServiceImpl implements ProductService {
+public class ProductServiceImpl extends AbstractService<Product, Long> implements ProductService {
 
     private ProductRepository repository;
 
@@ -22,14 +19,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product get(Long id) {
-        Optional<Product> product = repository.findById(id);
-        return product
-                .orElseThrow(() -> new NotFoundException("Cannot find product by id: " + id, ERROR_CODES.OBJECT_NOT_FOUND));
-    }
-
-    @Override
-    public List<Product> getAll() {
-        return repository.findAll();
+    protected CrudRepository<Product, Long> getRepository() {
+        return repository;
     }
 }

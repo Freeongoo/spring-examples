@@ -1,12 +1,7 @@
 package hello.service.jsonReference;
 
 import hello.entity.jsonReference.Comment;
+import hello.service.Service;
 
-import java.util.List;
-
-public interface CommentService {
-
-    Comment get(Long id);
-
-    List<Comment> getAll();
+public interface CommentService extends Service<Comment, Long> {
 }

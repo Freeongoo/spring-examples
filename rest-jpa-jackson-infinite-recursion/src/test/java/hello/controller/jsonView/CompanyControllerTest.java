@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
+import static hello.controller.jsonView.CompanyController.PATH;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
@@ -23,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 public class CompanyControllerTest {
 
-    private static final String API_COMPANY = "/api/companies/";
+    private static final String PATH_WITH_ID = PATH + "/{id}";
 
     @Autowired
     private WebApplicationContext context;
@@ -39,7 +40,7 @@ public class CompanyControllerTest {
 
     @Test
     public void getAll() throws Exception {
-        this.mockMvc.perform(get(API_COMPANY))
+        this.mockMvc.perform(get(PATH))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$", hasSize(1)))
@@ -55,7 +56,7 @@ public class CompanyControllerTest {
     public void getById() throws Exception {
         int id = 1;
 
-        this.mockMvc.perform(get(API_COMPANY + id))
+        this.mockMvc.perform(get(PATH_WITH_ID, + id))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("id", is(1)))
@@ -70,7 +71,7 @@ public class CompanyControllerTest {
     public void getById_WhenNotExist() throws Exception {
         int idNotExist = -1;
 
-        this.mockMvc.perform(get(API_COMPANY + idNotExist))
+        this.mockMvc.perform(get(PATH_WITH_ID, + idNotExist))
                 .andExpect(status().isNotFound());
     }
 }

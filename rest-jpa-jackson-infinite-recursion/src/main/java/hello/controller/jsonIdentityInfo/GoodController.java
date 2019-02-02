@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/goods")
+@RequestMapping(GoodController.PATH)
 public class GoodController {
+
+    public static final String PATH = "/api/goods";
 
     private final GoodService service;
 

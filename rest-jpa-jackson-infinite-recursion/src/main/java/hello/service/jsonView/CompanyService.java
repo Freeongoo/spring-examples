@@ -1,12 +1,7 @@
 package hello.service.jsonView;
 
 import hello.entity.jsonView.Company;
+import hello.service.Service;
 
-import java.util.List;
-
-public interface CompanyService {
-
-    Company get(Long id);
-
-    List<Company> getAll();
+public interface CompanyService extends Service<Company, Long> {
 }

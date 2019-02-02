@@ -1,12 +1,7 @@
 package hello.service.jsonIdentityInfo;
 
 import hello.entity.jsonIdentityInfo.Good;
+import hello.service.Service;
 
-import java.util.List;
-
-public interface GoodService {
-
-    Good get(Long id);
-
-    List<Good> getAll();
+public interface GoodService extends Service<Good, Long> {
 }

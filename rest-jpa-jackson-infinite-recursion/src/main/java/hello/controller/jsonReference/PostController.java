@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/posts")
+@RequestMapping(PostController.PATH)
 public class PostController {
+
+    public static final String PATH = "/api/posts";
 
     private final PostService service;
 

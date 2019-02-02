@@ -1,12 +1,7 @@
 package hello.service.jsonIdentityInfo;
 
 import hello.entity.jsonIdentityInfo.Catalog;
+import hello.service.Service;
 
-import java.util.List;
-
-public interface CatalogService {
-
-    Catalog get(Long id);
-
-    List<Catalog> getAll();
+public interface CatalogService extends Service<Catalog, Long> {
 }
