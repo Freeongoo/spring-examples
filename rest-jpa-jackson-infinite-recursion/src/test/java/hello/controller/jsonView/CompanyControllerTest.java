@@ -71,7 +71,7 @@ public class CompanyControllerTest {
     public void getById_WhenNotExist() throws Exception {
         int idNotExist = -1;
 
-        this.mockMvc.perform(get(PATH_WITH_ID, + idNotExist))
+        this.mockMvc.perform(get(PATH_WITH_ID, idNotExist))
                 .andExpect(status().isNotFound());
     }
 }
