@@ -56,7 +56,7 @@ public class CompanyControllerTest {
     public void getById() throws Exception {
         int id = 1;
 
-        this.mockMvc.perform(get(PATH_WITH_ID, + id))
+        this.mockMvc.perform(get(PATH_WITH_ID, id))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("id", is(1)))
