@@ -32,6 +32,6 @@ public class CompanyController {
     @JsonView({CompanyAndCommonViews.class})
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody Company get(@PathVariable Long id) {
-        return service.get(id);
+        return service.getById(id);
     }
 }

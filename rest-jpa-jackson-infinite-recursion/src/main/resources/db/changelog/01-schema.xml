@@ -129,4 +129,45 @@
                                  referencedTableName="catalog"/>
     </changeSet>
 
+    <changeSet id="10" author="freeongoo">
+        <createTable tableName="table_staff" remarks="All tables">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" unique="true" primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+        <modifySql dbms="mysql">
+            <append value="engine=innodb DEFAULT CHARSET=utf8"/>
+        </modifySql>
+    </changeSet>
+
+    <changeSet id="11" author="freeongoo">
+        <createTable tableName="chair" remarks="All chairs">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints nullable="false" unique="true" primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="table_staff_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <modifySql dbms="mysql">
+            <append value="engine=innodb DEFAULT CHARSET=utf8"/>
+        </modifySql>
+    </changeSet>
+
+    <changeSet id="12" author="freeongoo">
+        <addForeignKeyConstraint baseColumnNames="table_staff_id"
+                                 baseTableName="chair"
+                                 constraintName="fk_chair_table_staff_id"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="table_staff"/>
+    </changeSet>
+
 </databaseChangeLog>

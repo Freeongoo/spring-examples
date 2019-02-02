@@ -90,4 +90,32 @@
         </rollback>
     </changeSet>
 
+    <changeSet id="7" author="freeongoo">
+        <comment>Inserting tables</comment>
+        <insert tableName="table_staff">
+            <column name="id" valueNumeric="1"/>
+            <column name="name" value="iTable"/>
+        </insert>
+        <rollback>
+            DELETE FROM table_staff;
+        </rollback>
+    </changeSet>
+
+    <changeSet id="8" author="freeongoo">
+        <comment>Inserting chairs</comment>
+        <insert tableName="chair">
+            <column name="id" valueNumeric="1"/>
+            <column name="name" value="iChair#1"/>
+            <column name="table_staff_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="chair">
+            <column name="id" valueNumeric="2"/>
+            <column name="name" value="iChair#2"/>
+            <column name="table_staff_id" valueNumeric="1"/>
+        </insert>
+        <rollback>
+            DELETE FROM chair;
+        </rollback>
+    </changeSet>
+
 </databaseChangeLog>

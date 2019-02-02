@@ -11,7 +11,7 @@ public abstract class AbstractService<T, ID> implements Service<T, ID> {
     protected abstract CrudRepository<T, ID> getRepository();
 
     @Override
-    public T get(ID id) {
+    public T getById(ID id) {
         return getRepository().findById(id)
                 .orElseThrow(
                         () -> new NotFoundException("Cannot find entity by id: " + id, ERROR_CODES.OBJECT_NOT_FOUND)

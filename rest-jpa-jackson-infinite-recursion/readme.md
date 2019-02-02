@@ -57,7 +57,9 @@ public @ResponseBody List<Company> getAll() {
 }
 ```
 
-In result `/api/products`:
+#### Result
+
+/api/products
 
 ```
 [{
@@ -77,7 +79,7 @@ In result `/api/products`:
 }]
 ```
 
-In result `/api/companies`:
+/api/companies
 
 ```
 [{
@@ -113,6 +115,8 @@ Can preserve the Bidirectional-Relationships when deserialize string with relati
 Examples
 - `/hello/entity/jsonIdentityInfo/Catalog.java`
 - `/hello/entity/jsonIdentityInfo/Good.java`
+
+#### Result
 
 Catalog:
 ```
@@ -155,6 +159,62 @@ Good:
 
 ## 5. Using DTO
 
+Add deps: 
+
+```
+<dependency>
+    <groupId>org.modelmapper</groupId>
+    <artifactId>modelmapper</artifactId>
+    <version>2.3.2</version>
+</dependency>
+```
+
+Create utils for convert Entity to DTO: `ObjectMapperUtils`
+
+Next you need to create classes of the DTO, two ways:
+1. If you just need to ignore some kind of entity field, then extend entity and just add `@JsonIgnoreProperties` see example: `TableStaffWithoutChairDto`
+2. If you need to change the list of fields with the related object - then need to create a class (not extend from entity) with an associated object but another type see example `TableStaffDto`
+
+And in the next - you need to either manually convert it into the DTO in the controller or use the abstract controller class like `AbstractDtoRestController`
+
+#### Result
+
+/api/chairs:
+```
+[{
+  "id": 1,
+  "name": "iChair#1",
+  "tableStaff": {
+    "id": 1,
+    "name": "iTable"
+  }
+}, {
+  "id": 2,
+  "name": "iChair#2",
+  "tableStaff": {
+    "id": 1,
+    "name": "iTable"
+  }
+}]
+```
+
+/api/table-staffs:
+```
+[{
+  "id": 1,
+  "name": "iTable",
+  "chairs": [{
+    "id": 2,
+    "name": "iChair#2"
+  }, {
+    "id": 1,
+    "name": "iChair#1"
+  }]
+}]
+```
+
+
+More examples: 
 https://github.com/Freeongoo/spring-examples/tree/master/rest-jpa-dto-mapper
 
 # Testing 

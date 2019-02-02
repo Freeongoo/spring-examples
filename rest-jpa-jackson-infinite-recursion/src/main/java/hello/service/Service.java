@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface Service<T, ID> {
 
-    T get(ID id);
+    T getById(ID id);
 
     List<T> getAll();
 }

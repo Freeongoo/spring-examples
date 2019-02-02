@@ -28,6 +28,6 @@ public class CatalogController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody Catalog get(@PathVariable Long id) {
-        return service.get(id);
+        return service.getById(id);
     }
 }
