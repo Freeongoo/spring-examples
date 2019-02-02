@@ -1,18 +1,15 @@
 package hello.service.impl;
 
 import hello.entity.Company;
-import hello.exception.ERROR_CODES;
-import hello.exception.NotFoundException;
 import hello.repository.CompanyRepository;
+import hello.service.AbstractService;
 import hello.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-
 @Service
-public class CompanyServiceImpl implements CompanyService {
+public class CompanyServiceImpl extends AbstractService<Company, Long> implements CompanyService {
 
     private CompanyRepository repository;
 
@@ -22,14 +19,7 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     @Override
-    public Company get(Long id) {
-        Optional<Company> company = repository.findById(id);
-        return company
-                .orElseThrow(() -> new NotFoundException("Cannot find company by id: " + id, ERROR_CODES.OBJECT_NOT_FOUND));
-    }
-
-    @Override
-    public List<Company> getAll() {
-        return repository.findAll();
+    protected CrudRepository<Company, Long> getRepository() {
+        return repository;
     }
 }

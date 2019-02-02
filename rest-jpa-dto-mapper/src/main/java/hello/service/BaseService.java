@@ -2,9 +2,9 @@ package hello.service;
 
 import java.util.List;
 
-public interface BaseService<E> {
+public interface BaseService<T, ID> {
 
-    E get(Long id);
+    T getById(ID id);
 
-    List<E> getAll();
+    List<T> getAll();
 }

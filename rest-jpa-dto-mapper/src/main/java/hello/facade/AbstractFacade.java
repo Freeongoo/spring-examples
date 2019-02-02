@@ -6,26 +6,32 @@ import hello.service.BaseService;
 import java.util.Collection;
 import java.util.List;
 
-public abstract class AbstractFacade<D, E> implements Facade<D, E> {
+/**
+ *
+ * @param <T> source Entity
+ * @param <ID> Entity's id
+ * @param <DTO> DTO object to convert
+ */
+public abstract class AbstractFacade<T, ID, DTO> implements Facade<T, ID, DTO> {
 
-    protected abstract Class<D> getDtoClass();
-    protected abstract BaseService<E> getService();
+    protected abstract Class<DTO> getDtoClass();
+    protected abstract BaseService<T, ID> getService();
 
-    protected D convertToDto(E e) {
+    protected DTO convertToDto(T e) {
         return ObjectMapperUtils.map(e, getDtoClass());
     }
 
-    protected List<D> convertToDto(Collection<E> collection) {
+    protected List<DTO> convertToDto(Collection<T> collection) {
         return ObjectMapperUtils.mapAll(collection, getDtoClass());
     }
 
     @Override
-    public D get(Long id) {
-        return convertToDto(getService().get(id));
+    public DTO getById(ID id) {
+        return convertToDto(getService().getById(id));
     }
 
     @Override
-    public List<D> getAll() {
+    public List<DTO> getAll() {
         return convertToDto(getService().getAll());
     }
 }

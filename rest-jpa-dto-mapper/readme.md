@@ -96,7 +96,7 @@ public class Config {
     }
 ```
 
-#### Manual Mode
+#### Convert to DTO by facade
 
 Do the conversion yourself.
 
@@ -104,7 +104,7 @@ Do the conversion yourself.
 - Create facade for convert Entity to DTO: `CompanyFacade`
 - Use facade in controller: `CompanyMapperController`
 
-#### Auto Mode (using annotation)
+#### Convert to DTO by annotation in controller
 
 Using annotations for auto convert Entity to DTO
 
@@ -121,9 +121,14 @@ Using annotations for auto convert Entity to DTO
     }
 ```
 
+#### Convert to DTO by abstract controller with DTO as generic
+
+- Create abstract controller `AbstractMapperController`
+- Create realization company controller - by extend abstract `CompanyMapperFromAbstractController`
+
 # Testing 
 
-### Manual converting
+### DTO by facade
 
 Result `/api/mapper/companies`:
 
@@ -144,9 +149,31 @@ Result `/api/mapper/companies`:
 }]
 ```
 
-### Auto converting
+### DTO by annotation in controller
 
 Result `/api/mapper-annotation/companies`:
+
+```
+[
+{
+    "id": 1,
+    "name": "Amazon",
+    "productTypes": [
+    {
+        "id": 1,
+        "name": "electronics"
+    },
+    {
+        "id": 2,
+        "name": "household"
+    }]
+}]
+```
+
+
+### DTO by abstract controller with DTO as generic
+
+Result `/api/mapper-abstract/companies`:
 
 ```
 [

@@ -1,20 +1,23 @@
-package hello.controller.manual;
+package hello.controller.facade;
 
 import hello.dto.CompanyDto;
-import hello.entity.Company;
-import hello.facade.Facade;
+import hello.facade.CompanyFacade;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Soo bad solution
+ * better {@link hello.controller.abstractDtoController.CompanyMapperFromAbstractController}
+ */
 @RestController
 @RequestMapping("/api/mapper/companies")
 public class CompanyMapperController {
 
     @Autowired
-    private Facade<CompanyDto, Company> companyFacade;
+    private CompanyFacade companyFacade;
 
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody List<CompanyDto> getAll() {
@@ -23,6 +26,6 @@ public class CompanyMapperController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody CompanyDto get(@PathVariable Long id) {
-        return companyFacade.get(id);
+        return companyFacade.getById(id);
     }
 }

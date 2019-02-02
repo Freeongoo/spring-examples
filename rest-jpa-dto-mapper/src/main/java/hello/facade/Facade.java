@@ -2,6 +2,13 @@ package hello.facade;
 
 import hello.service.BaseService;
 
-public interface Facade<D, E> extends BaseService<D> {
+/**
+ * See changed Generics places
+ *
+ * @param <T>
+ * @param <ID>
+ * @param <DTO>
+ */
+public interface Facade<T, ID, DTO> extends BaseService<DTO, ID> {
 
 }

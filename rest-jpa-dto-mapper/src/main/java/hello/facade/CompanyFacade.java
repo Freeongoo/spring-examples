@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CompanyFacade extends AbstractFacade<CompanyDto, Company> {
+public class CompanyFacade extends AbstractFacade<Company, Long, CompanyDto> {
 
     @Autowired
     private CompanyService companyService;
@@ -19,7 +19,7 @@ public class CompanyFacade extends AbstractFacade<CompanyDto, Company> {
     }
 
     @Override
-    protected BaseService<Company> getService() {
+    protected BaseService<Company, Long> getService() {
         return companyService;
     }
 }

@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Without mapper
+ */
 @RestController
 @RequestMapping("/api/product-types")
 public class ProductTypeController {
@@ -26,6 +29,6 @@ public class ProductTypeController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody ProductType get(@PathVariable Long id) {
-        return service.get(id);
+        return service.getById(id);
     }
 }

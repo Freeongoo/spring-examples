@@ -27,7 +27,7 @@ public class CompanyFacadeOld {
     }
 
     public CompanyDto get(Long id){
-        return convertToOrderDto(companyService.get(id));
+        return convertToOrderDto(companyService.getById(id));
     }
 
     private CompanyDto convertToOrderDto(Company company) {
