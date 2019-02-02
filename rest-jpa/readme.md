@@ -6,10 +6,15 @@ JPA Employee:
 
 ```
 @Repository
-public interface EmployeeRepository extends JpaRepository<Employee, Long> {
-
-}
+public interface EmployeeRepository extends JpaRepository<Employee, Long> {}
 ```
+
+## Exception Handler
+
+- Create enum for list of errors code: `ErrorCode`
+- Create base exception `BaseException` for customization response data
+- All exceptions which throw from `service` or `controller` must be extended from `BaseException` - for correct handle
+- Create advice for exceptions: `ExceptionControllerAdvice`
 
 # Testing MVC
 
@@ -34,7 +39,7 @@ public class EmployeeControllerTest {
     @Before
     public void setup() {
         mockMvc = MockMvcBuilders.standaloneSetup(employeeController)
-                .setControllerAdvice(new EmployeeNotFoundAdvice()) // set advice Exception
+                .setControllerAdvice(new ExceptionControllerAdvice()) // set advice Exception
                 .build();       
     }
 }

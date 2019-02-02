@@ -2,6 +2,7 @@ package hello.controller.single;
 
 import hello.entity.single.Employee;
 import hello.exception.EmployeeNotFoundException;
+import hello.exception.ErrorCode;
 import hello.repository.single.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -43,7 +44,7 @@ public class EmployeeController {
     Employee one(@PathVariable Long id) {
         return repository
                 .findById(id)
-                .orElseThrow(() -> new EmployeeNotFoundException(id));
+                .orElseThrow(() -> new EmployeeNotFoundException("Employee not find by id: " + id, ErrorCode.OBJECT_NOT_FOUND));
     }
 
     @PutMapping("/{id}")

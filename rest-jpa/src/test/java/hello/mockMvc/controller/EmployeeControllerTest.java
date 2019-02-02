@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
+import hello.controller.advice.ExceptionControllerAdvice;
 import hello.controller.single.EmployeeController;
-import hello.controller.advice.EmployeeNotFoundAdvice;
 import hello.entity.single.Employee;
 import org.junit.Before;
 import org.junit.Test;
@@ -50,7 +50,7 @@ public class EmployeeControllerTest {
     @Before
     public void setup() {
         mockMvc = MockMvcBuilders.standaloneSetup(employeeController)
-                .setControllerAdvice(new EmployeeNotFoundAdvice()) // set advice Exception
+                .setControllerAdvice(new ExceptionControllerAdvice()) // set advice Exception
                 .build();
     }
 

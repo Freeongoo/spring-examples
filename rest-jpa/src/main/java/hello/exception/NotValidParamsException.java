@@ -1,19 +1,10 @@
 package hello.exception;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
+public class NotValidParamsException extends BaseException {
 
-@ResponseStatus(HttpStatus.BAD_REQUEST)
-public class NotValidParamsException extends RuntimeException {
-    public NotValidParamsException() {
-        super();
-    }
+    private static final long serialVersionUID = -1066219052235780119L;
 
-    public NotValidParamsException(String message) {
-        super(message);
-    }
-
-    public NotValidParamsException(String message, Throwable cause) {
-        super(message, cause);
+    public NotValidParamsException(String message, ErrorCode code) {
+        super(message, code);
     }
 }

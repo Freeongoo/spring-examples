@@ -1,6 +1,7 @@
 package hello.service.impl;
 
 import hello.entity.oneToMany.BaseEntity;
+import hello.exception.ErrorCode;
 import hello.exception.ResourceNotFoundException;
 import hello.service.Service;
 import org.springframework.data.repository.CrudRepository;
@@ -20,7 +21,7 @@ public abstract class AbstractService<T extends BaseEntity<ID>, ID> implements S
     public T getById(ID id) {
         return getRepository().findById(id)
                 .orElseThrow(
-                        () -> new ResourceNotFoundException("Cannot find entity by id: " + id)
+                        () -> new ResourceNotFoundException("Cannot find entity by id: " + id, ErrorCode.OBJECT_NOT_FOUND)
                 );
     }
 
@@ -33,7 +34,7 @@ public abstract class AbstractService<T extends BaseEntity<ID>, ID> implements S
                     return getRepository().save(entity);
                 })
                 .orElseThrow(
-                        () -> new ResourceNotFoundException("Cannot update - not exist entity by id: " + id)
+                        () -> new ResourceNotFoundException("Cannot update - not exist entity by id: " + id, ErrorCode.OBJECT_NOT_FOUND)
                 );
     }
 

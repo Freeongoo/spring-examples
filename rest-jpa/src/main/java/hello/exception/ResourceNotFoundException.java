@@ -1,19 +1,10 @@
 package hello.exception;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
+public class ResourceNotFoundException extends BaseException {
 
-@ResponseStatus(HttpStatus.NOT_FOUND)
-public class ResourceNotFoundException extends RuntimeException {
-    public ResourceNotFoundException() {
-        super();
-    }
+    private static final long serialVersionUID = -7540315244100557301L;
 
-    public ResourceNotFoundException(String message) {
-        super(message);
-    }
-
-    public ResourceNotFoundException(String message, Throwable cause) {
-        super(message, cause);
+    public ResourceNotFoundException(String message, ErrorCode code) {
+        super(message, code);
     }
 }
