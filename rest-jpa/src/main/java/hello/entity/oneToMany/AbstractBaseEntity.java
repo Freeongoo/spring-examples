@@ -45,6 +45,6 @@ public abstract class AbstractBaseEntity<ID> implements BaseEntity<ID> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return 31;
     }
 }
