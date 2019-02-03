@@ -1,9 +1,11 @@
+# Enabling H2 Console
+spring.h2.console.enabled=true
+
 # ===============================
 # DB
 # ===============================
-spring.datasource.url = jdbc:mysql://localhost:3306/testing?useSSL=false&serverTimezone=UTC
-spring.datasource.username = root
-spring.datasource.password = root
+spring.datasource.url=jdbc:h2:mem:testdb;MODE=MySQL;DB_CLOSE_ON_EXIT=false
+spring.datasource.driverClassName=org.h2.Driver
 
 # ===============================
 # JPA
@@ -11,6 +13,7 @@ spring.datasource.password = root
 spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.MySQL5InnoDBDialect
 spring.jpa.properties.hibernate.id.new_generator_mappings = false
 spring.jpa.properties.hibernate.format_sql = true
+spring.jpa.properties.hibernate.use_sql_comments=true
 spring.jpa.hibernate.ddl-auto = create-drop
 
 # ===============================
@@ -18,3 +21,4 @@ spring.jpa.hibernate.ddl-auto = create-drop
 # ===============================
 logging.level.org.hibernate.SQL = DEBUG
 logging.level.org.hibernate.type.descriptor.sql.BasicBinder=TRACE
+

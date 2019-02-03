@@ -58,6 +58,22 @@ Example: `/test/java/hello/mockMvc/webApplication/EmployeeControllerWebApplicati
     }
 ```
 
+### 1.3. MockMvc with @AutoConfigureMockMvc
+
+Example: `/test-mvc/src/test/java/hello/mockMvc/autoconfig/EmployeeControllerAutoConfigTest.java`
+
+```
+@RunWith(SpringRunner.class)
+@SpringBootTest
+@Transactional
+@AutoConfigureMockMvc
+public class EmployeeControllerAutoConfigTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+}
+```
+
 ## 2. Run real server and test by RestTemplate
 
 ```
