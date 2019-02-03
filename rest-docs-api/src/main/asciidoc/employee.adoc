@@ -1,0 +1,59 @@
+:source-highlighter: highlightjs
+
+==== Get one employee by id
+===== Curl example
+include::{snippets}/employee/get-by-id/curl-request.adoc[]
+===== HTTP Request
+include::{snippets}/employee/get-by-id/http-request.adoc[]
+===== HTTP Path parameters
+include::{snippets}/employee/get-by-id/path-parameters.adoc[]
+===== HTTP Response
+include::{snippets}/employee/get-by-id/http-response.adoc[]
+===== Response fields
+include::{snippets}/employee/get-by-id/response-fields.adoc[]
+
+==== Get all employee's
+===== Curl example
+include::{snippets}/employee/get-all/curl-request.adoc[]
+===== HTTP Request
+include::{snippets}/employee/get-all/http-request.adoc[]
+===== Response fields
+include::{snippets}/employee/get-all/response-fields.adoc[]
+===== HTTP Response
+include::{snippets}/employee/get-all/http-response.adoc[]
+
+==== Create new employee
+===== Curl example
+include::{snippets}/employee/create/curl-request.adoc[]
+===== HTTP Request
+include::{snippets}/employee/create/http-request.adoc[]
+===== Request fields
+include::{snippets}/employee/create/request-fields.adoc[]
+===== HTTP Response
+include::{snippets}/employee/create/http-response.adoc[]
+===== Response fields
+include::{snippets}/employee/create/response-fields.adoc[]
+
+==== Update employee
+===== Curl example
+include::{snippets}/employee/update/curl-request.adoc[]
+===== HTTP Request
+include::{snippets}/employee/update/http-request.adoc[]
+===== HTTP Path parameters
+include::{snippets}/employee/update/path-parameters.adoc[]
+===== Request fields
+include::{snippets}/employee/update/request-fields.adoc[]
+===== HTTP Response
+include::{snippets}/employee/update/http-response.adoc[]
+===== Response fields
+include::{snippets}/employee/update/response-fields.adoc[]
+
+==== Delete employee
+===== Curl example
+include::{snippets}/employee/remove/curl-request.adoc[]
+===== HTTP Request
+include::{snippets}/employee/remove/http-request.adoc[]
+===== HTTP Path parameters
+include::{snippets}/employee/remove/path-parameters.adoc[]
+===== HTTP Response
+include::{snippets}/employee/remove/http-response.adoc[]
