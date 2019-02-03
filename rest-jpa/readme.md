@@ -1,5 +1,10 @@
 # Example jpa rest
 
+## Configuration
+
+For main and test dirs:
+`cp application.properties.dist application.properties`
+
 ## With only one entity Employee, without relations
 
 JPA Employee:
