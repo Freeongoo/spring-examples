@@ -1,0 +1,8 @@
+<dataset>
+    <Account id="1" name="Account#11" client_id="1"/>
+    <Account id="2" name="Account#12" client_id="1"/>
+    <Account id="3" name="Account#21" client_id="2"/>
+    <Account id="4" name="Account#22" client_id="2"/>
+    <Account id="5" name="Account#31" client_id="3"/>
+    <Account id="6" name="Account#32" client_id="3"/>
+</dataset>
