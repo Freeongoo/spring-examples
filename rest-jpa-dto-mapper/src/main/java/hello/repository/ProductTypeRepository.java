@@ -1,12 +1,8 @@
 package hello.repository;
 
 import hello.entity.ProductType;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
+public interface ProductTypeRepository extends JpaRepository<ProductType, Long> {
 
-public interface ProductTypeRepository extends CrudRepository<ProductType, Long> {
-
-    @Override
-    List<ProductType> findAll();
 }

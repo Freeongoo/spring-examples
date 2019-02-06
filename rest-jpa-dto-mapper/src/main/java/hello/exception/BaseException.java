@@ -6,9 +6,9 @@ import java.util.Map;
 public class BaseException extends RuntimeException {
 
     private static final long serialVersionUID = 2087230193117227158L;
-    protected ERROR_CODES code;
+    protected ErrorCode code;
 
-    public BaseException (String message, ERROR_CODES code){
+    public BaseException (String message, ErrorCode code){
         super(message);
         this.code = code;
     }
