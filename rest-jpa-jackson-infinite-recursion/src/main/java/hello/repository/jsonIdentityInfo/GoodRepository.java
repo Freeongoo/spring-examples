@@ -1,12 +1,8 @@
 package hello.repository.jsonIdentityInfo;
 
 import hello.entity.jsonIdentityInfo.Good;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
+public interface GoodRepository extends JpaRepository<Good, Long> {
 
-public interface GoodRepository extends CrudRepository<Good, Long> {
-
-    @Override
-    List<Good> findAll();
 }

@@ -1,12 +1,8 @@
 package hello.repository.dto;
 
 import hello.entity.dto.TableStaff;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
+public interface TableStaffRepository extends JpaRepository<TableStaff, Long> {
 
-public interface TableStaffRepository extends CrudRepository<TableStaff, Long> {
-
-    @Override
-    List<TableStaff> findAll();
 }

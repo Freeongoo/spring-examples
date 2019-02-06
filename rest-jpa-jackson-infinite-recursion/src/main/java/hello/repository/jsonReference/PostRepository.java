@@ -1,12 +1,8 @@
 package hello.repository.jsonReference;
 
 import hello.entity.jsonReference.Post;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
+public interface PostRepository extends JpaRepository<Post, Long> {
 
-public interface PostRepository extends CrudRepository<Post, Long> {
-
-    @Override
-    List<Post> findAll();
 }

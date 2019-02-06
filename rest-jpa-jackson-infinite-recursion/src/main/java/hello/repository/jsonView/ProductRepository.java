@@ -1,12 +1,8 @@
 package hello.repository.jsonView;
 
 import hello.entity.jsonView.Product;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
+public interface ProductRepository extends JpaRepository<Product, Long> {
 
-public interface ProductRepository extends CrudRepository<Product, Long> {
-
-    @Override
-    List<Product> findAll();
 }

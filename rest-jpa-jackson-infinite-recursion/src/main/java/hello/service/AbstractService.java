@@ -1,6 +1,6 @@
 package hello.service;
 
-import hello.exception.ERROR_CODES;
+import hello.exception.ErrorCode;
 import hello.exception.NotFoundException;
 import org.springframework.data.repository.CrudRepository;
 
@@ -14,7 +14,7 @@ public abstract class AbstractService<T, ID> implements Service<T, ID> {
     public T getById(ID id) {
         return getRepository().findById(id)
                 .orElseThrow(
-                        () -> new NotFoundException("Cannot find entity by id: " + id, ERROR_CODES.OBJECT_NOT_FOUND)
+                        () -> new NotFoundException("Cannot find entity by id: " + id, ErrorCode.OBJECT_NOT_FOUND)
                 );
     }
 
