@@ -5,7 +5,6 @@ import hello.AbstractJpaTest;
 import org.junit.Test;
 
 import javax.persistence.PersistenceException;
-
 import java.util.List;
 
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -18,6 +17,7 @@ public class PostTest extends AbstractJpaTest {
     public void removePost_WhenNotRemoveDependenceComments() {
         Post post = entityManager.find(Post.class, 1L);
 
+        // cannot delete - because exist foreign key
         entityManager.remove(post);
 
         flushAndClean();
@@ -27,6 +27,7 @@ public class PostTest extends AbstractJpaTest {
     public void removePost_WhenBeforeRemoveLinkDependenceComments() {
         Post post = entityManager.find(Post.class, 1L);
 
+        // remove only link to parent and persist
         post.getComments().stream()
                 .peek(c -> c.setPost(null))
                 .forEach(c -> entityManager.persist(c));
@@ -46,6 +47,7 @@ public class PostTest extends AbstractJpaTest {
     public void removePost_WhenBeforeRemoveDependenceComments() {
         Post post = entityManager.find(Post.class, 1L);
 
+        // remove post children's
         post.getComments().forEach(c -> entityManager.remove(c));
 
         entityManager.remove(post);
@@ -57,6 +59,29 @@ public class PostTest extends AbstractJpaTest {
 
         Comment comment1 = entityManager.find(Comment.class, 1L);
         assertThat(comment1, equalTo(null));
+    }
+
+    @Test
+    public void tryDeletePostDependenciesByCleanOnlyCollections() {
+        Post post = entityManager.find(Post.class, 1L);
+
+        post.setComments(null);
+        entityManager.persist(post);
+
+        flushAndClean();
+
+        Post clientAfterCleanCollection = entityManager.find(Post.class, 1L);
+        assertThat(clientAfterCleanCollection.getComments().size(), equalTo(2)); // nothing deleted
+
+        Post post2 = entityManager.find(Post.class, 1L);
+
+        post2.getComments().clear();
+        entityManager.persist(post2);
+
+        flushAndClean();
+
+        Post clientAfterCleanCollection2 = entityManager.find(Post.class, 1L);
+        assertThat(clientAfterCleanCollection2.getComments().size(), equalTo(2)); // nothing deleted
     }
 
     @Test

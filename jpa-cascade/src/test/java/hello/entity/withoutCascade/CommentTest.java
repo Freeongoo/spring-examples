@@ -24,4 +24,20 @@ public class CommentTest extends AbstractJpaTest {
         Post post = entityManager.find(Post.class, 1L);
         assertThat(post.getComments().size(), equalTo(1));
     }
+
+    @Test
+    public void setCommentNewPost() {
+        Comment comment5 = entityManager.find(Comment.class, 5L); // without relation with Post
+        Post post = entityManager.find(Post.class, 1L);
+
+        // set parent
+        comment5.setPost(post);
+
+        entityManager.persist(comment5);
+
+        flushAndClean();
+
+        Post postAfterPersist = entityManager.find(Post.class, 1L);
+        assertThat(postAfterPersist.getComments().size(), equalTo(3)); // added new
+    }
 }
