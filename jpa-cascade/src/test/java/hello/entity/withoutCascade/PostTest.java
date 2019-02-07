@@ -21,6 +21,24 @@ public class PostTest extends AbstractJpaTest {
     }
 
     @Test
+    public void removePost_WhenBeforeRemoveLinkDependenceComments() {
+        Post post = entityManager.find(Post.class, 1L);
+
+        post.getComments().stream()
+                .peek(c -> c.setPost(null))
+                .forEach(c -> entityManager.persist(c));
+
+        entityManager.remove(post);
+        entityManager.flush();
+
+        Post postAfterDelete = entityManager.find(Post.class, 1L);
+        assertThat(postAfterDelete, equalTo(null));
+
+        Comment comment1 = entityManager.find(Comment.class, 1L);
+        assertThat(comment1.getPost(), equalTo(null));
+    }
+
+    @Test
     public void removePost_WhenBeforeRemoveDependenceComments() {
         Post post = entityManager.find(Post.class, 1L);
 
@@ -31,5 +49,8 @@ public class PostTest extends AbstractJpaTest {
 
         Post postAfterDelete = entityManager.find(Post.class, 1L);
         assertThat(postAfterDelete, equalTo(null));
+
+        Comment comment1 = entityManager.find(Comment.class, 1L);
+        assertThat(comment1, equalTo(null));
     }
 }
