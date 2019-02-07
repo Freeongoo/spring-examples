@@ -29,4 +29,10 @@ public abstract class AbstractJpaTest {
     public void setUp() {
         System.out.println("\n\n\n\n************************ Begin Test ************************");
     }
+
+    protected void flushAndClean() {
+        System.out.println("\n**** flush and clean ****\n");
+        entityManager.flush();
+        entityManager.clear();
+    }
 }

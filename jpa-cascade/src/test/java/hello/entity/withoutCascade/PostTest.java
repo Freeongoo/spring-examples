@@ -6,6 +6,8 @@ import org.junit.Test;
 
 import javax.persistence.PersistenceException;
 
+import java.util.List;
+
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 
@@ -17,7 +19,8 @@ public class PostTest extends AbstractJpaTest {
         Post post = entityManager.find(Post.class, 1L);
 
         entityManager.remove(post);
-        entityManager.flush();
+
+        flushAndClean();
     }
 
     @Test
@@ -29,7 +32,8 @@ public class PostTest extends AbstractJpaTest {
                 .forEach(c -> entityManager.persist(c));
 
         entityManager.remove(post);
-        entityManager.flush();
+
+        flushAndClean();
 
         Post postAfterDelete = entityManager.find(Post.class, 1L);
         assertThat(postAfterDelete, equalTo(null));
@@ -45,12 +49,32 @@ public class PostTest extends AbstractJpaTest {
         post.getComments().forEach(c -> entityManager.remove(c));
 
         entityManager.remove(post);
-        entityManager.flush();
+
+        flushAndClean();
 
         Post postAfterDelete = entityManager.find(Post.class, 1L);
         assertThat(postAfterDelete, equalTo(null));
 
         Comment comment1 = entityManager.find(Comment.class, 1L);
         assertThat(comment1, equalTo(null));
+    }
+
+    @Test
+    public void tryAddToPostNewAccount_WhenOnlySetInCollection() {
+        Comment comment5 = entityManager.find(Comment.class, 5L); // without relation with Post
+        Post post = entityManager.find(Post.class, 1L);
+
+        List<Comment> comments = post.getComments();
+        comments.add(comment5);
+
+        post.getComments().clear();
+        post.getComments().addAll(comments);
+
+        entityManager.persist(post);
+
+        flushAndClean();
+
+        Post postAfterPersist = entityManager.find(Post.class, 1L);
+        assertThat(postAfterPersist.getComments().size(), equalTo(2)); // nothing added
     }
 }

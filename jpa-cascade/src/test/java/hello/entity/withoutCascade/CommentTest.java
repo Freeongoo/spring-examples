@@ -15,7 +15,8 @@ public class CommentTest extends AbstractJpaTest {
     public void deleteComment() {
         Comment comment = entityManager.find(Comment.class, 1L);
         entityManager.remove(comment);
-        entityManager.flush();
+
+        flushAndClean();
 
         Comment commentAfterDelete = entityManager.find(Comment.class, 1L);
         assertThat(commentAfterDelete, equalTo(null));

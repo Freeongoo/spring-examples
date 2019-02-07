@@ -15,7 +15,8 @@ public class ClientTest extends AbstractJpaTest {
         Client client = entityManager.find(Client.class, 1L);
 
         entityManager.remove(client);
-        entityManager.flush();
+
+        flushAndClean();
 
         Client clientAfterDelete = entityManager.find(Client.class, 1L);
         assertThat(clientAfterDelete, equalTo(null));
