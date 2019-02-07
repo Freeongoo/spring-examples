@@ -27,7 +27,7 @@ public abstract class AbstractJpaTest {
 
     @Before
     public void setUp() {
-        System.out.println("\n\n\n\n************************ Begin Test ************************");
+        System.out.println("\n\n\n************************ Begin Test ************************");
     }
 
     protected void flushAndClean() {
