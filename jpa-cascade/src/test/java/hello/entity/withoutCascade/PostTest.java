@@ -19,7 +19,7 @@ public class PostTest extends AbstractJpaTest {
     public ExpectedException thrown = ExpectedException.none();
 
     @Test
-    public void removePost_WhenNotRemoveDependenceComments() {
+    public void removePost_WhenNotRemoveDependenceComments_ShouldThrowException() {
         this.thrown.expect(PersistenceException.class);
         this.thrown.expectMessage("org.hibernate.exception.ConstraintViolationException: could not execute statement");
 

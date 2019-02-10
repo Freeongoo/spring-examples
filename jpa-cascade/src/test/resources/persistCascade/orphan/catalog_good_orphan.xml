@@ -1,0 +1,12 @@
+<dataset>
+    <Catalog_Orphan id="1" name="Catalog#1"/>
+    <Catalog_Orphan id="2" name="Catalog#2"/>
+
+    <Good_Orphan id="1" name="Good#1" catalog_orphan_id="1"/>
+    <Good_Orphan id="2" name="Good#2" catalog_orphan_id="1"/>
+    <Good_Orphan id="3" name="Good#3" catalog_orphan_id="2"/>
+    <Good_Orphan id="4" name="Good#4" catalog_orphan_id="2"/>
+
+    <!-- without catalog -->
+    <Good_Orphan id="5" name="Good#5" />
+</dataset>

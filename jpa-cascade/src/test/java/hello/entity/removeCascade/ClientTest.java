@@ -30,7 +30,7 @@ public class ClientTest extends AbstractJpaTest {
     }
 
     @Test
-    public void tryDeleteClientDependenciesByCleanOnlyCollections() {
+    public void tryDeleteClientDependenciesByCleanOnlyCollections_WhenSetNullCollections() {
         Client client = entityManager.find(Client.class, 1L);
 
         client.setAccounts(null);
@@ -40,7 +40,10 @@ public class ClientTest extends AbstractJpaTest {
 
         Client clientAfterCleanCollection = entityManager.find(Client.class, 1L);
         assertThat(clientAfterCleanCollection.getAccounts().size(), equalTo(2)); // nothing deleted
+    }
 
+    @Test
+    public void tryDeleteClientDependenciesByCleanOnlyCollections_WhenCleanCollections() {
         Client client2 = entityManager.find(Client.class, 1L);
 
         client2.getAccounts().clear();

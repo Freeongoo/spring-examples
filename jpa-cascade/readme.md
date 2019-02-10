@@ -14,3 +14,9 @@ See tests: `/src/test/java/hello/entity/withoutCascade`
 ### Without Cascade Type - remove
 
 See tests: `/src/test/java/hello/entity/removeCascade`
+See tests with orphan: `/src/test/java/hello/entity/removeCascade/orphan`
+
+### Without Cascade Type - persist
+
+See tests: `/src/test/java/hello/entity/persistCascade`
+See tests with orphan: `/src/test/java/hello/entity/persistCascade/orphan`
