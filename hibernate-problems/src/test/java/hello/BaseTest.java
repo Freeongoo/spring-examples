@@ -1,6 +1,7 @@
 package hello;
 
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
+import hello.sqltracker.AssertSqlCount;
 import org.hibernate.Session;
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -39,6 +40,7 @@ public abstract class BaseTest {
     @Before
     public void dbAllSet() {
         Arrays.stream(DB_UNIT_SET_UP).forEach(System.out::println);
+        AssertSqlCount.reset();
         session = em.unwrap(Session.class);
     }
 }

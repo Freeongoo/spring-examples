@@ -3,6 +3,7 @@ package hello.entity.nPlusOneProblem;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import hello.BaseTest;
 import hello.repository.nPlusOneProblem.PostRepository;
+import hello.sqltracker.AssertSqlCount;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -26,5 +27,7 @@ public class NPlusOneProblemPostTest extends BaseTest {
             Set<Comment> comments = post.getComments();
             comments.forEach(c -> System.out.println(c.getName()));
         }
+
+        AssertSqlCount.assertSelectCount(4);
     }
 }

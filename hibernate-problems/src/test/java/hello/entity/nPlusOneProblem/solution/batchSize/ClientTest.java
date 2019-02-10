@@ -5,6 +5,7 @@ import hello.BaseTest;
 import hello.entity.nPlusOneProblem.solution.batchSize.Account;
 import hello.entity.nPlusOneProblem.solution.batchSize.Client;
 import hello.repository.nPlusOneProblem.solution.batchSize.ClientRepository;
+import hello.sqltracker.AssertSqlCount;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -26,5 +27,7 @@ public class ClientTest extends BaseTest {
             Set<Account> accounts = client.getAccounts();
             accounts.forEach(a -> System.out.println(a.getName()));
         }
+
+        AssertSqlCount.assertSelectCount(2);
     }
 }
