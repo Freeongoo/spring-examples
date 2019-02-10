@@ -2,7 +2,9 @@ package hello.entity.withoutCascade;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import hello.AbstractJpaTest;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import javax.persistence.PersistenceException;
 import java.util.List;
@@ -13,8 +15,14 @@ import static org.junit.Assert.assertThat;
 @DatabaseSetup("/withoutCascade/post_comment.xml")
 public class PostTest extends AbstractJpaTest {
 
-    @Test(expected = PersistenceException.class)
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
+    @Test
     public void removePost_WhenNotRemoveDependenceComments() {
+        this.thrown.expect(PersistenceException.class);
+        this.thrown.expectMessage("org.hibernate.exception.ConstraintViolationException: could not execute statement");
+
         Post post = entityManager.find(Post.class, 1L);
 
         // cannot delete - because exist foreign key
