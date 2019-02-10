@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
-import hello.controller.advice.ExceptionControllerAdvice;
+import hello.advice.ExceptionControllerAdvice;
 import hello.controller.single.EmployeeController;
 import hello.entity.single.Employee;
 import org.junit.Before;
