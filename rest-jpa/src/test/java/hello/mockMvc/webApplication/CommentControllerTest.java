@@ -22,10 +22,16 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.util.Optional;
+
 import static com.jcabi.matchers.RegexMatchers.matchesPattern;
 import static hello.controller.oneToMany.CommentController.PATH;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.junit.Assert.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -43,6 +49,12 @@ public class CommentControllerTest {
 
     @Autowired
     private WebApplicationContext context;
+
+    @PersistenceContext
+    private EntityManager em;
+
+    @Autowired
+    private CommentRepository commentRepository;
 
     private MockMvc mockMvc;
     private static String commentRouteWithIdParam = PATH + "/{id}";
@@ -141,6 +153,14 @@ public class CommentControllerTest {
                 .content(json))
                 .andExpect(status().isCreated())
                 .andExpect(header().string("location", matchesPattern("http://localhost/comments/\\d+")));
+
+        // additional check - not need
+        em.flush();
+        em.clear();
+
+        Optional<Comment> optionalComment = commentRepository.findById(1L);
+        Comment commentFromDb = optionalComment.orElseThrow(() -> new RuntimeException("cannot find"));
+        assertThat(commentFromDb.getName(), equalTo("Updated Comment"));
     }
 
     @Test
