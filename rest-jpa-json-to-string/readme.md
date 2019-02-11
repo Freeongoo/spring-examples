@@ -7,6 +7,12 @@ Sometimes there is a need to save JSON to the database and return the result as 
 For main and test dirs:
 `cp application.properties.dist application.properties`
 
-## Test
+## 1. Save json by custom field annotation
 
-see: `/src/test/java/hello/controller/EmployeeControllerTest.java`
+Code in dir: `/src/main/java/hello/json`
+
+See example use: `/src/main/java/hello/entity/customField/Employee.java`
+
+### Test
+
+see: `/src/test/java/hello/controller/customField/EmployeeControllerTest.java`

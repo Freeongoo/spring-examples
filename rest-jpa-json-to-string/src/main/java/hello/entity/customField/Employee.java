@@ -1,7 +1,8 @@
-package hello.entity;
+package hello.entity.customField;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import hello.entity.AbstractBaseEntity;
 import hello.json.JsonStringType;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;

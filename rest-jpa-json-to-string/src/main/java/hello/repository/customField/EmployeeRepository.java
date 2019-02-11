@@ -1,6 +1,6 @@
-package hello.repository;
+package hello.repository.customField;
 
-import hello.entity.Employee;
+import hello.entity.customField.Employee;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,10 +1,10 @@
-package hello.controller;
+package hello.controller.customField;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
-import hello.entity.Employee;
+import hello.entity.customField.Employee;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,7 +22,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.util.HashMap;
 
-import static hello.controller.EmployeeController.PATH;
+import static hello.controller.customField.EmployeeController.PATH;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;

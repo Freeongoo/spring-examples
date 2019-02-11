@@ -1,7 +1,7 @@
-package hello.controller;
+package hello.controller.customField;
 
-import hello.entity.Employee;
-import hello.service.EmployeeService;
+import hello.entity.customField.Employee;
+import hello.service.customField.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
