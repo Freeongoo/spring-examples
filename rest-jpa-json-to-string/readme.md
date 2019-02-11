@@ -2,6 +2,8 @@
 
 Sometimes there is a need to save JSON to the database and return the result as JSON and not as a string
 
+Base on article: https://vladmihalcea.com/how-to-map-json-objects-using-generic-hibernate-types/
+
 ## Configuration
 
 For main and test dirs:
