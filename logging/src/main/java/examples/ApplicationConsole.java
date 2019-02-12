@@ -1,6 +1,7 @@
 package examples;
 
 import examples.info.Info;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -9,10 +10,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class ApplicationConsole implements CommandLineRunner {
+
     @Autowired
     private Info info;
 
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(ApplicationConsole.class);
+    private static final Logger logger = LoggerFactory.getLogger(ApplicationConsole.class);
 
     public static void main(String[] args) {
         SpringApplication.run(ApplicationConsole.class, args);
