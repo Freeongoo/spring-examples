@@ -81,6 +81,4 @@ fabric.properties
 /src/main/resources/db.properties
 /src/test/resources/db-test.properties
 /.idea/hotswap_agent.xml
-/log.log
-/spring.log
-/application.log
+/src/main/resources/application.properties
