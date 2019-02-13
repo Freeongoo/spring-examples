@@ -4,7 +4,6 @@ import hello.entity.oneToMany.Comment;
 import hello.entity.oneToMany.Post;
 import hello.exception.ErrorCode;
 import hello.exception.NotValidParamsException;
-import hello.exception.ResourceNotFoundException;
 import hello.repository.oneToMany.CommentRepository;
 import hello.repository.oneToMany.PostRepository;
 import hello.service.CommentService;
@@ -49,7 +48,8 @@ public class CommentServiceImpl extends AbstractService<Comment, Long> implement
 
         Long postId = entity.getPost().getId();
         Optional<Post> postFromDb = postRepository.findById(postId);
-        postFromDb.orElseThrow(
-                () -> new ResourceNotFoundException("cannot find post by id:" + postId, ErrorCode.OBJECT_NOT_FOUND));
+
+        postFromDb
+                .orElseThrow(getNotFoundExceptionSupplier("cannot find post by id:" + postId, ErrorCode.OBJECT_NOT_FOUND));
     }
 }

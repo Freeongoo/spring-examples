@@ -6,8 +6,9 @@ import hello.exception.ResourceNotFoundException;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.function.Supplier;
+
+import static hello.exception.ErrorCode.OBJECT_NOT_FOUND;
 
 public abstract class AbstractService<T extends BaseEntity<ID>, ID> implements Service<T, ID> {
 
@@ -22,22 +23,20 @@ public abstract class AbstractService<T extends BaseEntity<ID>, ID> implements S
     public T getById(ID id) {
         return getRepository()
                 .findById(id)
-                .orElseThrow(getResourceNotFoundExceptionSupplier("Cannot find entity by id: " + id));
+                .orElseThrow(getNotFoundExceptionSupplier("Cannot find entity by id: " + id, OBJECT_NOT_FOUND));
     }
 
     @Override
     public T update(ID id, T entity) {
-        Optional<T> optionalItem = getRepository().findById(id);
-        return optionalItem
-                .map(setIdAndSave(entity))
-                .orElseThrow(getResourceNotFoundExceptionSupplier("Cannot update - not exist entity by id: " + id));
+        Optional<T> optionalEntityFromDB = getRepository().findById(id);
+        return optionalEntityFromDB
+                .map(e -> getSavedItem(entity, e))
+                .orElseThrow(getNotFoundExceptionSupplier("Cannot update - not exist entity by id: " + id, OBJECT_NOT_FOUND));
     }
 
-    private Function<T, T> setIdAndSave(T entity) {
-        return item -> {
-            entity.setId(item.getId());
-            return getRepository().save(entity);
-        };
+    private T getSavedItem(T entity, T entityFromDB) {
+        entity.setId(entityFromDB.getId());
+        return getRepository().save(entity);
     }
 
     @Override
@@ -55,7 +54,7 @@ public abstract class AbstractService<T extends BaseEntity<ID>, ID> implements S
         getRepository().deleteById(id);
     }
 
-    private Supplier<ResourceNotFoundException> getResourceNotFoundExceptionSupplier(String message) {
-        return () -> new ResourceNotFoundException(message, ErrorCode.OBJECT_NOT_FOUND);
+    protected Supplier<ResourceNotFoundException> getNotFoundExceptionSupplier(String message, ErrorCode code) {
+        return () -> new ResourceNotFoundException(message, code);
     }
 }
