@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="gs-serving-web-content" />
+        <module name="logging" />
+        <module name="logging-log4j" />
+        <module name="routes" />
+        <module name="spring-examples" />
+        <module name="test-spock" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="logging" target="1.8" />
+      <module name="logging-log4j" target="1.8" />
+      <module name="routes" target="1.8" />
+      <module name="test-spock" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="logging" options="-parameters" />
+      <module name="logging-log4j" options="-parameters" />
+      <module name="test-spock" options="-parameters" />
+    </option>
+  </component>
+</project>
