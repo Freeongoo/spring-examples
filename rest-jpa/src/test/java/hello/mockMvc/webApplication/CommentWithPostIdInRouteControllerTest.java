@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import static com.jcabi.matchers.RegexMatchers.matchesPattern;
-import static hello.controller.oneToMany.CommentWithPostIdController.PATH;
+import static hello.controller.oneToMany.CommentWithPostIdInRouteController.PATH;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -38,7 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         DependencyInjectionTestExecutionListener.class,
         DbUnitTestExecutionListener.class
 })
-public class CommentWithPostIdControllerTest {
+public class CommentWithPostIdInRouteControllerTest {
 
     @Autowired
     private WebApplicationContext context;

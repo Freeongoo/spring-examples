@@ -27,6 +27,7 @@ import static hello.controller.single.EmployeeController.PATH;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -57,6 +58,7 @@ public class EmployeeControllerTest {
     @Test
     public void all() throws Exception {
         this.mockMvc.perform(get(PATH))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$", hasSize(2)))
@@ -80,6 +82,7 @@ public class EmployeeControllerTest {
         this.mockMvc.perform(post(PATH)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(json))
+                .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(header().string("location", matchesPattern("http://localhost/employees/\\d+")));
     }
@@ -89,6 +92,7 @@ public class EmployeeControllerTest {
         int id = 1;
 
         this.mockMvc.perform(get(employeeRouteWithParam, id))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("id", is(1)))
@@ -101,6 +105,7 @@ public class EmployeeControllerTest {
         int idNotExist = -1;
 
         this.mockMvc.perform(get(employeeRouteWithParam, idNotExist))
+                .andDo(print())
                 .andExpect(status().isNotFound());
     }
 
@@ -117,6 +122,7 @@ public class EmployeeControllerTest {
         this.mockMvc.perform(put(employeeRouteWithParam, id)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(json))
+                .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(header().string("location", matchesPattern("http://localhost/employees/\\d+")));
     }
@@ -129,6 +135,7 @@ public class EmployeeControllerTest {
                 .andExpect(status().isNoContent());
 
         this.mockMvc.perform(get(PATH))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$", hasSize(1)))

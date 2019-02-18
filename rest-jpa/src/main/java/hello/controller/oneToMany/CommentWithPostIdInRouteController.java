@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
-@RequestMapping(CommentWithPostIdController.PATH)
-public class CommentWithPostIdController {
+@RequestMapping(CommentWithPostIdInRouteController.PATH)
+public class CommentWithPostIdInRouteController {
 
     public final static String PATH = "/posts/{postId}/comments";
 

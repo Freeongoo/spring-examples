@@ -38,7 +38,7 @@ public class Comment extends AbstractBaseEntity<Long> {
         return post;
     }
 
-    @JsonProperty("post")
+    @JsonIgnore
     public void setPost(Post post) {
         this.post = post;
     }

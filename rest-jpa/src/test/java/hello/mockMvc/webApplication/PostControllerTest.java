@@ -37,6 +37,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.Assert.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
@@ -76,12 +77,14 @@ public class PostControllerTest {
     @Test
     public void getAll_WhenCheckOnlyStatus() throws Exception {
         this.mockMvc.perform(get(PATH))
+                .andDo(print())
                 .andExpect(status().isOk());
     }
 
     @Test
     public void getAll() throws Exception {
         this.mockMvc.perform(get(PATH))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$", hasSize(2)))
@@ -102,6 +105,7 @@ public class PostControllerTest {
         this.mockMvc.perform(post(PATH)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(json))
+                .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(header().string("location", matchesPattern("http://localhost/posts/\\d+")));
     }
@@ -111,6 +115,7 @@ public class PostControllerTest {
         int id = 1;
 
         this.mockMvc.perform(get(postRouteWithParam, id))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("id", is(1)))
@@ -137,6 +142,7 @@ public class PostControllerTest {
         this.mockMvc.perform(put(postRouteWithParam, id)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(json))
+                .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(header().string("location", matchesPattern("http://localhost/posts/\\d+")));
     }
@@ -157,6 +163,7 @@ public class PostControllerTest {
         this.mockMvc.perform(put(postRouteWithParam, id)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(json))
+                .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(header().string("location", matchesPattern("http://localhost/posts/\\d+")));
 
@@ -187,6 +194,7 @@ public class PostControllerTest {
         this.mockMvc.perform(put(postRouteWithParam, idNotExist)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(json))
+                .andDo(print())
                 .andExpect(status().isNotFound());
     }
 
@@ -198,6 +206,7 @@ public class PostControllerTest {
                 .andExpect(status().isNoContent());
 
         this.mockMvc.perform(get(PATH))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$", hasSize(1)))
@@ -222,6 +231,7 @@ public class PostControllerTest {
                 .andExpect(status().isNoContent());
 
         this.mockMvc.perform(get(PATH))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$", hasSize(1)))
