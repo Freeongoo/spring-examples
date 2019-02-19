@@ -1,9 +1,7 @@
 package hello.controller.single;
 
 import hello.entity.single.Employee;
-import hello.exception.EmployeeNotFoundException;
-import hello.exception.ErrorCode;
-import hello.repository.single.EmployeeRepository;
+import hello.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -11,12 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.List;
-
-/**
- * Bad practices - need move logic from controller to service.
- * See better example {@link hello.controller.oneToMany.PostController}
- */
 @RestController
 @RequestMapping(EmployeeController.PATH)
 public class EmployeeController {
@@ -24,50 +16,41 @@ public class EmployeeController {
     public final static String PATH = "/employees";
 
     @Autowired
-    private EmployeeRepository repository;
+    private EmployeeService service;
 
     @GetMapping("")
-    List<Employee> all() {
-        return repository.findAll();
+    public Iterable<Employee> all() {
+        return service.getAll();
     }
 
     @PostMapping("")
-    ResponseEntity<Employee> newEmployee(@RequestBody Employee newEmployee, UriComponentsBuilder ucBuilder) {
-        Employee employeeSaved = repository.save(newEmployee);
+    public ResponseEntity<Employee> newEmployee(@RequestBody Employee newEmployee, UriComponentsBuilder ucBuilder) {
+        Employee employeeSaved = service.save(newEmployee);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(ucBuilder.path(PATH + "/{id}").buildAndExpand(employeeSaved.getId()).toUri());
-        return new ResponseEntity<>(headers, HttpStatus.CREATED);
+        return getHeaderWithLocation(ucBuilder, employeeSaved, PATH + "/{id}");
     }
 
     @GetMapping("/{id}")
-    Employee one(@PathVariable Long id) {
-        return repository
-                .findById(id)
-                .orElseThrow(() -> new EmployeeNotFoundException("Employee not find by id: " + id, ErrorCode.OBJECT_NOT_FOUND));
+    public Employee one(@PathVariable Long id) {
+        return service.getById(id);
     }
 
     @PutMapping("/{id}")
-    ResponseEntity<Employee> replaceEmployee(@RequestBody Employee newEmployee, @PathVariable Long id, UriComponentsBuilder ucBuilder) {
-        Employee updatedEmployee = repository.findById(id)
-                .map(employee -> {
-                    employee.setName(newEmployee.getName());
-                    employee.setRole(newEmployee.getRole());
-                    return repository.save(employee);
-                })
-                .orElseGet(() -> {
-                    newEmployee.setId(id);
-                    return repository.save(newEmployee);
-                });
+    public ResponseEntity<Employee> replaceEmployee(@RequestBody Employee newEmployee, @PathVariable Long id, UriComponentsBuilder ucBuilder) {
+        Employee updatedEmployee = service.update(id, newEmployee);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(ucBuilder.path("/employees/{id}").buildAndExpand(updatedEmployee.getId()).toUri());
-        return new ResponseEntity<>(headers, HttpStatus.CREATED);
+        return getHeaderWithLocation(ucBuilder, updatedEmployee, "/employees/{id}");
     }
 
     @DeleteMapping("/{id}")
-    ResponseEntity<?> deleteEmployee(@PathVariable Long id) {
-        repository.deleteById(id);
+    public ResponseEntity<?> deleteEmployee(@PathVariable Long id) {
+        service.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    private ResponseEntity<Employee> getHeaderWithLocation(UriComponentsBuilder ucBuilder, Employee employeeSaved, String url) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(ucBuilder.path(url).buildAndExpand(employeeSaved.getId()).toUri());
+        return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 }

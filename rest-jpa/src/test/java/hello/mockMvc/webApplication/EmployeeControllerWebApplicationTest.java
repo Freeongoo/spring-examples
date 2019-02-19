@@ -147,4 +147,12 @@ public class EmployeeControllerWebApplicationTest {
                 .andExpect(jsonPath("$[0].name", is("Mike")))
                 .andExpect(jsonPath("$[0].role", is("user")));
     }
+
+    @Test
+    public void deleteEmployee_WhenNotExist() throws Exception {
+        int notExistId = -1;
+
+        this.mockMvc.perform(delete(employeeRouteWithParam, notExistId))
+                .andExpect(status().isNotFound());
+    }
 }

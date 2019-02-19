@@ -19,12 +19,12 @@ public class PostController {
     private PostService service;
 
     @GetMapping("")
-    Iterable<Post> getAll() {
+    public Iterable<Post> getAll() {
         return service.getAll();
     }
 
     @PostMapping("")
-    ResponseEntity<Post> create(@RequestBody Post post, UriComponentsBuilder ucBuilder) {
+    public ResponseEntity<Post> create(@RequestBody Post post, UriComponentsBuilder ucBuilder) {
         Post postSaved = service.save(post);
 
         HttpHeaders headers = getHttpHeaderWithLocation(ucBuilder, postSaved);
@@ -32,12 +32,12 @@ public class PostController {
     }
 
     @GetMapping("/{id}")
-    Post getById(@PathVariable Long id) {
+    public Post getById(@PathVariable Long id) {
         return service.getById(id);
     }
 
     @PutMapping("/{id}")
-    ResponseEntity<Post> update(@RequestBody Post post, @PathVariable Long id, UriComponentsBuilder ucBuilder) {
+    public ResponseEntity<Post> update(@RequestBody Post post, @PathVariable Long id, UriComponentsBuilder ucBuilder) {
         Post postUpdated = service.update(id, post);
 
         HttpHeaders headers = getHttpHeaderWithLocation(ucBuilder, postUpdated);
@@ -45,7 +45,7 @@ public class PostController {
     }
 
     @DeleteMapping("/{id}")
-    ResponseEntity<?> delete(@PathVariable Long id) {
+    public ResponseEntity<?> delete(@PathVariable Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }

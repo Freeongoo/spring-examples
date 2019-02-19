@@ -1,6 +1,6 @@
 package hello.service.impl;
 
-import hello.entity.oneToMany.BaseEntity;
+import hello.entity.BaseEntity;
 import hello.exception.ErrorCode;
 import hello.exception.ResourceNotFoundException;
 import hello.service.Service;
@@ -31,11 +31,11 @@ public abstract class AbstractService<T extends BaseEntity<ID>, ID> implements S
     public T update(ID id, T entity) {
         Optional<T> optionalEntityFromDB = getRepository().findById(id);
         return optionalEntityFromDB
-                .map(e -> getSavedItem(entity, e))
+                .map(e -> saveAndReturnSavedEntity(entity, e))
                 .orElseThrow(getNotFoundExceptionSupplier("Cannot update - not exist entity by id: " + id, OBJECT_NOT_FOUND));
     }
 
-    private T getSavedItem(T entity, T entityFromDB) {
+    private T saveAndReturnSavedEntity(T entity, T entityFromDB) {
         entity.setId(entityFromDB.getId());
         return getRepository().save(entity);
     }
@@ -52,6 +52,10 @@ public abstract class AbstractService<T extends BaseEntity<ID>, ID> implements S
 
     @Override
     public void delete(ID id) {
+        getRepository()
+                .findById(id)
+                .orElseThrow(getNotFoundExceptionSupplier("Cannot find entity by id: " + id, OBJECT_NOT_FOUND));
+
         getRepository().deleteById(id);
     }
 

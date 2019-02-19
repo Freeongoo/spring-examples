@@ -19,12 +19,12 @@ public class CommentWithPostIdInRouteController {
     private CommentWithPostIdService service;
 
     @GetMapping("")
-    Iterable<Comment> getAll(@PathVariable Long postId) {
+    public Iterable<Comment> getAll(@PathVariable Long postId) {
         return service.getAll(postId);
     }
 
     @PostMapping("")
-    ResponseEntity<Comment> create(@PathVariable Long postId, @RequestBody Comment comment, UriComponentsBuilder ucBuilder) {
+    public ResponseEntity<Comment> create(@PathVariable Long postId, @RequestBody Comment comment, UriComponentsBuilder ucBuilder) {
         Comment commentSaved = service.save(postId, comment);
 
         HttpHeaders headers = getHttpHeaderWithLocation(ucBuilder, postId, commentSaved);
@@ -32,12 +32,12 @@ public class CommentWithPostIdInRouteController {
     }
 
     @GetMapping("/{id}")
-    Comment getById(@PathVariable Long postId, @PathVariable Long id) {
+    public Comment getById(@PathVariable Long postId, @PathVariable Long id) {
         return service.getById(postId, id);
     }
 
     @PutMapping("/{id}")
-    ResponseEntity<Comment> update(@PathVariable Long postId, @RequestBody Comment comment, @PathVariable Long id, UriComponentsBuilder ucBuilder) {
+    public ResponseEntity<Comment> update(@PathVariable Long postId, @RequestBody Comment comment, @PathVariable Long id, UriComponentsBuilder ucBuilder) {
         Comment postUpdated = service.update(postId, id, comment);
 
         HttpHeaders headers = getHttpHeaderWithLocation(ucBuilder, postId, postUpdated);
@@ -45,7 +45,7 @@ public class CommentWithPostIdInRouteController {
     }
 
     @DeleteMapping("/{id}")
-    ResponseEntity<?> delete(@PathVariable Long postId, @PathVariable Long id) {
+    public ResponseEntity<?> delete(@PathVariable Long postId, @PathVariable Long id) {
         service.delete(postId, id);
         return ResponseEntity.noContent().build();
     }

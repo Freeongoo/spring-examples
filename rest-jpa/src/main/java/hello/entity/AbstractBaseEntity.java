@@ -1,4 +1,4 @@
-package hello.entity.oneToMany;
+package hello.entity;
 
 import javax.persistence.*;
 import java.util.Objects;

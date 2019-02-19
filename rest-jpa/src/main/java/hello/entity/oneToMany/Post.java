@@ -2,6 +2,7 @@ package hello.entity.oneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import hello.entity.AbstractBaseEntity;
 
 import javax.persistence.*;
 import java.util.List;

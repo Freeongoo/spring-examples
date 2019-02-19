@@ -1,6 +1,7 @@
 package hello.entity.oneToMany;
 
 import com.fasterxml.jackson.annotation.*;
+import hello.entity.AbstractBaseEntity;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
