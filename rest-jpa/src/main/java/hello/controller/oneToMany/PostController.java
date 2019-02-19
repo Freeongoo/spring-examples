@@ -3,11 +3,8 @@ package hello.controller.oneToMany;
 import hello.entity.oneToMany.Post;
 import hello.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @RequestMapping(PostController.PATH)
@@ -24,11 +21,8 @@ public class PostController {
     }
 
     @PostMapping("")
-    public ResponseEntity<Post> create(@RequestBody Post post, UriComponentsBuilder ucBuilder) {
-        Post postSaved = service.save(post);
-
-        HttpHeaders headers = getHttpHeaderWithLocation(ucBuilder, postSaved);
-        return new ResponseEntity<>(headers, HttpStatus.CREATED);
+    public Post create(@RequestBody Post post) {
+        return service.save(post);
     }
 
     @GetMapping("/{id}")
@@ -37,22 +31,13 @@ public class PostController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Post> update(@RequestBody Post post, @PathVariable Long id, UriComponentsBuilder ucBuilder) {
-        Post postUpdated = service.update(id, post);
-
-        HttpHeaders headers = getHttpHeaderWithLocation(ucBuilder, postUpdated);
-        return new ResponseEntity<>(headers, HttpStatus.CREATED);
+    public Post update(@RequestBody Post post, @PathVariable Long id) {
+        return service.update(id, post);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
-    }
-
-    private HttpHeaders getHttpHeaderWithLocation(UriComponentsBuilder ucBuilder, Post post) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(ucBuilder.path(PATH + "/{id}").buildAndExpand(post.getId()).toUri());
-        return headers;
     }
 }

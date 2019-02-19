@@ -9,6 +9,12 @@ import javax.persistence.*;
 
 import static org.springframework.util.ObjectUtils.isEmpty;
 
+/**
+ * Entity with customization.
+ *
+ * Added the ability to set the value of a relation (Post post) from json passing simply id by field "postId"
+ * and display relation (Post post) by id => "postId: 1"
+ */
 @Entity
 @Table(name = "comment")
 @JsonInclude(JsonInclude.Include.NON_NULL)

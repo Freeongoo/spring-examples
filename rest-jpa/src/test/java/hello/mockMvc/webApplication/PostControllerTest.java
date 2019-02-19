@@ -29,11 +29,11 @@ import javax.persistence.PersistenceContext;
 import java.util.Collections;
 import java.util.Optional;
 
-import static com.jcabi.matchers.RegexMatchers.matchesPattern;
 import static hello.controller.oneToMany.PostController.PATH;
-import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.Assert.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -90,12 +90,14 @@ public class PostControllerTest {
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].id", is(1)))
                 .andExpect(jsonPath("$[0].name", is("Super news")))
+                .andExpect(jsonPath("$[0].comments").isArray())
                 .andExpect(jsonPath("$[1].id", is(2)))
-                .andExpect(jsonPath("$[1].name", is("Some other news")));
+                .andExpect(jsonPath("$[1].name", is("Some other news")))
+                .andExpect(jsonPath("$[1].comments").isArray());
     }
 
     @Test
-    public void create() throws Exception {
+    public void create_WithoutComments() throws Exception {
         String name = "New News";
         Post post = new Post(name);
 
@@ -106,8 +108,30 @@ public class PostControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(json))
                 .andDo(print())
-                .andExpect(status().isCreated())
-                .andExpect(header().string("location", matchesPattern("http://localhost/posts/\\d+")));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("id", notNullValue()))
+                .andExpect(jsonPath("name", is(name)))
+                .andExpect(jsonPath("comments").doesNotExist());
+    }
+
+    @Test
+    public void create_WithComments() throws Exception {
+        Post post = new Post();
+        Comment comment = new Comment();
+        comment.setId(1L);
+        post.setComments(Collections.singletonList(comment));
+
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        String json = ow.writeValueAsString(post);
+
+        this.mockMvc.perform(post(PATH)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(json))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("id", notNullValue()))
+                .andExpect(jsonPath("name").doesNotExist())
+                .andExpect(jsonPath("comments").isArray());
     }
 
     @Test
@@ -119,7 +143,8 @@ public class PostControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("id", is(1)))
-                .andExpect(jsonPath("name", is("Super news")));
+                .andExpect(jsonPath("name", is("Super news")))
+                .andExpect(jsonPath("comments").isArray());
     }
 
     @Test
@@ -143,8 +168,28 @@ public class PostControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(json))
                 .andDo(print())
-                .andExpect(status().isCreated())
-                .andExpect(header().string("location", matchesPattern("http://localhost/posts/\\d+")));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("id", is(1)))
+                .andExpect(jsonPath("name", is(name)))
+                .andExpect(jsonPath("comments").doesNotExist());
+    }
+
+    @Test
+    public void update_EmptyEntityPassed() throws Exception {
+        int id = 1;
+        Post post = new Post();
+
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        String json = ow.writeValueAsString(post);
+
+        this.mockMvc.perform(put(postRouteWithParam, id)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(json))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("id", is(1)))
+                .andExpect(jsonPath("name").doesNotExist())
+                .andExpect(jsonPath("comments").doesNotExist());
     }
 
     @Test
@@ -164,10 +209,11 @@ public class PostControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(json))
                 .andDo(print())
-                .andExpect(status().isCreated())
-                .andExpect(header().string("location", matchesPattern("http://localhost/posts/\\d+")));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("id", is(1)))
+                .andExpect(jsonPath("name", is(nameFroUpdate)));
 
-        // acutalization db
+        // actualization db
         em.flush();
         em.clear();
 

@@ -5,7 +5,14 @@
 For main and test dirs:
 `cp application.properties.dist application.properties`
 
-## With only one entity Employee, without relations
+# Examples of implementations
+
+## With only one entity "Employee", without relations
+
+See controller: `/src/main/java/hello/controller/single/EmployeeController.java`
+
+It should be noted that this controller uses the technique of inserting 
+a successfully created or updated object as a link to the header
 
 JPA Employee:
 
@@ -13,8 +20,11 @@ JPA Employee:
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {}
 ```
+## With @OneToMany relations
 
-## Exception Handler
+See controllers: `/src/main/java/hello/controller/oneToMany`
+
+# Exception Handler
 
 - Create enum for list of errors code: `ErrorCode`
 - Create base exception `BaseException` for customization response data

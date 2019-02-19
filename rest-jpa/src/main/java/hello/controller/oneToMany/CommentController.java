@@ -3,11 +3,8 @@ package hello.controller.oneToMany;
 import hello.entity.oneToMany.Comment;
 import hello.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
 
 /**
  * Without postId in route, just "/comments"
@@ -27,11 +24,8 @@ public class CommentController {
     }
 
     @PostMapping("")
-    public ResponseEntity<Comment> create(@RequestBody Comment comment, UriComponentsBuilder ucBuilder) {
-        Comment commentSaved = service.save(comment);
-
-        HttpHeaders headers = getHttpHeaderWithLocation(ucBuilder, commentSaved);
-        return new ResponseEntity<>(headers, HttpStatus.CREATED);
+    public Comment create(@RequestBody Comment comment) {
+        return service.save(comment);
     }
 
     @GetMapping("/{id}")
@@ -40,22 +34,13 @@ public class CommentController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Comment> update(@RequestBody Comment comment, @PathVariable Long id, UriComponentsBuilder ucBuilder) {
-        Comment postUpdated = service.update(id, comment);
-
-        HttpHeaders headers = getHttpHeaderWithLocation(ucBuilder, postUpdated);
-        return new ResponseEntity<>(headers, HttpStatus.CREATED);
+    public Comment update(@RequestBody Comment comment, @PathVariable Long id) {
+        return service.update(id, comment);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
-    }
-
-    private HttpHeaders getHttpHeaderWithLocation(UriComponentsBuilder ucBuilder, Comment comment) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(ucBuilder.path(PATH + "/{id}").buildAndExpand(comment.getId()).toUri());
-        return headers;
     }
 }

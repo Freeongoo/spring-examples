@@ -21,9 +21,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
-import static com.jcabi.matchers.RegexMatchers.matchesPattern;
 import static hello.controller.oneToMany.CommentWithPostIdInRouteController.PATH;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -84,12 +84,16 @@ public class CommentWithPostIdInRouteControllerTest {
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String json = ow.writeValueAsString(comment);
 
-        this.mockMvc.perform(post(PATH, 1)
+        int postId = 1;
+
+        this.mockMvc.perform(post(PATH, postId)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(json))
                 .andDo(print())
-                .andExpect(status().isCreated())
-                .andExpect(header().string("location", matchesPattern("http://localhost/posts/\\d+/comments/\\d+")));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", notNullValue()))
+                .andExpect(jsonPath("$.name", is(name)))
+                .andExpect(jsonPath("$.postId", is((int)postId)));
     }
 
     @Test
@@ -138,8 +142,10 @@ public class CommentWithPostIdInRouteControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(json))
                 .andDo(print())
-                .andExpect(status().isCreated())
-                .andExpect(header().string("location", matchesPattern("http://localhost/posts/\\d+/comments/\\d+")));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(id)))
+                .andExpect(jsonPath("$.name", is(name)))
+                .andExpect(jsonPath("$.postId").doesNotExist());
     }
 
     @Test

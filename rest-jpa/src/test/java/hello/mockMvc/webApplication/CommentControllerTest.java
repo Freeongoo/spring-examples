@@ -26,10 +26,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.Optional;
 
-import static com.jcabi.matchers.RegexMatchers.matchesPattern;
 import static hello.controller.oneToMany.CommentController.PATH;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.Assert.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -102,8 +102,10 @@ public class CommentControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(json))
                 .andDo(print())
-                .andExpect(status().isCreated())
-                .andExpect(header().string("location", matchesPattern("http://localhost/comments/\\d+")));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", notNullValue()))
+                .andExpect(jsonPath("$.name", is(name)))
+                .andExpect(jsonPath("$.postId", is((int)postId)));
     }
 
     @Test
@@ -157,8 +159,10 @@ public class CommentControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(json))
                 .andDo(print())
-                .andExpect(status().isCreated())
-                .andExpect(header().string("location", matchesPattern("http://localhost/comments/\\d+")));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(id)))
+                .andExpect(jsonPath("$.name", is(name)))
+                .andExpect(jsonPath("$.postId", is((int)postId)));
 
         // additional check - not need
         em.flush();
