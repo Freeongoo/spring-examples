@@ -2,6 +2,7 @@ package hello.service.impl;
 
 import hello.entity.BaseEntity;
 import hello.exception.ErrorCode;
+import hello.exception.NotValidParamsException;
 import hello.exception.ResourceNotFoundException;
 import hello.service.Service;
 import org.springframework.data.repository.CrudRepository;
@@ -9,6 +10,7 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import static hello.exception.ErrorCode.INVALID_PARAMS;
 import static hello.exception.ErrorCode.OBJECT_NOT_FOUND;
 
 public abstract class AbstractService<T extends BaseEntity<ID>, ID> implements Service<T, ID> {
@@ -47,16 +49,27 @@ public abstract class AbstractService<T extends BaseEntity<ID>, ID> implements S
 
     @Override
     public void delete(T entity) {
+        ID id = entity.getId();
+        if (id == null) {
+            throw new NotValidParamsException("Try delete entity without id", INVALID_PARAMS);
+        }
+
+        validateExistingEntityById(id);
+
         getRepository().delete(entity);
     }
 
     @Override
     public void delete(ID id) {
+        validateExistingEntityById(id);
+
+        getRepository().deleteById(id);
+    }
+
+    private void validateExistingEntityById(ID id) {
         getRepository()
                 .findById(id)
                 .orElseThrow(getNotFoundExceptionSupplier("Cannot find entity by id: " + id, OBJECT_NOT_FOUND));
-
-        getRepository().deleteById(id);
     }
 
     protected Supplier<ResourceNotFoundException> getNotFoundExceptionSupplier(String message, ErrorCode code) {
