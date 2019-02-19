@@ -26,6 +26,7 @@ import static hello.controller.oneToMany.CommentWithPostIdInRouteController.PATH
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
@@ -56,12 +57,14 @@ public class CommentWithPostIdInRouteControllerTest {
     @Test
     public void getAll_WhenCheckOnlyStatus() throws Exception {
         this.mockMvc.perform(get(PATH, 1))
+                .andDo(print())
                 .andExpect(status().isOk());
     }
 
     @Test
     public void getAll() throws Exception {
         this.mockMvc.perform(get(PATH, 1))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$", hasSize(2)))
@@ -84,6 +87,7 @@ public class CommentWithPostIdInRouteControllerTest {
         this.mockMvc.perform(post(PATH, 1)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(json))
+                .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(header().string("location", matchesPattern("http://localhost/posts/\\d+/comments/\\d+")));
     }
@@ -94,6 +98,7 @@ public class CommentWithPostIdInRouteControllerTest {
         int postId = 1;
 
         this.mockMvc.perform(get(commentRouteWithIdParam, postId, id))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("id", is(1)))
@@ -132,6 +137,7 @@ public class CommentWithPostIdInRouteControllerTest {
         this.mockMvc.perform(put(commentRouteWithIdParam, postId, id)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(json))
+                .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(header().string("location", matchesPattern("http://localhost/posts/\\d+/comments/\\d+")));
     }
@@ -149,6 +155,7 @@ public class CommentWithPostIdInRouteControllerTest {
         this.mockMvc.perform(put(commentRouteWithIdParam , postId, idNotExist)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(json))
+                .andDo(print())
                 .andExpect(status().isNotFound());
     }
 
@@ -165,6 +172,7 @@ public class CommentWithPostIdInRouteControllerTest {
         this.mockMvc.perform(put(commentRouteWithIdParam , idNotExistPostId, id)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(json))
+                .andDo(print())
                 .andExpect(status().isNotFound());
     }
 
@@ -182,6 +190,7 @@ public class CommentWithPostIdInRouteControllerTest {
         this.mockMvc.perform(put(commentRouteWithIdParam , postIdOther, id)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(json))
+                .andDo(print())
                 .andExpect(status().isBadRequest());
     }
 
@@ -194,6 +203,7 @@ public class CommentWithPostIdInRouteControllerTest {
                 .andExpect(status().isNoContent());
 
         this.mockMvc.perform(get(PATH, postId))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$", hasSize(1)));

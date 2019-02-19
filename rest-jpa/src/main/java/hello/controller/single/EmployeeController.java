@@ -9,6 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+/**
+ * Example REST controller with set location in header when update or create
+ */
 @RestController
 @RequestMapping(EmployeeController.PATH)
 public class EmployeeController {
