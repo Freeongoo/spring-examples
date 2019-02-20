@@ -1,6 +1,7 @@
 package hello.entity.oneToMany;
 
 import com.fasterxml.jackson.annotation.*;
+import hello.entity.AbstractBaseEntity;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -8,6 +9,12 @@ import javax.persistence.*;
 
 import static org.springframework.util.ObjectUtils.isEmpty;
 
+/**
+ * Entity with customization.
+ *
+ * Added the ability to set the value of a relation (Post post) from json passing simply id by field "postId"
+ * and display relation (Post post) by id => "postId: 1"
+ */
 @Entity
 @Table(name = "comment")
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -38,7 +45,7 @@ public class Comment extends AbstractBaseEntity<Long> {
         return post;
     }
 
-    @JsonProperty("post")
+    @JsonIgnore
     public void setPost(Post post) {
         this.post = post;
     }

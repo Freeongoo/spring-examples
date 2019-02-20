@@ -2,7 +2,6 @@ package hello.service.impl;
 
 import hello.entity.oneToMany.Comment;
 import hello.entity.oneToMany.Post;
-import hello.exception.ErrorCode;
 import hello.exception.NotValidParamsException;
 import hello.exception.ResourceNotFoundException;
 import hello.repository.oneToMany.CommentRepository;
@@ -14,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+import static hello.exception.ErrorCode.INVALID_PARAMS;
+import static hello.exception.ErrorCode.OBJECT_NOT_FOUND;
 import static org.springframework.util.ObjectUtils.isEmpty;
 
 @Service
@@ -33,7 +34,6 @@ public class CommentWithPostIdServiceImpl extends AbstractService<Comment, Long>
     @Override
     public Iterable<Comment> getAll(Long postId) {
         return repository.findAllByPostId(postId);
-        //return repository.findAllByPostId(postId);
     }
 
     @Override
@@ -46,12 +46,14 @@ public class CommentWithPostIdServiceImpl extends AbstractService<Comment, Long>
     public Comment save(Long postId, Comment comment) {
         Optional<Post> postFromDb = postRepository.findById(postId);
 
-        return postFromDb.map(p -> {
-                comment.setPost(postFromDb.get());
-                return repository.save(comment);
-        }).orElseThrow(
-                () -> new ResourceNotFoundException("Cannot create comment because passed not existing post id: " + postId, ErrorCode.OBJECT_NOT_FOUND)
-        );
+        return postFromDb
+                .map(post -> getSavedComment(comment, post))
+                .orElseThrow(getNotFoundExceptionSupplier("Cannot create comment because passed not existing post id: " + postId, OBJECT_NOT_FOUND));
+    }
+
+    private Comment getSavedComment(Comment comment, Post postFromDb) {
+        comment.setPost(postFromDb);
+        return repository.save(comment);
     }
 
     @Override
@@ -76,25 +78,22 @@ public class CommentWithPostIdServiceImpl extends AbstractService<Comment, Long>
 
     private void validatePostId(Long postId) {
         Optional<Post> postFromDb = postRepository.findById(postId);
-        postFromDb.orElseThrow(
-                () -> new ResourceNotFoundException("Passed post id not existing: " + postId, ErrorCode.OBJECT_NOT_FOUND));
+        postFromDb.orElseThrow(getNotFoundExceptionSupplier("Passed post id not existing: " + postId, OBJECT_NOT_FOUND));
     }
 
     private void validateEqualsPostId(Long postId, Long commentId) {
         Optional<Comment> commentFromDb = repository.findById(commentId);
 
-        if (!commentFromDb.isPresent()) {
-            throw new ResourceNotFoundException("Not exist comment by id: " + commentId, ErrorCode.OBJECT_NOT_FOUND);
-        }
+        Comment comment = commentFromDb
+                .orElseThrow(getNotFoundExceptionSupplier("Not exist comment by id: " + commentId, OBJECT_NOT_FOUND));
 
-        Comment comment = commentFromDb.get();
         Post post = comment.getPost();
         if (isEmpty(post)) {
-            throw new ResourceNotFoundException("Comment not exist Post", ErrorCode.OBJECT_NOT_FOUND);
+            throw new ResourceNotFoundException("Comment not exist Post", OBJECT_NOT_FOUND);
         }
 
         if (!postId.equals(post.getId())) {
-            throw new NotValidParamsException("Try update comment from other post", ErrorCode.INVALID_PARAMS);
+            throw new NotValidParamsException("Try update comment from other post", INVALID_PARAMS);
         }
     }
 }

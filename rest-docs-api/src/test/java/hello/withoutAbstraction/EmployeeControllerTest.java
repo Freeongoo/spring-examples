@@ -1,4 +1,4 @@
-package hello.mockMvc.webApplication;
+package hello.withoutAbstraction;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -49,6 +49,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class EmployeeControllerTest {
 
     private static String employeeRouteWithParam = PATH + "/{id}";
+
+    private static final String IDENTIFIER = "employee/{method-name}";
     private static final String OUTPUT_DIRECTORY = "target/snippets";
 
     private MockMvc mockMvc;
@@ -72,6 +74,7 @@ public class EmployeeControllerTest {
 
         ResultActions resultActions = this.mockMvc
                 .perform(RestDocumentationRequestBuilders.get(employeeRouteWithParam, id))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("id", is(1)))
@@ -79,9 +82,9 @@ public class EmployeeControllerTest {
                 .andExpect(jsonPath("role", is("admin")))
                 .andDo(print());
 
-        // added for rest docs !!!
+        // add rest docs !!!
         resultActions
-                .andDo(document("employee/{method-name}",
+                .andDo(document(IDENTIFIER,
                         pathParameters(
                                 parameterWithName("id").description("id's in route")
                         ),
@@ -95,6 +98,7 @@ public class EmployeeControllerTest {
     @Test
     public void getAll() throws Exception {
         ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders.get(PATH))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$", hasSize(2)))
@@ -106,9 +110,9 @@ public class EmployeeControllerTest {
                 .andExpect(jsonPath("$[1].role", is("user")))
                 .andDo(print());
 
-        // added for rest docs !!!
+        // add rest docs !!!
         resultActions
-                .andDo(document("employee/{method-name}", responseFields(
+                .andDo(document(IDENTIFIER, responseFields(
                         fieldWithPath("[].id").description("id"),
                         fieldWithPath("[].name").description("name"),
                         fieldWithPath("[].role").description("role")
@@ -127,13 +131,14 @@ public class EmployeeControllerTest {
         ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders.post(PATH)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(json))
+                .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(header().string("location", matchesPattern(".*/employees/\\d+")))
                 .andDo(print());
 
-        // added for rest docs !!!
+        // add rest docs !!!
         resultActions
-                .andDo(document("employee/{method-name}",
+                .andDo(document(IDENTIFIER,
                         requestFields(
                                 fieldWithPath("name").description("name"),
                                 fieldWithPath("role").description("role")
@@ -153,13 +158,14 @@ public class EmployeeControllerTest {
         ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders.put(employeeRouteWithParam, id)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(json))
+                .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(header().string("location", matchesPattern(".*/employees/\\d+")))
                 .andDo(print());
 
-        // added for rest docs !!!
+        // add rest docs !!!
         resultActions
-                .andDo(document("employee/{method-name}",
+                .andDo(document(IDENTIFIER,
                         pathParameters(
                                 parameterWithName("id").description("id's in route")
                         ),
@@ -176,9 +182,9 @@ public class EmployeeControllerTest {
         ResultActions resultActions = this.mockMvc.perform(RestDocumentationRequestBuilders.delete(employeeRouteWithParam, idForDelete))
                 .andExpect(status().isNoContent());
 
-        // added for rest docs !!!
+        // add rest docs !!!
         resultActions
-                .andDo(document("employee/{method-name}",
+                .andDo(document(IDENTIFIER,
                         pathParameters(
                                 parameterWithName("id").description("id's in route")
                         )));

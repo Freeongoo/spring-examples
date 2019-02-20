@@ -1,4 +1,4 @@
-package hello.controller.advice;
+package hello.advice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hello.exception.BaseException;
