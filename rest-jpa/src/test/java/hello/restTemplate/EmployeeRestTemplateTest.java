@@ -47,12 +47,13 @@ public class EmployeeRestTemplateTest {
 
     @After
     public void cleanUp() {
-        // manually clear db
+        // manually clear db - important when testing by TestRestTemplate
         employeeRepository.deleteAll();
     }
 
     @Test
-    public void getEmployeeById() {
+    public void getById_ShouldReturnEmployee() {
+        // given
         Employee employeeExpected = new Employee("Foo", "foo@foo.com");
 
         restTemplate.postForEntity(employeeUrl, employeeExpected, Employee.class);
@@ -63,38 +64,48 @@ public class EmployeeRestTemplateTest {
         Long id = createdEmployee.getId();
         employeeExpected.setId(id);
 
+        // when
         ResponseEntity<Employee> responseEntity = restTemplate.getForEntity(employeeUrl + "/" + id, Employee.class);
-        Employee employee = responseEntity.getBody();
 
+        // then
+        Employee employee = responseEntity.getBody();
         assertEquals(employeeExpected, employee);
     }
 
     @Test
-    public void employeeList_WhenEmpty() {
+    public void getAll_WhenEmpty_ShouldReturnEmpty() {
+        // when
         ResponseEntity<Employee[]> responseObject = restTemplate.getForEntity(employeeUrl, Employee[].class);
+
+        // then
         Object[] employees = responseObject.getBody();
         List<?> searchList = Arrays.asList(employees);
         assertEquals(0, searchList.size());
     }
 
     @Test
-    public void employeeList_WhenInserted() {
-        // insert
+    public void getAll_WhenExistEmployees_ShouldReturnList() {
+        // given
         Employee employee = new Employee("Foo", "foo@foo.com");
         restTemplate.postForEntity(employeeUrl, employee, Employee.class);
 
+        // when
         ResponseEntity<Employee[]> responseObject = restTemplate.getForEntity(employeeUrl, Employee[].class);
+
+        // then
         Employee[] employees = responseObject.getBody();
         Employee firstEmployee = employees[0];
-
         assertThat(firstEmployee.getName(), equalTo(employee.getName()));
         assertThat(firstEmployee.getRole(), equalTo(employee.getRole()));
     }
 
     @Test
-    public void createEmployee_WhenFirst() {
+    public void create_ShouldReturnCreated() {
+        // when
         ResponseEntity<Employee> responseEntity =
                 restTemplate.postForEntity(employeeUrl, new Employee("Foo", "foo@foo.com"), Employee.class);
+
+        // then
         HttpHeaders headers = responseEntity.getHeaders();
         List<String> location = headers.get("Location");
 
@@ -105,12 +116,15 @@ public class EmployeeRestTemplateTest {
     }
 
     @Test
-    public void createEmployee_WhenSecond() {
-        // First
+    public void create_WhenCreateTwoEmployee_ShouldReturnCreated() {
+        // given
         restTemplate.postForEntity(employeeUrl, new Employee("Foo", "foo@foo.com"), Employee.class);
 
+        // when
         ResponseEntity<Employee> responseEntity =
                 restTemplate.postForEntity(employeeUrl, new Employee("Foo2", "foo2@foo.com"), Employee.class);
+
+        // then
         HttpHeaders headers = responseEntity.getHeaders();
         List<String> location = headers.get("Location");
 

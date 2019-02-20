@@ -56,7 +56,7 @@ public class EmployeeControllerTest {
     }
 
     @Test
-    public void all() throws Exception {
+    public void getAll_ShouldReturnList() throws Exception {
         this.mockMvc.perform(get(PATH))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -71,7 +71,7 @@ public class EmployeeControllerTest {
     }
 
     @Test
-    public void newEmployee() throws Exception {
+    public void create_ShouldReturnCreated() throws Exception {
         String name = "Aha";
         String role = "admin";
         Employee expectedEmployee = new Employee(name, role);
@@ -88,7 +88,7 @@ public class EmployeeControllerTest {
     }
 
     @Test
-    public void one() throws Exception {
+    public void getById_ShouldReturnEmployee() throws Exception {
         int id = 1;
 
         this.mockMvc.perform(get(employeeRouteWithParam, id))
@@ -101,7 +101,7 @@ public class EmployeeControllerTest {
     }
 
     @Test
-    public void one_WhenNotExist() throws Exception {
+    public void getById_WhenNotExist_ShouldReturnNotFound() throws Exception {
         int idNotExist = -1;
 
         this.mockMvc.perform(get(employeeRouteWithParam, idNotExist))
@@ -110,7 +110,7 @@ public class EmployeeControllerTest {
     }
 
     @Test
-    public void updateEmployee() throws Exception {
+    public void update_ShouldReturnCreated() throws Exception {
         int id = 1;
         String name = "AhaHa";
         String role = "admin";
@@ -128,7 +128,24 @@ public class EmployeeControllerTest {
     }
 
     @Test
-    public void deleteEmployee() throws Exception {
+    public void update_WhenNotExist_ShouldReturnNotFound() throws Exception {
+        int id = -1;
+        String name = "AhaHa";
+        String role = "admin";
+        Employee expectedEmployee = new Employee(name, role);
+
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        String json = ow.writeValueAsString(expectedEmployee);
+
+        this.mockMvc.perform(put(employeeRouteWithParam, id)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(json))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void remove_ShouldReturnNotContent() throws Exception {
         int idForDelete = 1;
 
         this.mockMvc.perform(delete(employeeRouteWithParam, idForDelete))
@@ -145,7 +162,7 @@ public class EmployeeControllerTest {
     }
 
     @Test
-    public void deleteEmployee_WhenNotExist() throws Exception {
+    public void remove_WhenNotExist_ShouldReturnNotFound() throws Exception {
         int notExistId = -1;
 
         this.mockMvc.perform(delete(employeeRouteWithParam, notExistId))
