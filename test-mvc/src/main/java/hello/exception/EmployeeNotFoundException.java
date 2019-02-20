@@ -1,8 +1,10 @@
 package hello.exception;
 
-public class EmployeeNotFoundException extends RuntimeException {
+public class EmployeeNotFoundException extends BaseException {
 
-    public EmployeeNotFoundException(Long id) {
-        super("Could not find employee " + id);
+    private static final long serialVersionUID = 8178368916339356132L;
+
+    public EmployeeNotFoundException(String message, ErrorCode code) {
+        super(message, code);
     }
 }

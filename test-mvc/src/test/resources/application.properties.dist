@@ -22,3 +22,5 @@ spring.jpa.hibernate.ddl-auto = create-drop
 logging.level.org.hibernate.SQL = DEBUG
 logging.level.org.hibernate.type.descriptor.sql.BasicBinder=TRACE
 
+# for pretty json output - only for testing
+spring.jackson.serialization.indent_output=true
