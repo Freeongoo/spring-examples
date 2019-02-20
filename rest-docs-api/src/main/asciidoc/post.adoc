@@ -1,0 +1,59 @@
+:source-highlighter: highlightjs
+
+==== Get one post by id
+===== Curl example
+include::{snippets}/post/get-by-id/curl-request.adoc[]
+===== HTTP Request
+include::{snippets}/post/get-by-id/http-request.adoc[]
+===== HTTP Path parameters
+include::{snippets}/post/get-by-id/path-parameters.adoc[]
+===== HTTP Response
+include::{snippets}/post/get-by-id/http-response.adoc[]
+===== Response fields
+include::{snippets}/post/get-by-id/response-fields.adoc[]
+
+==== Get all post's
+===== Curl example
+include::{snippets}/post/get-all/curl-request.adoc[]
+===== HTTP Request
+include::{snippets}/post/get-all/http-request.adoc[]
+===== Response fields
+include::{snippets}/post/get-all/response-fields.adoc[]
+===== HTTP Response
+include::{snippets}/post/get-all/http-response.adoc[]
+
+==== Create new post
+===== Curl example
+include::{snippets}/post/create/curl-request.adoc[]
+===== HTTP Request
+include::{snippets}/post/create/http-request.adoc[]
+===== Request fields
+include::{snippets}/post/create/request-fields.adoc[]
+===== HTTP Response
+include::{snippets}/post/create/http-response.adoc[]
+===== Response fields
+include::{snippets}/post/create/response-fields.adoc[]
+
+==== Update post
+===== Curl example
+include::{snippets}/post/update/curl-request.adoc[]
+===== HTTP Request
+include::{snippets}/post/update/http-request.adoc[]
+===== HTTP Path parameters
+include::{snippets}/post/update/path-parameters.adoc[]
+===== Request fields
+include::{snippets}/post/update/request-fields.adoc[]
+===== HTTP Response
+include::{snippets}/post/update/http-response.adoc[]
+===== Response fields
+include::{snippets}/post/update/response-fields.adoc[]
+
+==== Delete post
+===== Curl example
+include::{snippets}/post/remove/curl-request.adoc[]
+===== HTTP Request
+include::{snippets}/post/remove/http-request.adoc[]
+===== HTTP Path parameters
+include::{snippets}/post/remove/path-parameters.adoc[]
+===== HTTP Response
+include::{snippets}/post/remove/http-response.adoc[]

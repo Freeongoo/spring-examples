@@ -3,7 +3,6 @@ package hello.controller.oneToMany;
 import hello.entity.oneToMany.Comment;
 import hello.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -33,14 +32,13 @@ public class CommentController {
         return service.getById(id);
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public Comment update(@RequestBody Comment comment, @PathVariable Long id) {
         return service.update(id, comment);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable Long id) {
+    public void delete(@PathVariable Long id) {
         service.delete(id);
-        return ResponseEntity.noContent().build();
     }
 }

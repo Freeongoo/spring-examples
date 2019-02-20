@@ -3,7 +3,6 @@ package hello.controller.oneToMany;
 import hello.entity.oneToMany.Post;
 import hello.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -30,14 +29,13 @@ public class PostController {
         return service.getById(id);
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public Post update(@RequestBody Post post, @PathVariable Long id) {
         return service.update(id, post);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable Long id) {
+    public void delete(@PathVariable Long id) {
         service.delete(id);
-        return ResponseEntity.noContent().build();
     }
 }

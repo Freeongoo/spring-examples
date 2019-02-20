@@ -2,3 +2,6 @@
 
 === Employee
 include::employee.adoc[]
+
+=== Post
+include::post.adoc[]
