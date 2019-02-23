@@ -1,0 +1,4 @@
+<dataset>
+    <Employee id="1" name="John" json="{&quot;x&quot;:22,&quot;y&quot;:-23,&quot;array&quot;:[1,6,5,33]}"/>
+    <Employee id="2" name="Mike" json="{&quot;x&quot;:11,&quot;y&quot;:0,&quot;array&quot;:[]}"/>
+</dataset>
