@@ -11,8 +11,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class EmployeeServiceImpl extends AbstractService<Employee, Long> implements EmployeeService {
 
+    private final EmployeeRepository repository;
+
     @Autowired
-    private EmployeeRepository repository;
+    public EmployeeServiceImpl(EmployeeRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     protected CrudRepository<Employee, Long> getRepository() {
