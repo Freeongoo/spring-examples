@@ -1,18 +1,19 @@
-package hello.mock_mvc.spring_boot_test;
+package hello.mock_mvc.controller.spring_runner;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
-import hello.controller.EmployeeController;
-import hello.controller.advice.EmployeeNotFoundAdvice;
-import hello.entity.Employee;
+import hello.advice.ExceptionControllerAdvice;
+import hello.controller.single.EmployeeController;
+import hello.entity.single.Employee;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
@@ -21,13 +22,16 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 @DatabaseSetup("/data.xml")
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@ContextConfiguration(classes = ConfigTest.class)
+@DataJpaTest
 @TestExecutionListeners({
         TransactionalTestExecutionListener.class,
         DependencyInjectionTestExecutionListener.class,
@@ -43,7 +47,7 @@ public class EmployeeControllerTest {
     @Before
     public void setup() {
         this.mockMvc = standaloneSetup(this.employeeController)
-                .setControllerAdvice(new EmployeeNotFoundAdvice())
+                .setControllerAdvice(new ExceptionControllerAdvice())
                 .build(); // Standalone context
     }
 
