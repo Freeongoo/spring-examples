@@ -2,7 +2,6 @@ package hello.entity.defaultHashCode;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import hello.BaseTest;
-import org.apache.commons.lang3.SerializationUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -13,7 +12,7 @@ import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 // DBUnit config:
 @DatabaseSetup("/good.xml")
@@ -30,6 +29,8 @@ public class GoodTest extends BaseTest {
         em.persist(good1);
         em.persist(good2);
 
+        flushAndClean();
+
         assertTrue("The entity is not found in the Set after it's persisted.", map.contains(good1));
     }
 
@@ -40,22 +41,11 @@ public class GoodTest extends BaseTest {
         map.add(item);
 
         em.persist(item);
+        flushAndClean();
+
         Good merge1 = em.merge(item);
 
         Assert.assertTrue("The entity is not found in the Set after it's merged.", map.contains(merge1));
-    }
-
-    @Test
-    public void storeToSetMerge_WhenClone_ShouldBeContains() {
-        Set<Good> map = new HashSet<>();
-        Good item = new Good("John");
-        map.add(item);
-
-        em.persist(item);
-        Good merge1 = em.merge(item);
-        Good mergeCloned = SerializationUtils.clone(merge1);
-
-        Assert.assertTrue("The entity is not found in the Set after it's merged and clone.", map.contains(mergeCloned));
     }
 
     @Test

@@ -2,7 +2,6 @@ package hello.entity.overrideAllFields;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import hello.BaseTest;
-import org.apache.commons.lang3.SerializationUtils;
 import org.junit.Test;
 
 import java.util.HashSet;
@@ -29,6 +28,8 @@ public class UserTest extends BaseTest {
         em.persist(user1);
         em.persist(user2);
 
+        flushAndClean();
+
         assertTrue("The entity is not found in the Set after it's persisted.", map.contains(user1));
     }
 
@@ -39,22 +40,11 @@ public class UserTest extends BaseTest {
         map.add(item);
 
         em.persist(item);
+        flushAndClean();
+
         User merge1 = em.merge(item);
 
         assertTrue("The entity is not found in the Set after it's merged.", map.contains(merge1));
-    }
-
-    @Test
-    public void storeToSetMerge_WhenClone_ShouldBeContains() {
-        Set<User> map = new HashSet<>();
-        User item = new User("John");
-        map.add(item);
-
-        em.persist(item);
-        User merge1 = em.merge(item);
-        User mergeCloned = SerializationUtils.clone(merge1);
-
-        assertTrue("The entity is not found in the Set after it's merged and clone.", map.contains(mergeCloned));
     }
 
     @Test

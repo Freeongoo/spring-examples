@@ -2,7 +2,6 @@ package hello.entity.naturalId;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import hello.BaseTest;
-import org.apache.commons.lang3.SerializationUtils;
 import org.junit.Test;
 
 import java.util.HashSet;
@@ -29,6 +28,8 @@ public class BookTest extends BaseTest {
         em.persist(book1);
         em.persist(book2);
 
+        flushAndClean();
+
         assertTrue("The entity is not found in the Set after it's persisted.", map.contains(book1));
     }
 
@@ -39,23 +40,11 @@ public class BookTest extends BaseTest {
         map.add(item);
 
         em.persist(item);
+        flushAndClean();
+
         Book merge1 = em.merge(item);
 
         assertTrue("The entity is not found in the Set after it's merged.", map.contains(merge1));
-    }
-
-    @Test
-    public void storeToSetMerge_WhenClone_ShouldBeContains() {
-        Set<Book> map = new HashSet<>();
-        Book item = new Book("MyBook2", "4322-5445-5434-4323");
-        map.add(item);
-
-        em.persist(item);
-        Book merge1 = em.merge(item);
-
-        Book mergeCloned = SerializationUtils.clone(merge1);
-
-        assertTrue("The entity is not found in the Set after it's merged and clone.", map.contains(mergeCloned));
     }
 
     @Test
