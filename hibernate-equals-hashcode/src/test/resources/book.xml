@@ -1,0 +1,5 @@
+<dataset>
+    <Book id="1" isbn="1234-5431-2352-5432" name="Book#1"/>
+    <Book id="2" isbn="5674-9860-6543-3421" name="Book#2"/>
+    <Book id="3" isbn="8975-6542-2657-8635" name="Book#3"/>
+</dataset>
