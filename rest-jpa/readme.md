@@ -91,6 +91,38 @@ Example: `/test/java/hello/mockMvc/webApplication/EmployeeControllerWebApplicati
     }
 ```
 
+#### 1.2.1. MockMvc with @MockBean
+
+For those situations when you don’t need to use a real database (even in-memory), 
+but perform service spoofing
+
+Example: `/src/test/java/hello/mockBean/controller/EmployeeControllerMockBeanTest.java`
+
+```
+    @RunWith(SpringRunner.class)
+    @SpringBootTest
+    @Transactional
+    public class EmployeeControllerMockBeanTest {
+    
+        @MockBean
+        private EmployeeService service;
+    
+        @Autowired
+        private WebApplicationContext context;
+    
+        private MockMvc mockMvc;
+        private static String employeeRouteWithParam = PATH + "/{id}";
+    
+        @Before
+        public void setup() {
+            mockMvc = MockMvcBuilders
+                    .webAppContextSetup(context)
+                    .build();
+        }
+        ...
+    }
+```
+
 ## 2. Run real server and test by RestTemplate
 
 ```
