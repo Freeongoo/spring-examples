@@ -2,6 +2,7 @@ package hello.entity.defaultHashCode;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import hello.BaseTest;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.HashSet;
@@ -28,23 +29,20 @@ public class GoodTest extends BaseTest {
         em.persist(good1);
         em.persist(good2);
 
-        assertTrue(map.contains(good1));
+        assertTrue("The entity is not found in the Set after it's persisted.", map.contains(good1));
     }
 
-    /*@Test
-    public void storeToSetBeforeMerge_ShouldBeContains() {
+    @Test
+    public void storeToSetMerge_ShouldBeContains() {
         Set<Good> map = new HashSet<>();
-        Good good1 = new Good("John");
-        Good good2 = new Good("Mike");
-        map.add(good1);
-        map.add(good2);
+        Good item = new Good("John");
+        map.add(item);
 
-        Good merge1 = em.merge(good1);
-        Good merge2 = em.merge(good2);
+        em.persist(item);
+        Good merge1 = em.merge(item);
 
-        assertTrue(map.contains(merge1));
-        assertTrue(map.contains(merge2));
-    }*/
+        Assert.assertTrue("The entity is not found in the Set after it's merged.", map.contains(merge1));
+    }
 
     @Test
     public void transientOtherEntities_ShouldNotBeEquals() {

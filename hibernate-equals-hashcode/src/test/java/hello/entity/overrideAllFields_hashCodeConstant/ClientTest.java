@@ -2,8 +2,7 @@ package hello.entity.overrideAllFields_hashCodeConstant;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import hello.BaseTest;
-import hello.entity.naturalId.Book;
-import hello.entity.overrideAllFields.User;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.HashSet;
@@ -13,7 +12,7 @@ import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 // DBUnit config:
 @DatabaseSetup("/client.xml")
@@ -30,25 +29,20 @@ public class ClientTest extends BaseTest {
         session.persist(client1);
         session.persist(client2);
 
-        assertTrue(map.contains(client1));
+        assertTrue("The entity is not found in the Set after it's persisted.", map.contains(client1));
     }
 
-    /*@Test
-    public void storeToSetBeforeMerge_ShouldBeContains() {
+    @Test
+    public void storeToSetMerge_ShouldBeContains() {
         Set<Client> map = new HashSet<>();
-        Client client1 = new Client("John");
-        Client client2 = new Client("Mike");
-        map.add(client1);
-        map.add(client2);
+        Client item = new Client("John");
+        map.add(item);
 
-        Client merge1 = em.merge(client1);
-        Client merge2 = em.merge(client2);
+        em.persist(item);
+        Client merge1 = em.merge(item);
 
-        flushAndClean();
-
-        assertTrue(map.contains(merge1));
-        assertTrue(map.contains(merge2));
-    }*/
+        Assert.assertTrue("The entity is not found in the Set after it's merged.", map.contains(merge1));
+    }
 
     @Test
     public void transientOtherEntities_ShouldNotBeEquals() {

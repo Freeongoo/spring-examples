@@ -28,23 +28,20 @@ public class BookTest extends BaseTest {
         em.persist(book1);
         em.persist(book2);
 
-        assertTrue(map.contains(book1));
+        assertTrue("The entity is not found in the Set after it's persisted.", map.contains(book1));
     }
 
-    /*@Test
-    public void storeToSetBeforeMerge_ShouldBeContains() {
+    @Test
+    public void storeToSetMerge_ShouldBeContains() {
         Set<Book> map = new HashSet<>();
-        Book book1 = new Book("MyBook1", "4567-5445-5434-3212");
-        Book book2 = new Book("MyBook2", "4322-5445-5434-4323");
-        map.add(book1);
-        map.add(book2);
+        Book item = new Book("MyBook2", "4322-5445-5434-4323");
+        map.add(item);
 
-        Book merge1 = em.merge(book1);
-        Book merge2 = em.merge(book2);
+        em.persist(item);
+        Book merge1 = em.merge(item);
 
-        assertTrue(map.contains(merge1));
-        assertTrue(map.contains(merge2));
-    }*/
+        assertTrue("The entity is not found in the Set after it's merged.", map.contains(merge1));
+    }
 
     @Test
     public void transientOtherEntities_ShouldNotBeEquals() {

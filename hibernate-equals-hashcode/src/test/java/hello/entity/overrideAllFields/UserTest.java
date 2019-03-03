@@ -28,7 +28,19 @@ public class UserTest extends BaseTest {
         em.persist(user1);
         em.persist(user2);
 
-        assertTrue(map.contains(user1));
+        assertTrue("The entity is not found in the Set after it's persisted.", map.contains(user1));
+    }
+
+    @Test
+    public void storeToSetMerge_ShouldBeContains() {
+        Set<User> map = new HashSet<>();
+        User item = new User("John");
+        map.add(item);
+
+        em.persist(item);
+        User merge1 = em.merge(item);
+
+        assertTrue("The entity is not found in the Set after it's merged.", map.contains(merge1));
     }
 
     @Test
