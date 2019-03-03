@@ -2,6 +2,7 @@ package hello.entity.overrideAllFields_hashCodeConstant;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import hello.BaseTest;
+import org.apache.commons.lang3.SerializationUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -42,6 +43,20 @@ public class ClientTest extends BaseTest {
         Client merge1 = em.merge(item);
 
         Assert.assertTrue("The entity is not found in the Set after it's merged.", map.contains(merge1));
+    }
+
+    @Test
+    public void storeToSetMerge_WhenClone_ShouldBeContains() {
+        Set<Client> map = new HashSet<>();
+        Client item = new Client("John");
+        map.add(item);
+
+        em.persist(item);
+        Client merge1 = em.merge(item);
+
+        Client mergeCloned = SerializationUtils.clone(merge1);
+
+        Assert.assertTrue("The entity is not found in the Set after it's merged and clone.", map.contains(mergeCloned));
     }
 
     @Test

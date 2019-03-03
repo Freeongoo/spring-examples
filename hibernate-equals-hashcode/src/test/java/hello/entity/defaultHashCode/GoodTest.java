@@ -2,6 +2,7 @@ package hello.entity.defaultHashCode;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import hello.BaseTest;
+import org.apache.commons.lang3.SerializationUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -42,6 +43,19 @@ public class GoodTest extends BaseTest {
         Good merge1 = em.merge(item);
 
         Assert.assertTrue("The entity is not found in the Set after it's merged.", map.contains(merge1));
+    }
+
+    @Test
+    public void storeToSetMerge_WhenClone_ShouldBeContains() {
+        Set<Good> map = new HashSet<>();
+        Good item = new Good("John");
+        map.add(item);
+
+        em.persist(item);
+        Good merge1 = em.merge(item);
+        Good mergeCloned = SerializationUtils.clone(merge1);
+
+        Assert.assertTrue("The entity is not found in the Set after it's merged and clone.", map.contains(mergeCloned));
     }
 
     @Test

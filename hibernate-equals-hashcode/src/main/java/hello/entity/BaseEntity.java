@@ -1,6 +1,8 @@
 package hello.entity;
 
-public interface BaseEntity<ID> {
+import java.io.Serializable;
+
+public interface BaseEntity<ID> extends Serializable {
 
     ID getId();
 
