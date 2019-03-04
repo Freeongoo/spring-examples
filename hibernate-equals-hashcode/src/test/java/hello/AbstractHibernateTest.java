@@ -24,7 +24,7 @@ import java.util.Arrays;
         DbUnitTestExecutionListener.class
 })
 @Transactional
-public abstract class BaseTest {
+public abstract class AbstractHibernateTest {
 
     private static final String[] DB_UNIT_SET_UP = {"",
             "****************************************************************",
@@ -38,10 +38,15 @@ public abstract class BaseTest {
     protected Session session;
 
     @Before
-    public void dbAllSet() {
-        Arrays.stream(DB_UNIT_SET_UP).forEach(System.out::println);
+    public void setUp() {
+        showMessage();
+
         AssertSqlCount.reset();
         session = em.unwrap(Session.class);
+    }
+
+    private void showMessage() {
+        Arrays.stream(DB_UNIT_SET_UP).forEach(System.out::println);
     }
 
     protected void flushAndClean() {

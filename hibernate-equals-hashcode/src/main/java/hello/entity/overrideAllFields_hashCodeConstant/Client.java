@@ -8,6 +8,8 @@ import java.util.Objects;
 @Entity
 public class Client implements BaseEntity<Long> {
 
+    private static final long serialVersionUID = -2199271070705029886L;
+
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,14 +1,9 @@
 package hello.entity.overrideAllFields_hashCodeConstant;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
-import hello.BaseTest;
-import org.junit.Assert;
+import hello.AbstractHibernateCheckEqualsHashCodeTest;
 import org.junit.Test;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.is;
@@ -16,36 +11,12 @@ import static org.junit.Assert.assertThat;
 
 // DBUnit config:
 @DatabaseSetup("/client.xml")
-public class ClientTest extends BaseTest {
+public class ClientTest extends AbstractHibernateCheckEqualsHashCodeTest<Client> {
 
     @Test
-    public void storeToSetBeforePersist_ShouldBeContains() {
-        Set<Client> map = new HashSet<>();
-        Client client1 = new Client("John");
-        Client client2 = new Client("Mike");
-        map.add(client1);
-        map.add(client2);
-
-        session.persist(client1);
-        session.persist(client2);
-
-        flushAndClean();
-
-        assertTrue("The entity is not found in the Set after it's persisted.", map.contains(client1));
-    }
-
-    @Test
-    public void storeToSetMerge_ShouldBeContains() {
-        Set<Client> map = new HashSet<>();
-        Client item = new Client("John");
-        map.add(item);
-
-        em.persist(item);
-        flushAndClean();
-
-        Client merge1 = em.merge(item);
-
-        Assert.assertTrue("The entity is not found in the Set after it's merged.", map.contains(merge1));
+    public void checkTheContentsOfTheSetUnderDifferentStatesOfTheEntity() {
+        Client client = new Client("John");
+        checkTheContentsOfTheSetUnderDifferentStatesOfTheEntity(client);
     }
 
     @Test
@@ -88,6 +59,7 @@ public class ClientTest extends BaseTest {
         Client client2 = new Client("John");
 
         em.persist(client2);
+        flushAndClean();
 
         assertThat(client1, is(not((equalTo(client2)))));
     }
@@ -96,7 +68,10 @@ public class ClientTest extends BaseTest {
     public void managedReattachSameEntity_ShouldBeEquals() {
         Client client1 = session.get(Client.class, 1L);
         em.detach(client1);
+        flushAndClean();
+
         Client client1AfterMerged = em.merge(client1);
+        flushAndClean();
 
         Client client2 = session.get(Client.class, 1L);
 

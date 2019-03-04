@@ -9,6 +9,8 @@ import java.util.Objects;
 @Entity
 public class Book implements BaseEntity<Long> {
 
+    private static final long serialVersionUID = 8051910209443286981L;
+
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,11 +22,10 @@ public class Book implements BaseEntity<Long> {
     @Column
     private String name;
 
-    public Book() {
+    private Book() {
     }
 
-    public Book(String name, String isbn) {
-        this.name = name;
+    public Book(String isbn) {
         this.isbn = isbn;
     }
 

@@ -8,6 +8,8 @@ import java.util.Objects;
 @Entity
 public class Good implements BaseEntity<Long> {
 
+    private static final long serialVersionUID = 1026762550268731861L;
+
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
