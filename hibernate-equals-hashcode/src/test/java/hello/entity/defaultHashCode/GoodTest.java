@@ -38,6 +38,7 @@ public class GoodTest extends AbstractHibernateCheckEqualsHashCodeTest<Good> {
     @Test
     public void managedSameEntities_ShouldBeEquals() {
         Good good1 = session.get(Good.class, 1L);
+        flushAndClean();
         Good good2 = session.get(Good.class, 1L);
 
         assertThat(good1, (equalTo(good2)));

@@ -38,6 +38,7 @@ public class ClientTest extends AbstractHibernateCheckEqualsHashCodeTest<Client>
     @Test
     public void managedSameEntities_ShouldBeEquals() {
         Client client1 = session.get(Client.class, 1L);
+        flushAndClean();
         Client client2 = session.get(Client.class, 1L);
 
         assertThat(client1, (equalTo(client2)));

@@ -38,6 +38,7 @@ public class BookTest extends AbstractHibernateCheckEqualsHashCodeTest<Book> {
     @Test
     public void managedSameEntities_ShouldBeEquals() {
         Book book1 = session.get(Book.class, 1L);
+        flushAndClean();
         Book book2 = session.get(Book.class, 1L);
 
         assertThat(book1, (equalTo(book2)));

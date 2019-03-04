@@ -38,6 +38,7 @@ public class UserTest extends AbstractHibernateCheckEqualsHashCodeTest<User> {
     @Test
     public void managedSameEntities_ShouldBeEquals() {
         User user1 = session.get(User.class, 1L);
+        flushAndClean();
         User user2 = session.get(User.class, 1L);
 
         assertThat(user1, (equalTo(user2)));
