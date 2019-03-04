@@ -18,7 +18,7 @@ public class Client implements BaseEntity<Long> {
     @Column
     private String name;
 
-    public Client() {
+    private Client() {
     }
 
     public Client(String name) {

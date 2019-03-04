@@ -18,7 +18,7 @@ public class Good implements BaseEntity<Long> {
     @Column
     private String name;
 
-    public Good() {
+    private Good() {
     }
 
     public Good(String name) {

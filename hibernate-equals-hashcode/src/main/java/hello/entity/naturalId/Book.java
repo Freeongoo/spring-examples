@@ -17,6 +17,7 @@ public class Book implements BaseEntity<Long> {
     private Long id;
 
     @NaturalId
+    @Column(name = "isbn", nullable = false, unique = true)
     private String isbn;
 
     @Column

@@ -18,7 +18,7 @@ public class User implements BaseEntity<Long> {
     @Column
     private String name;
 
-    public User() {
+    private User() {
     }
 
     public User(String name) {
