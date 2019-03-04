@@ -22,3 +22,8 @@ see: `/src/test/java/hello/entity/overrideAllFields/UserTest.java`
 ### Equals by all fields, hashCode - constant
 
 see: `/src/test/java/hello/entity/overrideAllFields_hashCodeConstant/ClientTest.java`
+
+# Conclusion
+- If your entity has a business key or a natural ID, you can use it within your equals() and hashCode() method.
+- If you set your primary key values programmatically, you can use its value in your equals check and when you calculate the hash code.
+- If you tell Hibernate to generate your primary key values, you need to use a fixed hash code, and your equals() method requires explicit handling of null values.
