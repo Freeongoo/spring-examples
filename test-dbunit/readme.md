@@ -1,5 +1,6 @@
 # Testing Spring Boot with DBUnit
 
+
 ## Dependencies
 
 1. Add dependencies for testing spring:
@@ -93,3 +94,32 @@ You must manually config connect in test for DBUnit, like this:
 ```
 
 where `getDataSource` - name of bean
+
+## how to work with DBUnit when there is already data in the selected table
+
+You must config `@DatabaseSetup`:
+
+```
+    @Test
+    public void getAllAuthors_WithoutDBUnit() {
+        List<Author> authors = authorsManager.getAllAuthors().collect(Collectors.toList());
+        assertFalse(authors.isEmpty());
+        assertEquals(5, authors.size());
+    }
+
+    @Test
+    @DatabaseSetup(value = "/dbunit/books_authors.xml")
+    public void getAllAuthors_WithDBUnit_DeleteAllAndInsertOnlyFromDBUnitFile() {
+        List<Author> authors = authorsManager.getAllAuthors().collect(Collectors.toList());
+        assertFalse(authors.isEmpty());
+        assertEquals(1, authors.size());
+    }
+
+    @Test
+    @DatabaseSetup(value = "/dbunit/books_authors.xml", type = DatabaseOperation.INSERT)
+    public void getAllAuthors_WithDBUnit_Add() {
+        List<Author> authors = authorsManager.getAllAuthors().collect(Collectors.toList());
+        assertFalse(authors.isEmpty());
+        assertEquals(6, authors.size());
+    }
+```
