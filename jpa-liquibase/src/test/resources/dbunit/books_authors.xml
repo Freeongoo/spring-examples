@@ -1,0 +1,6 @@
+<dataset>
+    <Authors id="200" name="My Author" />
+
+    <Books id="100" name="My Book 100" author="200"/>
+    <Books id="101" name="My Book 101" author="200"/>
+</dataset>

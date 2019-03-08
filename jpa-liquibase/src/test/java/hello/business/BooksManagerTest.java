@@ -1,34 +1,26 @@
 package hello.business;
 
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-
+import hello.AbstractIntegrationDBUnitTest;
 import hello.persistence.entities.Book;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-public class BooksManagerTest {
+public class BooksManagerTest extends AbstractIntegrationDBUnitTest {
 
     @Autowired
     private BooksManager booksManager;
 
     @Test
-    public void getAllBooksReturnsDataFromDatabase() throws Exception {
+    public void getAllBooksReturnsDataFromDatabase() {
         List<Book> books = booksManager.getAllBooks().collect(Collectors.toList());
         assertFalse(books.isEmpty());
         assertEquals(5, books.size());
-
-        // If you want to compare all the authors to what we inserted in '02-insert-data-authors.xml'
-        books.forEach(System.out::println);
     }
 }

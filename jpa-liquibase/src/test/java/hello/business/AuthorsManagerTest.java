@@ -1,34 +1,44 @@
 package hello.business;
 
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-
+import com.github.springtestdbunit.annotation.DatabaseOperation;
+import com.github.springtestdbunit.annotation.DatabaseSetup;
+import hello.AbstractIntegrationDBUnitTest;
 import hello.persistence.entities.Author;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-public class AuthorsManagerTest {
+public class AuthorsManagerTest extends AbstractIntegrationDBUnitTest {
 
     @Autowired
     private AuthorsManager authorsManager;
 
     @Test
-    public void getAllAuthorsReturnDataFromDatabase() throws Exception {
+    public void getAllAuthors_WithoutDBUnit() {
         List<Author> authors = authorsManager.getAllAuthors().collect(Collectors.toList());
         assertFalse(authors.isEmpty());
         assertEquals(5, authors.size());
+    }
 
-        // If you want to compare all the authors to what we inserted in '02-insert-data-authors.xml'
-        // authors.forEach(System.out::println);
+    @Test
+    @DatabaseSetup(value = "/dbunit/books_authors.xml")
+    public void getAllAuthors_WithDBUnit_DeleteAllAndInsertOnlyFromDBUnitFile() {
+        List<Author> authors = authorsManager.getAllAuthors().collect(Collectors.toList());
+        assertFalse(authors.isEmpty());
+        assertEquals(1, authors.size());
+    }
+
+    @Test
+    @DatabaseSetup(value = "/dbunit/books_authors.xml", type = DatabaseOperation.INSERT)
+    public void getAllAuthors_WithDBUnit_Add() {
+        List<Author> authors = authorsManager.getAllAuthors().collect(Collectors.toList());
+        assertFalse(authors.isEmpty());
+        assertEquals(6, authors.size());
     }
 }
