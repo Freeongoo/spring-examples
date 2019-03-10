@@ -3,7 +3,6 @@ package hello.entity.single;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import hello.entity.AbstractBaseEntity;
-import lombok.Data;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
