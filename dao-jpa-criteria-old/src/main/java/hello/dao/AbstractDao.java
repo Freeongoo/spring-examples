@@ -2,6 +2,7 @@ package hello.dao;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface AbstractDao<T, ID extends Serializable> {
@@ -15,4 +16,6 @@ public interface AbstractDao<T, ID extends Serializable> {
     public void saveOrUpdate(T entity);
 
     public void delete(T entity);
+
+    public List<T> getByProps(Map<String, List<?>> props);
 }

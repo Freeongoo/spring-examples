@@ -11,7 +11,7 @@ import java.util.Objects;
 @Table(name = "comment")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Comment extends AbstractBaseEntity<Long> {
+public class Comment extends AbstractBaseEntity {
 
     private String name;
 

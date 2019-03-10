@@ -12,7 +12,7 @@ import java.util.Objects;
 @Table(name="employee")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Employee extends AbstractBaseEntity<Long> {
+public class Employee extends AbstractBaseEntity {
 
     private String name;
     private String role;

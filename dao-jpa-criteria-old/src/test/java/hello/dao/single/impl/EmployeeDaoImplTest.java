@@ -7,8 +7,7 @@ import hello.entity.single.Employee;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -75,6 +74,30 @@ public class EmployeeDaoImplTest extends BaseTest {
     @Test
     public void findByName_WhenExistName() {
         List<Employee> employees = employeeDao.findByName("John");
+
+        assertThat(employees.size(), equalTo(1));
+        assertThat(employees, containsInAnyOrder(
+                hasProperty("name", is("John"))
+        ));
+    }
+
+    @Test
+    public void getByProps_ById() {
+        Map<String, List<?>> props = new HashMap<>();
+        props.put("id", Collections.singletonList(1L));
+        List<Employee> employees = employeeDao.getByProps(props);
+
+        assertThat(employees.size(), equalTo(1));
+        assertThat(employees, containsInAnyOrder(
+                hasProperty("id", is(1L))
+        ));
+    }
+
+    @Test
+    public void getByProps_ByName() {
+        Map<String, List<?>> props = new HashMap<>();
+        props.put("name", Arrays.asList("John", "NotExistName"));
+        List<Employee> employees = employeeDao.getByProps(props);
 
         assertThat(employees.size(), equalTo(1));
         assertThat(employees, containsInAnyOrder(
