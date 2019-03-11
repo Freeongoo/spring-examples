@@ -1,8 +1,8 @@
 package hello.entity;
 
-public interface BaseEntity {
+public interface BaseEntity<ID> {
 
-    Long getId();
+    ID getId();
 
-    void setId(Long id);
+    void setId(ID id);
 }

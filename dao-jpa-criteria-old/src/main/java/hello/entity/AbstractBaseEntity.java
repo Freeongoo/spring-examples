@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @MappedSuperclass
-public abstract class AbstractBaseEntity implements BaseEntity {
+public abstract class AbstractBaseEntity implements BaseEntity<Long> {
 
     @Id
     @Column
