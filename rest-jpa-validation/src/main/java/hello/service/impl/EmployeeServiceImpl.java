@@ -8,7 +8,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class EmployeeServiceImpl extends AbstractService<Employee, Long> implements EmployeeService {
+public class EmployeeServiceImpl extends AbstractService<Employee> implements EmployeeService {
 
     @Autowired
     private EmployeeRepository repository;

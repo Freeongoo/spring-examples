@@ -3,7 +3,7 @@ package hello.service;
 import hello.entity.BaseEntity;
 import hello.exception.ResourceNotFoundException;
 
-public interface Service<T extends BaseEntity<ID>, ID> {
+public interface Service<T extends BaseEntity, ID> {
 
     /**
      * Get all entities, if not exist return empty collection

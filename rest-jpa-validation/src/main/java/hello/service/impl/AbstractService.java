@@ -13,9 +13,9 @@ import java.util.function.Supplier;
 import static hello.exception.ErrorCode.INVALID_PARAMS;
 import static hello.exception.ErrorCode.OBJECT_NOT_FOUND;
 
-public abstract class AbstractService<T extends BaseEntity<ID>, ID> implements Service<T, ID> {
+public abstract class AbstractService<T extends BaseEntity> implements Service<T, Long> {
 
-    protected abstract CrudRepository<T, ID> getRepository();
+    protected abstract CrudRepository<T, Long> getRepository();
 
     @Override
     public Iterable<T> getAll() {
@@ -23,14 +23,14 @@ public abstract class AbstractService<T extends BaseEntity<ID>, ID> implements S
     }
 
     @Override
-    public T getById(ID id) {
+    public T getById(Long id) {
         return getRepository()
                 .findById(id)
                 .orElseThrow(getNotFoundExceptionSupplier("Cannot find entity by id: " + id, OBJECT_NOT_FOUND));
     }
 
     @Override
-    public T update(ID id, T entity) {
+    public T update(Long id, T entity) {
         Optional<T> optionalEntityFromDB = getRepository().findById(id);
         return optionalEntityFromDB
                 .map(e -> saveAndReturnSavedEntity(entity, e))
@@ -49,7 +49,7 @@ public abstract class AbstractService<T extends BaseEntity<ID>, ID> implements S
 
     @Override
     public void delete(T entity) {
-        ID id = entity.getId();
+        Long id = entity.getId();
         if (id == null) {
             throw new NotValidParamsException("Try delete entity without id", INVALID_PARAMS);
         }
@@ -60,13 +60,13 @@ public abstract class AbstractService<T extends BaseEntity<ID>, ID> implements S
     }
 
     @Override
-    public void delete(ID id) {
+    public void delete(Long id) {
         validateExistingEntityById(id);
 
         getRepository().deleteById(id);
     }
 
-    private void validateExistingEntityById(ID id) {
+    private void validateExistingEntityById(Long id) {
         getRepository()
                 .findById(id)
                 .orElseThrow(getNotFoundExceptionSupplier("Cannot find entity by id: " + id, OBJECT_NOT_FOUND));

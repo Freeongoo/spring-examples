@@ -5,23 +5,22 @@ import java.util.Objects;
 
 /**
  * Only with primary key
- * @param <PK>
  */
 @MappedSuperclass
-public abstract class AbstractBaseEntity<PK> implements BaseEntity<PK> {
+public abstract class AbstractBaseEntity implements BaseEntity {
 
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected PK id;
+    protected Long id;
 
     @Override
-    public PK getId() {
+    public Long getId() {
         return id;
     }
 
     @Override
-    public void setId(PK id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -29,7 +28,7 @@ public abstract class AbstractBaseEntity<PK> implements BaseEntity<PK> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        AbstractBaseEntity<?> that = (AbstractBaseEntity<?>) o;
+        AbstractBaseEntity that = (AbstractBaseEntity) o;
         return Objects.equals(id, that.id);
     }
 
