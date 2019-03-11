@@ -1,7 +1,7 @@
 package hello.entity.oneToMany;
 
 import com.fasterxml.jackson.annotation.*;
-import hello.entity.AbstractBaseEntity;
+import hello.entity.AbstractBaseEntityWithLong;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -19,7 +19,7 @@ import static org.springframework.util.ObjectUtils.isEmpty;
 @Table(name = "comment")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Comment extends AbstractBaseEntity<Long> {
+public class Comment extends AbstractBaseEntityWithLong {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "post_id", nullable = false)
