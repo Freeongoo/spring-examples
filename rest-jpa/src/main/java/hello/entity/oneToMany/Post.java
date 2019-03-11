@@ -2,7 +2,7 @@ package hello.entity.oneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import hello.entity.AbstractBaseEntity;
+import hello.entity.AbstractBaseEntityWithLong;
 
 import javax.persistence.*;
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.List;
 @Table(name = "post")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Post extends AbstractBaseEntity<Long> {
+public class Post extends AbstractBaseEntityWithLong {
 
     @OneToMany(mappedBy = "post")
     private List<Comment> comments;
