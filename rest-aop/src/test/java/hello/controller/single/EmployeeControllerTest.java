@@ -51,29 +51,13 @@ public class EmployeeControllerTest {
                 .build();
     }
 
+    // test aspect
     @Test
     public void getPersonal_ShouldThrowException() throws Exception {
         this.mockMvc.perform(get(PATH + "/personal"))
                 .andDo(print())
                 .andExpect(status().isForbidden());
     }
-
-    // TODO: do it
-    /*@Test
-    public void create_WhenNullName_ShouldThrowException() throws Exception {
-        String role = "admin";
-        Employee expectedEmployee = new Employee(null, role);
-        expectedEmployee.setName(null);
-
-        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        String json = ow.writeValueAsString(expectedEmployee);
-
-        this.mockMvc.perform(post(PATH)
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .content(json))
-                .andDo(print())
-                .andExpect(status().isBadRequest());
-    }*/
 
     @Test
     public void getAll_ShouldReturnList() throws Exception {
