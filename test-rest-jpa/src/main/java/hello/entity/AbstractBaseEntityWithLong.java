@@ -4,23 +4,23 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @MappedSuperclass
-public abstract class AbstractBaseEntity<ID> implements BaseEntity<ID> {
+public abstract class AbstractBaseEntityWithLong implements BaseEntity<Long> {
 
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected ID id;
+    protected Long id;
 
     @Column(name = "name")
     protected String name;
 
     @Override
-    public ID getId() {
+    public Long getId() {
         return id;
     }
 
     @Override
-    public void setId(ID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -38,7 +38,7 @@ public abstract class AbstractBaseEntity<ID> implements BaseEntity<ID> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        AbstractBaseEntity<?> that = (AbstractBaseEntity<?>) o;
+        AbstractBaseEntityWithLong that = (AbstractBaseEntityWithLong) o;
         return Objects.equals(id, that.id) &&
                 Objects.equals(name, that.name);
     }

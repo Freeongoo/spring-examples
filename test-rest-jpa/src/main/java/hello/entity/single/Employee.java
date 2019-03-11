@@ -2,8 +2,7 @@ package hello.entity.single;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import hello.entity.AbstractBaseEntity;
-import lombok.Data;
+import hello.entity.AbstractBaseEntityWithLong;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -13,7 +12,7 @@ import java.util.Objects;
 @Table(name="employee")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Employee extends AbstractBaseEntity<Long> {
+public class Employee extends AbstractBaseEntityWithLong {
 
     private String role;
 
