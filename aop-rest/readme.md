@@ -4,20 +4,15 @@ You need to clearly understand that Spring AOP only works for beans.
 If you need to check for classes that are not managed by Spring, 
 you need to use AspectJ (for example: JPA entity)
 
-## Configuration
-
-For main and test dirs:
-`cp application.properties.dist application.properties`
-
 ## Create aspect
 
 Add annotations: `@Aspect` and `@Configuration`
 
-Example: 
+Example:
 ```
     @Aspect
     @Configuration
-    public class SecurityAccessAspect {
+    public class AccessByRouteAspect {
     
         @Before("@annotation(org.springframework.web.bind.annotation.RequestMapping)")
         public void check(JoinPoint joinPoint) throws NoSuchMethodException {
@@ -25,8 +20,8 @@ Example:
             String[] routeValues = req.value();
     
             for (String route: routeValues) {
-                if (route.contains("/personal"))
-                    throw new AccessDeniedException("Access denied", ErrorCode.ACCESS_DENIED);
+                if (route.equals("/secret"))
+                    throw new AccessDeniedException("Access denied");
             }
         }
     
