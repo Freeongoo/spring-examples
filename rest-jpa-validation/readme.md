@@ -25,3 +25,11 @@ Add to controller `@Valid`:
         return service.save(newEmployee);
     }
 ```
+
+#### Testing
+
+For testing `@Valid` with response must run full application.  
+See test: `/src/test/java/hello/controller/beanValidation/EmployeeRestTemplateTest.java`
+
+When testing with @MockMvc check only status code, body - empty
+See test: `/src/test/java/hello/controller/beanValidation/EmployeeControllerTest.java`

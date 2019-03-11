@@ -21,11 +21,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
-import static com.jcabi.matchers.RegexMatchers.matchesPattern;
 import static hello.controller.beanValidation.EmployeeController.PATH;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.hamcrest.core.IsNull.notNullValue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -72,7 +70,7 @@ public class EmployeeControllerTest {
 
     // TODO: not work, why?
     @Test
-    public void create_WithoutName_ShouldThrowException() throws Exception {
+    public void create_WithoutName_ShouldBeBadRequest() throws Exception {
         String role = "admin";
         Employee expectedEmployee = new Employee(null, role);
 
@@ -88,12 +86,12 @@ public class EmployeeControllerTest {
         System.out.println("content: " + contentAsString); // empty body
 
         resultActions
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("error", is("Bad Request")))
-                .andExpect(jsonPath("timestamp", is(notNullValue())))
-                .andExpect(jsonPath("status", is(400)))
-                .andExpect(jsonPath("path", is(notNullValue())));
-
+                .andExpect(status().isBadRequest());
+                // this is param not exist - because using @MockMvc - for get this params - run all application
+                // .andExpect(jsonPath("error", is("Bad Request")))
+                // .andExpect(jsonPath("timestamp", is(notNullValue())))
+                // .andExpect(jsonPath("status", is(400)))
+                // .andExpect(jsonPath("path", is(notNullValue())));
     }
 
     @Test
