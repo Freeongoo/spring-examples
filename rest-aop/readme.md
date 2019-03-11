@@ -1,4 +1,8 @@
-# Example jpa rest
+# Example Spring REST and AOP
+
+You need to clearly understand that Spring AOP only works for beans. 
+If you need to check for classes that are not managed by Spring, 
+you need to use AspectJ
 
 ## Configuration
 
