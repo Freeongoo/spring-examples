@@ -20,6 +20,8 @@ import static org.springframework.util.ObjectUtils.isEmpty;
 
 public abstract class AbstractBaseDao<T, ID extends Serializable> implements BaseDao<T, ID> {
 
+    public final static String FIELD_DELIMITER = ".";
+
     protected abstract Class<T> getPersistentClass();
 
     @PersistenceContext
@@ -72,6 +74,14 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
     }
 
     protected void createCriteriaByFieldNameAndValues(Criteria criteria, String fieldName, List<?> values) {
+        if (!isSimpleField(fieldName)) {
+            if (values.size() > 1)
+                throw new RuntimeException(String.format("For relation field '%s' must be only one value, for create join query", fieldName));
+
+            getCriteriaAliasRelationIdWithCast(criteria, getFieldNameFromRelation(fieldName), values.get(0));
+            return;
+        }
+
         Class<?> fieldType = getFieldType(fieldName);
 
         if (values.isEmpty()) return;
@@ -130,6 +140,16 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
             criteria.add(Restrictions.in(fieldName, values));
     }
 
+    private boolean isSimpleField(String fieldName) {
+        List<String> el = Arrays.asList(fieldName.split("\\" + FIELD_DELIMITER));
+        return el.size() == 1;
+    }
+
+    private String getFieldNameFromRelation(String fieldName) {
+        List<String> el = Arrays.asList(fieldName.split("\\" + FIELD_DELIMITER));
+        return el.get(0);
+    }
+
     private Class<?> getFieldType(String fieldName) {
         Field field = ReflectionUtils.getField(getPersistentClass(), fieldName)
                 .orElseThrow(() -> new RuntimeException(String.format("Cannot find fieldName: '%s'", fieldName)));
@@ -154,7 +174,7 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
                 continue;
             }
 
-            criteria = getCriteriaAliasRelationIdWithCast(criteria, fieldHolder);
+            criteria = getCriteriaAliasRelationIdWithCast(criteria, fieldHolder.getFieldName(), fieldHolder.getValue());
         }
         return criteria.list();
     }
@@ -179,14 +199,12 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
         return criteria;
     }
 
-    private Criteria getCriteriaAliasRelationIdWithCast(Criteria criteria, FieldHolder fieldHolder) {
-        String fieldName = fieldHolder.getFieldName();
-
+    protected Criteria getCriteriaAliasRelationIdWithCast(Criteria criteria, String fieldName, Object value) {
         Field field = ReflectionUtils.getField(getPersistentClass(), fieldName)
                 .orElseThrow(() -> new IllegalArgumentException("Cannot find field name: '" + fieldName + "'"));
 
         Class<?> relationObjectClass = field.getType();
-        Object castedId = ReflectionUtils.castFieldValue(relationObjectClass, "id", fieldHolder.getValue());
+        Object castedId = ReflectionUtils.castFieldValue(relationObjectClass, "id", value);
 
         Criteria criteriaWithAlias = criteria.createAlias(fieldName, fieldName);
         return getCriteriaEqByField(criteriaWithAlias, fieldName + ".id", castedId);

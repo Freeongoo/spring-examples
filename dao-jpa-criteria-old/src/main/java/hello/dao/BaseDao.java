@@ -24,6 +24,9 @@ public interface BaseDao<T, ID extends Serializable> {
      * When passed empty map or all not exist fields - return all
      * When passed existing fields by not exist values - return empty list
      *
+     * For create query with relation object - pass field in format: "<fieldName>.id" (Ex.: "post.id")
+     * and for relation field you can passed only one value
+     *
      * @param props props
      * @return list of entities
      */

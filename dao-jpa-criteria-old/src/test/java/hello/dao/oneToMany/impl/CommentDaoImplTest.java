@@ -9,8 +9,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.*;
@@ -98,5 +97,42 @@ public class CommentDaoImplTest extends BaseTest {
         assertThat(comments, containsInAnyOrder(
                 hasProperty("name", is("Comment#1"))
         ));
+    }
+
+    @Test
+    public void getByProps_WhenRelationId() {
+        Map<String, List<?>> props = new HashMap<>();
+        props.put("post.id", Collections.singletonList(1L));
+        List<Comment> comments = commentDao.getByProps(props);
+
+        assertThat(comments.size(), equalTo(2));
+        for(Comment comment : comments) {
+            assertThat(comment.getPost().getId(), equalTo(1L));
+        }
+    }
+
+    @Test
+    public void getByProps_WhenRelationId_WhenIdIsString() {
+        Map<String, List<?>> props = new HashMap<>();
+        props.put("post.id", Collections.singletonList("1"));
+        List<Comment> comments = commentDao.getByProps(props);
+
+        assertThat(comments.size(), equalTo(2));
+        for(Comment comment : comments) {
+            assertThat(comment.getPost().getId(), equalTo(1L));
+        }
+    }
+
+    @Test
+    public void getByProps_WhenRelationId_AndName() {
+        Map<String, List<?>> props = new HashMap<>();
+        props.put("post.id", Collections.singletonList(1L));
+        props.put("name", Collections.singletonList("Comment#1"));
+        List<Comment> comments = commentDao.getByProps(props);
+
+        assertThat(comments.size(), equalTo(1));
+        for(Comment comment : comments) {
+            assertThat(comment.getPost().getId(), equalTo(1L));
+        }
     }
 }
