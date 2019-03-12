@@ -81,6 +81,28 @@ public class EmployeeDaoImplTest extends BaseTest {
         ));
     }
 
+    @Test(expected = NullPointerException.class)
+    public void getByProps_WhenPassedNull() {
+        List<Employee> employees = employeeDao.getByProps(null);
+    }
+
+    @Test
+    public void getByProps_WhenEmptyPassedFields_ShouldReturnAll() {
+        Map<String, List<?>> props = new HashMap<>();
+        List<Employee> employees = employeeDao.getByProps(props);
+
+        assertThat(employees.size(), equalTo(2));
+    }
+
+    @Test
+    public void getByProps_ById_WhenNotExistId() {
+        Map<String, List<?>> props = new HashMap<>();
+        props.put("id", Collections.singletonList(-1L));
+        List<Employee> employees = employeeDao.getByProps(props);
+
+        assertThat(employees.size(), equalTo(0));
+    }
+
     @Test
     public void getByProps_ById() {
         Map<String, List<?>> props = new HashMap<>();

@@ -33,6 +33,19 @@ public class CommentDaoImplTest extends BaseTest {
     }
 
     @Test
+    public void getByFields_WhenEmptyFields() {
+        ArrayList<FieldHolder> fields = new ArrayList<>();
+        List<Comment> comments = commentDao.getByFields(fields);
+
+        assertThat(comments.size(), equalTo(0));
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void getByFields_WhenPassedNull() {
+        List<Comment> comments = commentDao.getByFields(null);
+    }
+
+    @Test
     public void getByFields_ByName_WhenNotExist() {
         ArrayList<FieldHolder> fields = new ArrayList<>();
         fields.add(FieldHolder.of("name", "NotExistName", false));

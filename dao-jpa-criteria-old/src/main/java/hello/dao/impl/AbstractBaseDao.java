@@ -1,7 +1,7 @@
 package hello.dao.impl;
 
 import hello.container.FieldHolder;
-import hello.dao.AbstractDao;
+import hello.dao.BaseDao;
 import hello.util.ReflectionUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -12,17 +12,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.io.Serializable;
 import java.lang.reflect.Field;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.*;
 
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toSet;
 import static org.springframework.util.ObjectUtils.isEmpty;
 
-public abstract class AbstractDaoImpl<T, ID extends Serializable> implements AbstractDao<T, ID> {
+public abstract class AbstractBaseDao<T, ID extends Serializable> implements BaseDao<T, ID> {
 
     protected abstract Class<T> getPersistentClass();
 
@@ -67,6 +63,8 @@ public abstract class AbstractDaoImpl<T, ID extends Serializable> implements Abs
 
     @Override
     public List<T> getByProps(Map<String, List<?>> props) {
+        Objects.requireNonNull(props, "Param 'props' cannot be null, sorry");
+
         Criteria criteria = createEntityCriteria();
         props.forEach((fieldName, values) -> createCriteriaByFieldNameAndValues(criteria, fieldName, values));
 
@@ -140,6 +138,8 @@ public abstract class AbstractDaoImpl<T, ID extends Serializable> implements Abs
 
     @Override
     public List<T> getByFields(Collection<FieldHolder> fieldHolders) {
+        Objects.requireNonNull(fieldHolders, "Param 'fieldHolders' cannot be null, sorry");
+
         if (isEmpty(fieldHolders)) {
             return emptyList();
         }
