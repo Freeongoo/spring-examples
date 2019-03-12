@@ -160,7 +160,7 @@ public final class ReflectionUtils {
      */
     public static Object castFieldValue(Class<?> clazz, String fieldName, Object fieldValue) {
         Field field = getField(clazz, fieldName)
-                .orElseThrow(() -> new IllegalArgumentException("Cannot find field name:" + fieldName));
+                .orElseThrow(() -> new IllegalArgumentException("Cannot find field name: " + fieldName));
 
         Class<?> fieldType = field.getType();
 

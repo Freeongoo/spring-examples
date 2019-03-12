@@ -94,6 +94,30 @@ public class EmployeeDaoImplTest extends BaseTest {
     }
 
     @Test
+    public void getByProps_ById_WhenIdIsString() {
+        Map<String, List<?>> props = new HashMap<>();
+        props.put("id", Collections.singletonList("1"));
+        List<Employee> employees = employeeDao.getByProps(props);
+
+        assertThat(employees.size(), equalTo(1));
+        assertThat(employees, containsInAnyOrder(
+                hasProperty("id", is(1L))
+        ));
+    }
+
+    @Test
+    public void getByProps_ById_WhenIdIsDouble() {
+        Map<String, List<?>> props = new HashMap<>();
+        props.put("id", Collections.singletonList(1.));
+        List<Employee> employees = employeeDao.getByProps(props);
+
+        assertThat(employees.size(), equalTo(1));
+        assertThat(employees, containsInAnyOrder(
+                hasProperty("id", is(1L))
+        ));
+    }
+
+    @Test
     public void getByProps_ByName() {
         Map<String, List<?>> props = new HashMap<>();
         props.put("name", Arrays.asList("John", "NotExistName"));

@@ -7,6 +7,7 @@ import hello.dao.oneToMany.CommentDao;
 import hello.entity.oneToMany.Comment;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +33,49 @@ public class CommentDaoImplTest extends BaseTest {
     }
 
     @Test
-    public void getByFields_WhenExist() {
+    public void getByFields_ByName_WhenNotExist() {
+        ArrayList<FieldHolder> fields = new ArrayList<>();
+        fields.add(FieldHolder.of("name", "NotExistName", false));
+        List<Comment> comments = commentDao.getByFields(fields);
+
+        assertThat(comments.size(), equalTo(0));
+    }
+
+    @Test(expected = InvalidDataAccessApiUsageException.class)
+    public void getByFields_ByName_WhenNotExistFieldName() {
+        ArrayList<FieldHolder> fields = new ArrayList<>();
+        fields.add(FieldHolder.of("nameNotExist", "Comment#1", false));
+        List<Comment> comments = commentDao.getByFields(fields);
+
+        assertThat(comments.size(), equalTo(0));
+    }
+
+    @Test
+    public void getByFields_ById() {
+        ArrayList<FieldHolder> fields = new ArrayList<>();
+        fields.add(FieldHolder.of("id", 1, false));
+        List<Comment> comments = commentDao.getByFields(fields);
+
+        assertThat(comments.size(), equalTo(1));
+        assertThat(comments, containsInAnyOrder(
+                hasProperty("id", is(1L))
+        ));
+    }
+
+    @Test
+    public void getByFields_ById_WheIdIsString() {
+        ArrayList<FieldHolder> fields = new ArrayList<>();
+        fields.add(FieldHolder.of("id", "1", false));
+        List<Comment> comments = commentDao.getByFields(fields);
+
+        assertThat(comments.size(), equalTo(1));
+        assertThat(comments, containsInAnyOrder(
+                hasProperty("id", is(1L))
+        ));
+    }
+
+    @Test
+    public void getByFields_ByNameAndPostId_WhenExist() {
         ArrayList<FieldHolder> fields = new ArrayList<>();
         fields.add(FieldHolder.of("name", "Comment#1", false));
         fields.add(FieldHolder.of("post", 1L, true));

@@ -19,6 +19,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static java.util.Collections.emptyList;
+import static java.util.stream.Collectors.toSet;
 import static org.springframework.util.ObjectUtils.isEmpty;
 
 public abstract class AbstractDaoImpl<T, ID extends Serializable> implements AbstractDao<T, ID> {
@@ -72,25 +73,60 @@ public abstract class AbstractDaoImpl<T, ID extends Serializable> implements Abs
         return criteria.list();
     }
 
-    private void createCriteriaByFieldNameAndValues(Criteria criteria, String fieldName, List<?> values) {
+    protected void createCriteriaByFieldNameAndValues(Criteria criteria, String fieldName, List<?> values) {
         Class<?> fieldType = getFieldType(fieldName);
 
         if (values.isEmpty()) return;
 
         if (fieldType.isAssignableFrom(Double.class))
-            criteria.add(Restrictions.in(fieldName, values.stream().map(x -> ((Number)x).doubleValue()).collect(Collectors.toSet())));
+            criteria.add(Restrictions.in(fieldName, values.stream()
+                    .map(x -> {
+                        if (x instanceof String) {
+                            return Double.valueOf((String) x);
+                        }
+                        return ((Number)x).doubleValue();
+                    })
+                    .collect(toSet())));
 
         else if (fieldType.isAssignableFrom(Long.class))
-            criteria.add(Restrictions.in(fieldName, values.stream().map(x -> ((Number)x).longValue()).collect(Collectors.toSet())));
+            criteria.add(Restrictions.in(fieldName, values.stream()
+                    .map(x -> {
+                        if (x instanceof String) {
+                            return Long.valueOf((String) x);
+                        }
+                        return ((Number)x).longValue();
+                    })
+                    .collect(toSet())));
 
         else if (fieldType.isAssignableFrom(Float.class))
-            criteria.add(Restrictions.in(fieldName, values.stream().map(x -> ((Number)x).floatValue()).collect(Collectors.toSet())));
+            criteria.add(Restrictions.in(fieldName, values.stream()
+                    .map(x -> {
+                        if (x instanceof String) {
+                            return Float.valueOf((String) x);
+                        }
+                        return ((Number)x).floatValue();
+                    })
+                    .collect(toSet())));
 
         else if (fieldType.isAssignableFrom(Integer.class))
-            criteria.add(Restrictions.in(fieldName, values.stream().map(x -> ((Number)x).intValue()).collect(Collectors.toSet())));
+            criteria.add(Restrictions.in(fieldName, values.stream()
+                    .map(x -> {
+                        if (x instanceof String) {
+                            return Integer.valueOf((String) x);
+                        }
+                        return ((Number)x).intValue();
+                    })
+                    .collect(toSet())));
 
         else if (fieldType.isAssignableFrom(Short.class))
-            criteria.add(Restrictions.in(fieldName, values.stream().map(x -> ((Number)x).shortValue()).collect(Collectors.toSet())));
+            criteria.add(Restrictions.in(fieldName, values.stream()
+                    .map(x -> {
+                        if (x instanceof String) {
+                            return Short.valueOf((String) x);
+                        }
+                        return ((Number)x).shortValue();
+                    })
+                    .collect(toSet())));
 
         else
             criteria.add(Restrictions.in(fieldName, values));
