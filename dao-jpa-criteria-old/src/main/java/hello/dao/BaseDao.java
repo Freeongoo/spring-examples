@@ -1,6 +1,7 @@
 package hello.dao;
 
 import hello.container.FieldHolder;
+import hello.container.OrderType;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -40,4 +41,15 @@ public interface BaseDao<T, ID extends Serializable> {
      * @return list of entities
      */
     public List<T> getByFields(Collection<FieldHolder> fieldHolders);
+
+    /**
+     * Universal method for create complex query - useful for REST API
+     *
+     * @param fields fields
+     * @param sortByFieldName sortByFieldName
+     * @param orderTypeBy orderTypeBy
+     * @param limit limit
+     * @return list of entities
+     */
+    public List<T> universalQuery(Map<String, List<?>> fields, String sortByFieldName, OrderType orderTypeBy, Integer limit);
 }

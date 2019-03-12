@@ -1,10 +1,12 @@
 package hello.dao.impl;
 
 import hello.container.FieldHolder;
+import hello.container.OrderType;
 import hello.dao.BaseDao;
 import hello.util.ReflectionUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.util.Assert;
 
@@ -65,12 +67,17 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
 
     @Override
     public List<T> getByProps(Map<String, List<?>> props) {
+        Criteria criteria = getCriteriaByProps(props);
+
+        return criteria.list();
+    }
+
+    protected Criteria getCriteriaByProps(Map<String, List<?>> props) {
         Objects.requireNonNull(props, "Param 'props' cannot be null, sorry");
 
         Criteria criteria = createEntityCriteria();
         props.forEach((fieldName, values) -> createCriteriaByFieldNameAndValues(criteria, fieldName, values));
-
-        return criteria.list();
+        return criteria;
     }
 
     protected void createCriteriaByFieldNameAndValues(Criteria criteria, String fieldName, List<?> values) {
@@ -176,6 +183,24 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
 
             criteria = getCriteriaAliasRelationIdWithCast(criteria, fieldHolder.getFieldName(), fieldHolder.getValue());
         }
+        return criteria.list();
+    }
+
+    @Override
+    public List<T> universalQuery(Map<String, List<?>> fields, String sortByFieldName, OrderType orderBy, Integer limit) {
+        Criteria criteria = getCriteriaByProps(fields);
+
+        if (sortByFieldName != null) {
+            if (orderBy == null || orderBy.equals(OrderType.ASC)) {
+                criteria.addOrder(Order.asc(sortByFieldName));
+            } else if (orderBy.equals(OrderType.DESC)) {
+                criteria.addOrder(Order.desc(sortByFieldName));
+            }
+        }
+
+        if (limit != null)
+            criteria.setMaxResults(limit);
+
         return criteria.list();
     }
 
