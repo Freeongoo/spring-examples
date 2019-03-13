@@ -34,10 +34,8 @@ See at `AbstractBaseDao`:
      * Universal method for create complex query - useful for REST API
      *
      * @param fields fields
-     * @param sortByFieldName sortByFieldName
-     * @param orderTypeBy orderTypeBy
-     * @param limit limit
+     * @param queryParams queryParams
      * @return list of entities
      */
-    public List<T> universalQuery(Map<String, List<?>> fields, String sortByFieldName, OrderType orderTypeBy, Integer limit);
+    public List<T> universalQuery(Map<String, List<?>> fields, QueryParams queryParams);
 ```

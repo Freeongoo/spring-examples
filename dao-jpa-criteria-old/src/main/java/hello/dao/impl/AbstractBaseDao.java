@@ -2,6 +2,7 @@ package hello.dao.impl;
 
 import hello.container.FieldHolder;
 import hello.container.OrderType;
+import hello.container.QueryParams;
 import hello.dao.BaseDao;
 import hello.util.ReflectionUtils;
 import org.hibernate.Criteria;
@@ -187,19 +188,19 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
     }
 
     @Override
-    public List<T> universalQuery(Map<String, List<?>> fields, String sortByFieldName, OrderType orderBy, Integer limit) {
+    public List<T> universalQuery(Map<String, List<?>> fields, QueryParams queryParams) {
         Criteria criteria = getCriteriaByProps(fields);
 
-        if (sortByFieldName != null) {
-            if (orderBy == null || orderBy.equals(OrderType.ASC)) {
-                criteria.addOrder(Order.asc(sortByFieldName));
-            } else if (orderBy.equals(OrderType.DESC)) {
-                criteria.addOrder(Order.desc(sortByFieldName));
+        if (queryParams.getSortBy() != null) {
+            if (queryParams.getOrderType() == null || queryParams.getOrderType().equals(OrderType.ASC)) {
+                criteria.addOrder(Order.asc(queryParams.getSortBy()));
+            } else if (queryParams.getOrderType().equals(OrderType.DESC)) {
+                criteria.addOrder(Order.desc(queryParams.getSortBy()));
             }
         }
 
-        if (limit != null)
-            criteria.setMaxResults(limit);
+        if (queryParams.getLimit() != null)
+            criteria.setMaxResults(queryParams.getLimit());
 
         return criteria.list();
     }

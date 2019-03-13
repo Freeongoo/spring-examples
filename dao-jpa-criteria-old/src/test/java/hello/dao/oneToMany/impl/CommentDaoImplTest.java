@@ -4,6 +4,7 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import hello.BaseTest;
 import hello.container.FieldHolder;
 import hello.container.OrderType;
+import hello.container.QueryParams;
 import hello.dao.oneToMany.CommentDao;
 import hello.entity.oneToMany.Comment;
 import org.junit.Test;
@@ -140,7 +141,8 @@ public class CommentDaoImplTest extends BaseTest {
     @Test
     public void universalQuery_WhenEmptyFields_SortByName_LimitOne() {
         Map<String, List<?>> props = new HashMap<>();
-        List<Comment> comments = commentDao.universalQuery(props, "name", OrderType.DESC, 1);
+        QueryParams queryParams = QueryParams.of("name", OrderType.DESC, 1);
+        List<Comment> comments = commentDao.universalQuery(props, queryParams);
 
         assertThat(comments.size(), equalTo(1));
         for(Comment comment : comments) {
@@ -151,7 +153,8 @@ public class CommentDaoImplTest extends BaseTest {
     @Test
     public void universalQuery_WhenEmptyFields_SortNullOrderNullLimit2() {
         Map<String, List<?>> props = new HashMap<>();
-        List<Comment> comments = commentDao.universalQuery(props, null, null, 2);
+        QueryParams queryParams = QueryParams.of(null, null, 2);
+        List<Comment> comments = commentDao.universalQuery(props, queryParams);
 
         assertThat(comments.size(), equalTo(2));
     }
@@ -160,7 +163,8 @@ public class CommentDaoImplTest extends BaseTest {
     public void universalQuery_WhenFieldByPostId_SortByName_LimitOne() {
         Map<String, List<?>> props = new HashMap<>();
         props.put("post.id", Collections.singletonList(1L));
-        List<Comment> comments = commentDao.universalQuery(props, "name", OrderType.DESC, 1);
+        QueryParams queryParams = QueryParams.of("name", OrderType.DESC, 1);
+        List<Comment> comments = commentDao.universalQuery(props, queryParams);
 
         assertThat(comments.size(), equalTo(1));
         for(Comment comment : comments) {
@@ -172,7 +176,8 @@ public class CommentDaoImplTest extends BaseTest {
     public void universalQuery_WhenFieldByPostId_SortById_LimitOne() {
         Map<String, List<?>> props = new HashMap<>();
         props.put("post.id", Collections.singletonList(1L));
-        List<Comment> comments = commentDao.universalQuery(props, "id", OrderType.DESC, 1);
+        QueryParams queryParams = QueryParams.of("id", OrderType.DESC, 1);
+        List<Comment> comments = commentDao.universalQuery(props, queryParams);
 
         assertThat(comments.size(), equalTo(1));
         for(Comment comment : comments) {
@@ -184,7 +189,8 @@ public class CommentDaoImplTest extends BaseTest {
     public void universalQuery_WhenFieldByPostId_SortById_WithoutOrderAndLimit() {
         Map<String, List<?>> props = new HashMap<>();
         props.put("post.id", Collections.singletonList(1L));
-        List<Comment> comments = commentDao.universalQuery(props, "id", null, null);
+        QueryParams queryParams = QueryParams.of("id", null, null);
+        List<Comment> comments = commentDao.universalQuery(props, queryParams);
 
         assertThat(comments.size(), equalTo(2));
         assertThat(comments.get(0).getId(), equalTo(1L));
