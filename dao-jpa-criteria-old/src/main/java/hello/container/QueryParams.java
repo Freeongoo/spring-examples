@@ -6,18 +6,20 @@ public class QueryParams {
     private String sortBy;
     private OrderType orderType;
     private Integer limit;
+    private Integer start;
 
     public QueryParams() {
     }
 
-    private QueryParams(String sortBy, OrderType orderType, Integer limit) {
+    private QueryParams(String sortBy, OrderType orderType, Integer limit, Integer start) {
         this.sortBy = sortBy;
         this.orderType = orderType;
         this.limit = limit;
+        this.start = start;
     }
 
-    public static QueryParams of(String sortBy, OrderType orderType, Integer limit) {
-        return new QueryParams(sortBy, orderType, limit);
+    public static QueryParams of(String sortBy, OrderType orderType, Integer limit, Integer start) {
+        return new QueryParams(sortBy, orderType, limit, start);
     }
 
     public String getSortBy() {
@@ -44,6 +46,14 @@ public class QueryParams {
         this.limit = limit;
     }
 
+    public Integer getStart() {
+        return start;
+    }
+
+    public void setStart(Integer start) {
+        this.start = start;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -51,11 +61,12 @@ public class QueryParams {
         QueryParams that = (QueryParams) o;
         return Objects.equals(sortBy, that.sortBy) &&
                 orderType == that.orderType &&
-                Objects.equals(limit, that.limit);
+                Objects.equals(limit, that.limit) &&
+                Objects.equals(start, that.start);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(sortBy, orderType, limit);
+        return Objects.hash(sortBy, orderType, limit, start);
     }
 }

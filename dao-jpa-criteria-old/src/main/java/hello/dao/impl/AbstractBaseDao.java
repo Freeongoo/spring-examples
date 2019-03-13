@@ -199,6 +199,9 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
             }
         }
 
+        if (queryParams.getStart() != null)
+            criteria.setFirstResult(queryParams.getStart());
+
         if (queryParams.getLimit() != null)
             criteria.setMaxResults(queryParams.getLimit());
 
