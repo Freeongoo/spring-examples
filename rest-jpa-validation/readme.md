@@ -1,5 +1,7 @@
 # Validation API
 
+https://habr.com/ru/post/424819/
+
 Hibernate Validator is the reference implementation of the validation API.
 
 ## Configuration
@@ -39,15 +41,15 @@ To use it, we must add the following dependencies:
 </dependency>
 ```
 
-## Validation Examples
+## Validation (JSR 303)
 
-### Bean Validation (JSR 303) POJO
+### Bean Validation POJO
 
 See test: `/src/test/java/hello/beanValidation/PersonTest.java`
 
 With custom annotation: `/src/test/java/hello/beanValidation/customAnnotation/PersonWithCustomAnnotationTest.java`
 
-### Bean Validation (JSR 303) with MVC Controller
+### Bean Validation with MVC Controller
 
 Entity: `/src/main/java/hello/entity/beanValidation/Employee.java`
 
@@ -73,3 +75,7 @@ See test: `/src/test/java/hello/controller/beanValidation/EmployeeRestTemplateTe
 
 When testing with @MockMvc check only status code, body - empty
 See test: `/src/test/java/hello/controller/beanValidation/EmployeeControllerTest.java`
+
+## Spring Validation
+
+Test: `/src/test/java/hello/springValidation/PeopleTest.java`
