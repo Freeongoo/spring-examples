@@ -7,7 +7,11 @@ For main and test dirs:
 
 ## Validation
 
-### Bean Validation
+### Bean Validation POJO
+
+See test: `/src/test/java/hello/beanValidation/PersonTest.java`
+
+### Bean Validation with MVC Controller
 
 Entity: `/src/main/java/hello/entity/beanValidation/Employee.java`
 

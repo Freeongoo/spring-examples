@@ -65,7 +65,7 @@ public class EmployeeRestTemplateTest {
         HashMap<String, Object> mapResponse = new ObjectMapper().readValue(body, HashMap.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, stringResponseEntity.getStatusCode());
-        assertThat((int)mapResponse.get("status"), is(400));
+        assertThat(mapResponse.get("status"), is(400));
         assertThat(mapResponse.get("error"), equalTo("Bad Request"));
         assertThat(mapResponse.get("timestamp"), is(notNullValue()));
         assertThat(mapResponse.get("errors"), is(notNullValue()));
