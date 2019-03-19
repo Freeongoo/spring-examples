@@ -78,4 +78,5 @@ See test: `/src/test/java/hello/controller/beanValidation/EmployeeControllerTest
 
 ## Spring Validation
 
+Validator: `/src/main/java/hello/springValidation/service/PeopleValidator.java`
 Test: `/src/test/java/hello/springValidation/PeopleTest.java`
