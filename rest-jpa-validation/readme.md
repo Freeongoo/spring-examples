@@ -80,3 +80,30 @@ See test: `/src/test/java/hello/controller/beanValidation/EmployeeControllerTest
 
 Validator: `/src/main/java/hello/springValidation/service/PeopleValidator.java`
 Test: `/src/test/java/hello/springValidation/PeopleTest.java`
+
+### Spring Validation for MVC controller
+
+Example: `/src/main/java/hello/controller/springValidation/PeopleController.java`
+
+1. Init binder out validator:
+```
+    @Autowired
+    private PeopleValidator peopleValidator;
+
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+        binder.setValidator(peopleValidator);
+    }
+```
+
+2. Add in method check errors:
+
+```
+    @PostMapping("")
+    public People create(@RequestBody @Valid People people, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            throw new NotValidParamsException(bindingResult.getFieldError().getCode(), INVALID_PARAMS);
+        }
+        return service.save(people);
+    }
+```

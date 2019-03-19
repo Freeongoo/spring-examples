@@ -1,8 +1,9 @@
-package hello.controller.beanValidation;
+package hello.controller.springValidation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import hello.entity.beanValidation.Employee;
-import hello.repository.beanValidation.EmployeeRepository;
+import hello.exception.ErrorCode;
+import hello.repository.springValidation.PeopleRepository;
+import hello.springValidation.People;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,18 +19,16 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.io.IOException;
 import java.util.HashMap;
 
-import static hello.controller.beanValidation.EmployeeController.PATH;
-import static org.hamcrest.CoreMatchers.notNullValue;
+import static hello.controller.springValidation.PeopleController.PATH;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class EmployeeRestTemplateTest {
+public class PeopleControllerRestTemplateTest {
 
-    private String employeeUrl;
+    private String peopleUrl;
 
     @LocalServerPort
     private int port;
@@ -38,26 +37,37 @@ public class EmployeeRestTemplateTest {
     private TestRestTemplate restTemplate;
 
     @Autowired
-    private EmployeeRepository employeeRepository;
+    private PeopleRepository peopleRepository;
 
     @Before
     public void setUp() {
         String url = "http://localhost:" + port;
-        employeeUrl = url + PATH;
+        peopleUrl = url + PATH;
     }
 
     @After
     public void cleanUp() {
         // manually clear db - important when testing by TestRestTemplate
-        employeeRepository.deleteAll();
+        peopleRepository.deleteAll();
     }
 
     @Test
-    public void create_WithoutName_ShouldBeBadRequest() throws IOException {
+    public void create_WhenAllCorrect_ShouldBeStatusOK() {
         // when
-        String role = "admin";
-        Employee employee = new Employee(null, role);
-        ResponseEntity<String> stringResponseEntity = restTemplate.postForEntity(employeeUrl, employee, String.class);
+        People people = new People(20);
+        ResponseEntity<String> stringResponseEntity = restTemplate.postForEntity(peopleUrl, people, String.class);
+
+        String body = stringResponseEntity.getBody();
+        System.out.println(body);
+
+        assertEquals(HttpStatus.OK, stringResponseEntity.getStatusCode());
+    }
+
+    @Test
+    public void create_WithNegativeAge_ShouldBeBadRequest() throws IOException {
+        // when
+        People people = new People(-20);
+        ResponseEntity<String> stringResponseEntity = restTemplate.postForEntity(peopleUrl, people, String.class);
 
         String body = stringResponseEntity.getBody();
         System.out.println(body);
@@ -65,11 +75,9 @@ public class EmployeeRestTemplateTest {
         HashMap<String, Object> mapResponse = new ObjectMapper().readValue(body, HashMap.class);
 
         assertEquals(HttpStatus.BAD_REQUEST, stringResponseEntity.getStatusCode());
-        assertThat(mapResponse.get("status"), is(400));
-        assertThat(mapResponse.get("error"), equalTo("Bad Request"));
-        assertThat(mapResponse.get("timestamp"), is(notNullValue()));
-        assertThat(mapResponse.get("errors"), is(notNullValue()));
-        assertThat(mapResponse.get("message"), is(notNullValue()));
-        assertThat(mapResponse.get("path"), is("/employees"));
+
+        assertThat(mapResponse.get("status"), is("error"));
+        assertThat(mapResponse.get("code"), is(ErrorCode.INVALID_PARAMS.getValue()));
+        assertThat(mapResponse.get("message"), is("Negative value"));
     }
 }

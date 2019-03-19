@@ -1,9 +1,23 @@
 package hello.springValidation;
 
-import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import hello.entity.AbstractBaseEntity;
 
-public class People {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="people")
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class People extends AbstractBaseEntity {
+
+    @Column
     private int age;
+
+    public People() {}
 
     public People(int age) {
         this.age = age;
@@ -15,18 +29,5 @@ public class People {
 
     public void setAge(int age) {
         this.age = age;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        People people = (People) o;
-        return age == people.age;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(age);
     }
 }
