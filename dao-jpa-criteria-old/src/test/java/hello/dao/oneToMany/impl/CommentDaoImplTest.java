@@ -167,6 +167,32 @@ public class CommentDaoImplTest extends BaseTest {
     }
 
     @Test
+    public void getByProps_WhenRelationName() {
+        Map<String, List<?>> props = new HashMap<>();
+        props.put("post.name", Collections.singletonList("Post#1"));
+        List<Comment> comments = commentDao.getByProps(props);
+
+        assertThat(comments.size(), equalTo(2));
+        for(Comment comment : comments) {
+            assertThat(comment.getPost().getId(), equalTo(1L));
+        }
+    }
+
+    @Test
+    public void getByProps_WhenRelationNamePostAndAuthor() {
+        Map<String, List<?>> props = new HashMap<>();
+        props.put("post.name", Collections.singletonList("Post#1"));
+        props.put("author.name", Collections.singletonList("Author#1"));
+        List<Comment> comments = commentDao.getByProps(props);
+
+        assertThat(comments.size(), equalTo(1));
+        for(Comment comment : comments) {
+            assertThat(comment.getPost().getId(), equalTo(1L));
+            assertThat(comment.getAuthor().getId(), equalTo(1L));
+        }
+    }
+
+    @Test
     public void universalQuery_WhenEmptyFields_SortByName_LimitOne() {
         Map<String, List<?>> props = new HashMap<>();
         QueryParams queryParams = QueryParams.of("name", OrderType.DESC, 1, null);

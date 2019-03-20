@@ -76,23 +76,38 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
         Objects.requireNonNull(props, "Param 'props' cannot be null, sorry");
 
         Criteria criteria = createEntityCriteria();
-        props.forEach((fieldName, values) -> createCriteriaByFieldNameAndValues(criteria, fieldName, values));
+        Set<String> aliasStore = new HashSet<>();
+        props.forEach((fieldName, values) -> createCriteriaByFieldNameAndValues(criteria, aliasStore, fieldName, values));
         return criteria;
     }
 
-    protected void createCriteriaByFieldNameAndValues(Criteria criteria, String fieldName, List<?> values) {
-        if (EntityFieldUtils.isRelationField(fieldName)) {
-            if (values.size() > 1)
-                throw new RuntimeException(String.format("For relation field '%s' must be only one value, for create join query", fieldName));
+    protected void createCriteriaByFieldNameAndValues(Criteria criteria, Set<String> aliasStore, String fieldName, List<?> values) {
+        if (values.isEmpty()) return;
 
-            getCriteriaEqByRelationId(criteria, values.get(0), EntityFieldUtils.getRelationFieldAlias(fieldName));
+        if (EntityFieldUtils.isRelationField(fieldName)) {
+            setCriteriaRelationField(criteria, aliasStore, fieldName, values);
             return;
         }
 
         Class<?> fieldType = getFieldType(fieldName);
+        setCriteriaInByValuesWithCast(criteria, fieldName, values, fieldType);
+    }
 
-        if (values.isEmpty()) return;
+    private void setCriteriaRelationField(Criteria criteria, Set<String> aliasStore, String fieldName, List<?> values) {
+        // this validation for simplify - soo complex if use "in" for relation objects
+        if (values.size() > 1) {
+            throw new RuntimeException(String.format("For relation field '%s' must be only one value, for create join query", fieldName));
+        }
 
+        String relationFieldAlias = EntityFieldUtils.getRelationFieldAlias(fieldName);
+        String relationFieldName = EntityFieldUtils.getRelationFieldName(fieldName);
+        criteria = getCriteriaWithAliasIfNeeded(criteria, aliasStore, relationFieldAlias);
+
+        getCriteriaEqByRelationField(criteria, relationFieldName, values.get(0), relationFieldAlias);
+        return;
+    }
+
+    private void setCriteriaInByValuesWithCast(Criteria criteria, String fieldName, List<?> values, Class<?> fieldType) {
         if (fieldType.isAssignableFrom(Boolean.class))
             criteria.add(Restrictions.in(fieldName, values.stream()
                     .map(x -> {
@@ -186,17 +201,16 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
             return criteria;
         }
 
-        criteria = getCriteriaWithAliasIfNeeded(criteria, aliasStore, fieldHolder);
+        criteria = getCriteriaWithAliasIfNeeded(criteria, aliasStore, fieldHolder.getRelationFieldName());
         criteria = getCriteriaEqByRelationField(criteria, fieldHolder.getName(), fieldHolder.getValue(), fieldHolder.getRelationFieldName());
 
         return criteria;
     }
 
-    private Criteria getCriteriaWithAliasIfNeeded(Criteria criteria, Set<String> aliasStore, FieldHolder fieldHolder) {
-        String relationFieldName = fieldHolder.getRelationFieldName();
-        if (!aliasStore.contains(relationFieldName)) {
-            criteria = criteria.createAlias(relationFieldName, relationFieldName);
-            aliasStore.add(relationFieldName);
+    private Criteria getCriteriaWithAliasIfNeeded(Criteria criteria, Set<String> aliasStore, String relationFieldAlias) {
+        if (!aliasStore.contains(relationFieldAlias)) {
+            criteria = criteria.createAlias(relationFieldAlias, relationFieldAlias);
+            aliasStore.add(relationFieldAlias);
         }
         return criteria;
     }
