@@ -5,38 +5,34 @@ package hello.container;
  */
 public class FieldHolder {
 
-    private String fieldName;
+    private String name;
 
-    /**
-     * field value, may contain id of related object
-     */
     private Object value;
 
     /**
-     * "true" - means that the field "value" contains id related object
-     * "false" - elementary type like: String, Wrapper, Primitive
+     * If relationFieldName null - field without relation
+     * if relationFieldName not null - name of relation object.
      */
-    private boolean isRelationId;
+    private String relationFieldName;
 
-    public FieldHolder() {
+    public FieldHolder() {}
+
+    public FieldHolder(String name, Object value, String relationFieldName) {
+        this(name, value);
+        this.relationFieldName = relationFieldName;
     }
 
-    private FieldHolder(String fieldName, Object value, boolean isRelationId) {
-        this.fieldName = fieldName;
+    public FieldHolder(String name, Object value) {
+        this.name = name;
         this.value = value;
-        this.isRelationId = isRelationId;
     }
 
-    public static FieldHolder of(String fieldName, Object value, boolean isRelationId) {
-        return new FieldHolder(fieldName, value, isRelationId);
+    public String getName() {
+        return name;
     }
 
-    public String getFieldName() {
-        return fieldName;
-    }
-
-    public void setFieldName(String fieldName) {
-        this.fieldName = fieldName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Object getValue() {
@@ -47,11 +43,11 @@ public class FieldHolder {
         this.value = value;
     }
 
-    public boolean getIsRelationId() {
-        return isRelationId;
+    public String getRelationFieldName() {
+        return relationFieldName;
     }
 
-    public void setIsRelationId(boolean isRelationId) {
-        this.isRelationId = isRelationId;
+    public void setRelationFieldName(String relationFieldName) {
+        this.relationFieldName = relationFieldName;
     }
 }

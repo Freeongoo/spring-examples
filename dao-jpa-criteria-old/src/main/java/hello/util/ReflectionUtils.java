@@ -164,35 +164,46 @@ public final class ReflectionUtils {
 
         Class<?> fieldType = field.getType();
 
-        if (fieldType.isAssignableFrom(Double.class)) {
+        if (fieldType.isAssignableFrom(Boolean.class)) {
+            if (fieldValue instanceof String) {
+                String trimmedStr = ((String) fieldValue).trim();
+                return !trimmedStr.equals("") && !trimmedStr.equals("0") && !trimmedStr.toLowerCase().equals("false");
+            }
+            if (fieldValue instanceof Number) {
+                return !(fieldValue).equals(0);
+            }
+            return fieldValue;
+        }
+
+        else if (fieldType.isAssignableFrom(Double.class)) {
             if (fieldValue instanceof String) {
                 return Double.valueOf((String) fieldValue);
             }
             return ((Number) fieldValue).doubleValue();
         }
 
-        if (fieldType.isAssignableFrom(Long.class)) {
+        else if (fieldType.isAssignableFrom(Long.class)) {
             if (fieldValue instanceof String) {
                 return Long.valueOf((String) fieldValue);
             }
             return ((Number) fieldValue).longValue();
         }
 
-        if (fieldType.isAssignableFrom(Float.class)) {
+        else if (fieldType.isAssignableFrom(Float.class)) {
             if (fieldValue instanceof String) {
                 return Float.valueOf((String) fieldValue);
             }
             return ((Number) fieldValue).floatValue();
         }
 
-        if (fieldType.isAssignableFrom(Integer.class)) {
+        else if (fieldType.isAssignableFrom(Integer.class)) {
             if (fieldValue instanceof String) {
                 return Integer.valueOf((String) fieldValue);
             }
             return ((Number) fieldValue).intValue();
         }
 
-        if (fieldType.isAssignableFrom(Short.class)) {
+        else if (fieldType.isAssignableFrom(Short.class)) {
             if (fieldValue instanceof String) {
                 return Short.valueOf((String) fieldValue);
             }

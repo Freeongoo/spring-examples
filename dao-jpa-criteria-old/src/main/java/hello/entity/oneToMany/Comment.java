@@ -19,6 +19,10 @@ public class Comment extends AbstractBaseEntity {
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "author_id", nullable = false)
+    private Author author;
+
     public Comment() {
     }
 
@@ -47,18 +51,11 @@ public class Comment extends AbstractBaseEntity {
         this.name = name;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        Comment comment = (Comment) o;
-        return Objects.equals(name, comment.name) &&
-                Objects.equals(post, comment.post);
+    public Author getAuthor() {
+        return author;
     }
 
-    @Override
-    public int hashCode() {
-        return 31;
+    public void setAuthor(Author author) {
+        this.author = author;
     }
 }

@@ -4,6 +4,7 @@ import hello.container.FieldHolder;
 import hello.container.OrderType;
 import hello.container.QueryParams;
 import hello.dao.BaseDao;
+import hello.util.EntityFieldUtils;
 import hello.util.ReflectionUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -22,8 +23,6 @@ import static java.util.stream.Collectors.toSet;
 import static org.springframework.util.ObjectUtils.isEmpty;
 
 public abstract class AbstractBaseDao<T, ID extends Serializable> implements BaseDao<T, ID> {
-
-    public final static String FIELD_DELIMITER = ".";
 
     protected abstract Class<T> getPersistentClass();
 
@@ -82,11 +81,11 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
     }
 
     protected void createCriteriaByFieldNameAndValues(Criteria criteria, String fieldName, List<?> values) {
-        if (!isSimpleField(fieldName)) {
+        if (EntityFieldUtils.isRelationField(fieldName)) {
             if (values.size() > 1)
                 throw new RuntimeException(String.format("For relation field '%s' must be only one value, for create join query", fieldName));
 
-            getCriteriaAliasRelationIdWithCast(criteria, getFieldNameFromRelation(fieldName), values.get(0));
+            getCriteriaEqByRelationId(criteria, values.get(0), EntityFieldUtils.getRelationFieldAlias(fieldName));
             return;
         }
 
@@ -94,7 +93,21 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
 
         if (values.isEmpty()) return;
 
-        if (fieldType.isAssignableFrom(Double.class))
+        if (fieldType.isAssignableFrom(Boolean.class))
+            criteria.add(Restrictions.in(fieldName, values.stream()
+                    .map(x -> {
+                        if (x instanceof String) {
+                            String trimmedStr = ((String) x).trim();
+                            return !trimmedStr.equals("") && !trimmedStr.equals("0") && !trimmedStr.toLowerCase().equals("false");
+                        }
+                        if (x instanceof Number) {
+                            return !(x).equals(0);
+                        }
+                        return x;
+                    })
+                    .collect(toSet())));
+
+        else if (fieldType.isAssignableFrom(Double.class))
             criteria.add(Restrictions.in(fieldName, values.stream()
                     .map(x -> {
                         if (x instanceof String) {
@@ -148,22 +161,6 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
             criteria.add(Restrictions.in(fieldName, values));
     }
 
-    private boolean isSimpleField(String fieldName) {
-        List<String> el = Arrays.asList(fieldName.split("\\" + FIELD_DELIMITER));
-        return el.size() == 1;
-    }
-
-    private String getFieldNameFromRelation(String fieldName) {
-        List<String> el = Arrays.asList(fieldName.split("\\" + FIELD_DELIMITER));
-        return el.get(0);
-    }
-
-    private Class<?> getFieldType(String fieldName) {
-        Field field = ReflectionUtils.getField(getPersistentClass(), fieldName)
-                .orElseThrow(() -> new RuntimeException(String.format("Cannot find fieldName: '%s'", fieldName)));
-        return field.getType();
-    }
-
     @Override
     public List<T> getByFields(Collection<FieldHolder> fieldHolders) {
         Objects.requireNonNull(fieldHolders, "Param 'fieldHolders' cannot be null, sorry");
@@ -173,18 +170,35 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
         }
 
         Criteria criteria = createEntityCriteria();
-
+        Set<String> aliasStore = new HashSet<>();
         for (FieldHolder fieldHolder : fieldHolders) {
-            Assert.notNull(fieldHolder.getFieldName(), "Field name cannot be null");
-
-            if (!fieldHolder.getIsRelationId()) {
-                criteria = getCriteriaEqByFieldWithCast(criteria, fieldHolder.getFieldName(), fieldHolder.getValue());
-                continue;
-            }
-
-            criteria = getCriteriaAliasRelationIdWithCast(criteria, fieldHolder.getFieldName(), fieldHolder.getValue());
+            criteria = getCriteriaByFieldHolder(criteria, aliasStore, fieldHolder);
         }
+
         return criteria.list();
+    }
+
+    private Criteria getCriteriaByFieldHolder(Criteria criteria, Set<String> aliasStore, FieldHolder fieldHolder) {
+        Assert.notNull(fieldHolder.getName(), "Field name cannot be null");
+
+        if (isEmpty(fieldHolder.getRelationFieldName())) {
+            criteria = getCriteriaEqByFieldWithCast(criteria, fieldHolder.getName(), fieldHolder.getValue());
+            return criteria;
+        }
+
+        criteria = getCriteriaWithAliasIfNeeded(criteria, aliasStore, fieldHolder);
+        criteria = getCriteriaEqByRelationField(criteria, fieldHolder.getName(), fieldHolder.getValue(), fieldHolder.getRelationFieldName());
+
+        return criteria;
+    }
+
+    private Criteria getCriteriaWithAliasIfNeeded(Criteria criteria, Set<String> aliasStore, FieldHolder fieldHolder) {
+        String relationFieldName = fieldHolder.getRelationFieldName();
+        if (!aliasStore.contains(relationFieldName)) {
+            criteria = criteria.createAlias(relationFieldName, relationFieldName);
+            aliasStore.add(relationFieldName);
+        }
+        return criteria;
     }
 
     @Override
@@ -228,14 +242,42 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
         return criteria;
     }
 
-    protected Criteria getCriteriaAliasRelationIdWithCast(Criteria criteria, String fieldName, Object value) {
-        Field field = ReflectionUtils.getField(getPersistentClass(), fieldName)
-                .orElseThrow(() -> new IllegalArgumentException("Cannot find field name: '" + fieldName + "'"));
+    /**
+     * Important! Before use, you must add an alias in the criterion for relation field
+     * except for the field "id" - not need create alias
+     *
+     * @param criteria criteria
+     * @param fieldName fieldName
+     * @param fieldValue fieldValue
+     * @param relationFieldName relationFieldName
+     * @return Criteria
+     */
+    protected Criteria getCriteriaEqByRelationField(Criteria criteria, String fieldName, Object fieldValue, String relationFieldName) {
+        Class<?> relationFieldClass = getFieldType(relationFieldName);
+        Object valueFromRelationObject = ReflectionUtils.castFieldValue(relationFieldClass, fieldName, fieldValue);
 
-        Class<?> relationObjectClass = field.getType();
-        Object castedId = ReflectionUtils.castFieldValue(relationObjectClass, "id", value);
+        return getCriteriaEqByField(criteria, EntityFieldUtils.concat(relationFieldName, fieldName), valueFromRelationObject);
+    }
 
-        Criteria criteriaWithAlias = criteria.createAlias(fieldName, fieldName);
-        return getCriteriaEqByField(criteriaWithAlias, fieldName + ".id", castedId);
+    /**
+     * @param criteria criteria
+     * @param idValue idValue
+     * @param relationFieldName relationFieldName
+     * @return Criteria
+     */
+    protected Criteria getCriteriaEqByRelationId(Criteria criteria, Object idValue, String relationFieldName) {
+        return getCriteriaEqByRelationField(criteria, "id", idValue, relationFieldName);
+    }
+
+    private Class<?> getFieldType(String fieldName) {
+        return getField(fieldName).getType();
+    }
+
+    private Field getField(String fieldName) {
+        return ReflectionUtils.getField(getPersistentClass(), fieldName)
+                .orElseThrow(() -> {
+                    String msg = String.format("Cannot find field name: '%s' from class: '%s'", fieldName, getPersistentClass());
+                    return new IllegalArgumentException(msg);
+                });
     }
 }

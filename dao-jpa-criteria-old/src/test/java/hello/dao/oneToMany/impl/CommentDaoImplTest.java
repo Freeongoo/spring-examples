@@ -17,7 +17,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
-@DatabaseSetup({"/post_comment.xml"})
+@DatabaseSetup({"/post_comment_author.xml"})
 public class CommentDaoImplTest extends BaseTest {
 
     @Autowired
@@ -49,7 +49,7 @@ public class CommentDaoImplTest extends BaseTest {
     @Test
     public void getByFields_ByName_WhenNotExist() {
         ArrayList<FieldHolder> fields = new ArrayList<>();
-        fields.add(FieldHolder.of("name", "NotExistName", false));
+        fields.add(new FieldHolder("name", "NotExistName"));
         List<Comment> comments = commentDao.getByFields(fields);
 
         assertThat(comments.size(), equalTo(0));
@@ -58,7 +58,7 @@ public class CommentDaoImplTest extends BaseTest {
     @Test(expected = InvalidDataAccessApiUsageException.class)
     public void getByFields_ByName_WhenNotExistFieldName() {
         ArrayList<FieldHolder> fields = new ArrayList<>();
-        fields.add(FieldHolder.of("nameNotExist", "Comment#1", false));
+        fields.add(new FieldHolder("nameNotExist", "Comment#1"));
         List<Comment> comments = commentDao.getByFields(fields);
 
         assertThat(comments.size(), equalTo(0));
@@ -67,7 +67,7 @@ public class CommentDaoImplTest extends BaseTest {
     @Test
     public void getByFields_ById() {
         ArrayList<FieldHolder> fields = new ArrayList<>();
-        fields.add(FieldHolder.of("id", 1, false));
+        fields.add(new FieldHolder("id", 1));
         List<Comment> comments = commentDao.getByFields(fields);
 
         assertThat(comments.size(), equalTo(1));
@@ -79,7 +79,7 @@ public class CommentDaoImplTest extends BaseTest {
     @Test
     public void getByFields_ById_WheIdIsString() {
         ArrayList<FieldHolder> fields = new ArrayList<>();
-        fields.add(FieldHolder.of("id", "1", false));
+        fields.add(new FieldHolder("id", "1"));
         List<Comment> comments = commentDao.getByFields(fields);
 
         assertThat(comments.size(), equalTo(1));
@@ -91,8 +91,36 @@ public class CommentDaoImplTest extends BaseTest {
     @Test
     public void getByFields_ByNameAndPostId_WhenExist() {
         ArrayList<FieldHolder> fields = new ArrayList<>();
-        fields.add(FieldHolder.of("name", "Comment#1", false));
-        fields.add(FieldHolder.of("post", 1L, true));
+        fields.add(new FieldHolder("name", "Comment#1"));
+        fields.add(new FieldHolder("id", 1L, "post"));
+        List<Comment> comments = commentDao.getByFields(fields);
+
+        assertThat(comments.size(), equalTo(1));
+        assertThat(comments, containsInAnyOrder(
+                hasProperty("name", is("Comment#1"))
+        ));
+    }
+
+    @Test
+    public void getByFields_ByPostIdAndAuthorId_WhenExist() {
+        ArrayList<FieldHolder> fields = new ArrayList<>();
+        fields.add(new FieldHolder("id", 1L, "post"));
+        fields.add(new FieldHolder("id", 1L, "author"));
+        List<Comment> comments = commentDao.getByFields(fields);
+
+        assertThat(comments.size(), equalTo(1));
+        assertThat(comments, containsInAnyOrder(
+                hasProperty("name", is("Comment#1"))
+        ));
+    }
+
+    @Test
+    public void getByFields_ByPostIdNameAndAuthorIdName_WhenExist() {
+        ArrayList<FieldHolder> fields = new ArrayList<>();
+        fields.add(new FieldHolder("id", 1L, "post"));
+        fields.add(new FieldHolder("name", "Post#1", "post"));
+        fields.add(new FieldHolder("id", 1L, "author"));
+        fields.add(new FieldHolder("name", "Author#1", "author"));
         List<Comment> comments = commentDao.getByFields(fields);
 
         assertThat(comments.size(), equalTo(1));
