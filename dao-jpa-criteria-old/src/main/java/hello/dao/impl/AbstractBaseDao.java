@@ -89,7 +89,7 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
             return;
         }
 
-        Class<?> fieldType = getFieldType(fieldName);
+        Class<?> fieldType = ReflectionUtils.getFieldType(getPersistentClass(), fieldName);
         setCriteriaInByValuesWithCast(criteria, fieldName, values, fieldType);
     }
 
@@ -104,11 +104,10 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
         criteria = getCriteriaWithAliasIfNeeded(criteria, aliasStore, relationFieldAlias);
 
         getCriteriaEqByRelationField(criteria, relationFieldName, values.get(0), relationFieldAlias);
-        return;
     }
 
     private void setCriteriaInByValuesWithCast(Criteria criteria, String fieldName, List<?> values, Class<?> fieldType) {
-        if (fieldType.isAssignableFrom(Boolean.class))
+        if (fieldType.isAssignableFrom(Boolean.class)) {
             criteria.add(Restrictions.in(fieldName, values.stream()
                     .map(x -> {
                         if (x instanceof String) {
@@ -122,58 +121,59 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
                     })
                     .collect(toSet())));
 
-        else if (fieldType.isAssignableFrom(Double.class))
+        } else if (fieldType.isAssignableFrom(Double.class)) {
             criteria.add(Restrictions.in(fieldName, values.stream()
                     .map(x -> {
                         if (x instanceof String) {
                             return Double.valueOf((String) x);
                         }
-                        return ((Number)x).doubleValue();
+                        return ((Number) x).doubleValue();
                     })
                     .collect(toSet())));
 
-        else if (fieldType.isAssignableFrom(Long.class))
+        } else if (fieldType.isAssignableFrom(Long.class)) {
             criteria.add(Restrictions.in(fieldName, values.stream()
                     .map(x -> {
                         if (x instanceof String) {
                             return Long.valueOf((String) x);
                         }
-                        return ((Number)x).longValue();
+                        return ((Number) x).longValue();
                     })
                     .collect(toSet())));
 
-        else if (fieldType.isAssignableFrom(Float.class))
+        } else if (fieldType.isAssignableFrom(Float.class)) {
             criteria.add(Restrictions.in(fieldName, values.stream()
                     .map(x -> {
                         if (x instanceof String) {
                             return Float.valueOf((String) x);
                         }
-                        return ((Number)x).floatValue();
+                        return ((Number) x).floatValue();
                     })
                     .collect(toSet())));
 
-        else if (fieldType.isAssignableFrom(Integer.class))
+        } else if (fieldType.isAssignableFrom(Integer.class)) {
             criteria.add(Restrictions.in(fieldName, values.stream()
                     .map(x -> {
                         if (x instanceof String) {
                             return Integer.valueOf((String) x);
                         }
-                        return ((Number)x).intValue();
+                        return ((Number) x).intValue();
                     })
                     .collect(toSet())));
 
-        else if (fieldType.isAssignableFrom(Short.class))
+        } else if (fieldType.isAssignableFrom(Short.class)) {
             criteria.add(Restrictions.in(fieldName, values.stream()
                     .map(x -> {
                         if (x instanceof String) {
                             return Short.valueOf((String) x);
                         }
-                        return ((Number)x).shortValue();
+                        return ((Number) x).shortValue();
                     })
                     .collect(toSet())));
 
-        else
+        } else {
             criteria.add(Restrictions.in(fieldName, values));
+        }
     }
 
     @Override
@@ -197,12 +197,12 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
         Assert.notNull(fieldHolder.getName(), "Field name cannot be null");
 
         if (isEmpty(fieldHolder.getRelationFieldName())) {
-            criteria = getCriteriaEqByFieldWithCast(criteria, fieldHolder.getName(), fieldHolder.getValue());
+            criteria = getCriteriaEqByFieldWithCast(criteria, fieldHolder);
             return criteria;
         }
 
         criteria = getCriteriaWithAliasIfNeeded(criteria, aliasStore, fieldHolder.getRelationFieldName());
-        criteria = getCriteriaEqByRelationField(criteria, fieldHolder.getName(), fieldHolder.getValue(), fieldHolder.getRelationFieldName());
+        criteria = getCriteriaEqByRelationField(criteria, fieldHolder);
 
         return criteria;
     }
@@ -218,7 +218,12 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
     @Override
     public List<T> universalQuery(Map<String, List<?>> fields, QueryParams queryParams) {
         Criteria criteria = getCriteriaByProps(fields);
+        criteria = getCriteriaByQueryParams(criteria, queryParams);
 
+        return criteria.list();
+    }
+
+    private Criteria getCriteriaByQueryParams(Criteria criteria, QueryParams queryParams) {
         if (queryParams.getSortBy() != null) {
             if (queryParams.getOrderType() == null || queryParams.getOrderType().equals(OrderType.ASC)) {
                 criteria.addOrder(Order.asc(queryParams.getSortBy()));
@@ -233,7 +238,7 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
         if (queryParams.getLimit() != null)
             criteria.setMaxResults(queryParams.getLimit());
 
-        return criteria.list();
+        return criteria;
     }
 
     /**
@@ -249,16 +254,25 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
         return criteria;
     }
 
+    private Criteria getCriteriaEqByFieldWithCast(Criteria criteria, FieldHolder fieldHolder) {
+        return getCriteriaEqByFieldWithCast(criteria, fieldHolder.getName(), fieldHolder.getValue());
+    }
+
     protected Criteria getCriteriaEqByFieldWithCast(Criteria criteria, String fieldName, Object fieldValue) {
-        Object fieldValueCasted = fieldValue == null ? null : ReflectionUtils.castFieldValue(getPersistentClass(), fieldName, fieldValue);
+        Object fieldValueCasted;
+        if (fieldValue == null) {
+            fieldValueCasted = null;
+        } else {
+            fieldValueCasted = ReflectionUtils.castFieldValue(getPersistentClass(), fieldName, fieldValue);
+        }
 
         criteria.add(Restrictions.eq(fieldName, fieldValueCasted));
         return criteria;
     }
 
     /**
-     * Important! Before use, you must add an alias in the criterion for relation field
-     * except for the field "id" - not need create alias
+     * Important! Before use, you must add an alias in the Criteria for relation field
+     * but except for the field "id" - not need create alias
      *
      * @param criteria criteria
      * @param fieldName fieldName
@@ -267,10 +281,14 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
      * @return Criteria
      */
     protected Criteria getCriteriaEqByRelationField(Criteria criteria, String fieldName, Object fieldValue, String relationFieldName) {
-        Class<?> relationFieldClass = getFieldType(relationFieldName);
+        Class<?> relationFieldClass = ReflectionUtils.getFieldType(getPersistentClass(), relationFieldName);
         Object valueFromRelationObject = ReflectionUtils.castFieldValue(relationFieldClass, fieldName, fieldValue);
 
         return getCriteriaEqByField(criteria, EntityFieldUtils.concat(relationFieldName, fieldName), valueFromRelationObject);
+    }
+
+    private Criteria getCriteriaEqByRelationField(Criteria criteria, FieldHolder fieldHolder) {
+        return getCriteriaEqByRelationField(criteria, fieldHolder.getName(), fieldHolder.getValue(), fieldHolder.getRelationFieldName());
     }
 
     /**
@@ -281,17 +299,5 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
      */
     protected Criteria getCriteriaEqByRelationId(Criteria criteria, Object idValue, String relationFieldName) {
         return getCriteriaEqByRelationField(criteria, "id", idValue, relationFieldName);
-    }
-
-    private Class<?> getFieldType(String fieldName) {
-        return getField(fieldName).getType();
-    }
-
-    private Field getField(String fieldName) {
-        return ReflectionUtils.getField(getPersistentClass(), fieldName)
-                .orElseThrow(() -> {
-                    String msg = String.format("Cannot find field name: '%s' from class: '%s'", fieldName, getPersistentClass());
-                    return new IllegalArgumentException(msg);
-                });
     }
 }

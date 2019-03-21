@@ -213,6 +213,28 @@ public final class ReflectionUtils {
         return fieldValue;
     }
 
+    /**
+     * @param clazz clazz
+     * @param fieldName fieldName
+     * @return Class
+     */
+    public static Class<?> getFieldType(Class<?> clazz, String fieldName) {
+        return getFieldWithCheck(clazz, fieldName).getType();
+    }
+
+    /**
+     * @param clazz clazz
+     * @param fieldName fieldName
+     * @return Field
+     */
+    public static Field getFieldWithCheck(Class<?> clazz, String fieldName) {
+        return ReflectionUtils.getField(clazz, fieldName)
+                .orElseThrow(() -> {
+                    String msg = String.format("Cannot find field name: '%s' from class: '%s'", fieldName, clazz);
+                    return new IllegalArgumentException(msg);
+                });
+    }
+
     private static boolean isValidParams(Object obj, String param) {
         return (obj != null && !isStringNullOrEmpty(param));
     }
