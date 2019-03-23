@@ -6,6 +6,7 @@ import hello.container.QueryParams;
 import hello.dao.BaseDao;
 import hello.util.EntityFieldUtils;
 import hello.util.ReflectionUtils;
+import hello.util.StringUtil;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
@@ -104,7 +105,6 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
         criteria = getCriteriaWithAliasIfNeeded(criteria, aliasStore, relationFieldAlias);
 
         getCriteriaEqByRelationField(criteria, relationFieldName, values.get(0), relationFieldAlias);
-        return;
     }
 
     private void setCriteriaInByValuesWithCast(Criteria criteria, String fieldName, List<?> values, Class<?> fieldType) {
@@ -112,8 +112,7 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
             criteria.add(Restrictions.in(fieldName, values.stream()
                     .map(x -> {
                         if (x instanceof String) {
-                            String trimmedStr = ((String) x).trim();
-                            return !trimmedStr.equals("") && !trimmedStr.equals("0") && !trimmedStr.toLowerCase().equals("false");
+                            return StringUtil.convertToBoolean((String) x);
                         }
                         if (x instanceof Number) {
                             return !(x).equals(0);
