@@ -69,6 +69,10 @@ See test: `/src/test/java/hello/beanValidation/PersonTest.java`
 
 With custom annotation: `/src/test/java/hello/beanValidation/customAnnotation/PersonWithCustomAnnotationTest.java`
 
+#### Bean Validation on class level - for validate dependencies fields
+
+With validate two fields start and finish time: `/src/test/java/hello/beanValidation/customTwoFieldsValidation/OperationTest.java`
+
 ### Bean Validation with MVC Controller
 
 Entity: `/src/main/java/hello/entity/beanValidation/Employee.java`
