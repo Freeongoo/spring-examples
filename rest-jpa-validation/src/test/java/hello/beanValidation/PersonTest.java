@@ -4,10 +4,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
+import javax.validation.*;
 import java.util.Set;
 
 import static org.hamcrest.Matchers.containsInAnyOrder;
@@ -45,6 +42,23 @@ public class PersonTest {
 
         assertThat(validates, containsInAnyOrder(
                 hasProperty("message", is("size must be between 2 and 50"))
+        ));
+    }
+
+    @Test
+    public void validate_WhenInvalidSecondName_DefaultValidationMessage() {
+        Person person = new Person("John", "M", 20);
+
+        Set<ConstraintViolation<Person>> validates = validator.validate(person);
+        Assert.assertTrue(validates.size() > 0);
+
+        for(ConstraintViolation<Person> constraintViolation : validates) {
+            Path propertyPath = constraintViolation.getPropertyPath();
+            System.out.println(propertyPath);
+        }
+
+        assertThat(validates, containsInAnyOrder(
+                hasProperty("message", is("Param value: 'M' size must be between 2 and 50"))
         ));
     }
 
