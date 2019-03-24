@@ -3,7 +3,7 @@ package hello.beanValidation.customTwoFieldsValidation;
 import java.util.Date;
 
 @ValidDateInterval
-public class Operation {
+public class Operation implements DateIntervalBean {
 
     private Date startTime;
 

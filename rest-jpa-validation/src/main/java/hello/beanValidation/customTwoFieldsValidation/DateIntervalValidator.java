@@ -3,14 +3,14 @@ package hello.beanValidation.customTwoFieldsValidation;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class DateIntervalValidator implements ConstraintValidator<ValidDateInterval, Operation> {
+public class DateIntervalValidator implements ConstraintValidator<ValidDateInterval, DateIntervalBean> {
 
     @Override
-    public boolean isValid(Operation operation, ConstraintValidatorContext context) {
-        if (operation.getStartTime() == null || operation.getFinishTime() == null) {
+    public boolean isValid(DateIntervalBean bean, ConstraintValidatorContext context) {
+        if (bean.getStartTime() == null || bean.getFinishTime() == null) {
             return true;
         }
 
-        return !operation.getStartTime().after(operation.getFinishTime());
+        return !bean.getStartTime().after(bean.getFinishTime());
     }
 }
