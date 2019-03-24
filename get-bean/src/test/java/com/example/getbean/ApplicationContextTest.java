@@ -1,6 +1,7 @@
 package com.example.getbean;
 
 import com.example.getbean.service.ServiceA;
+import com.example.getbean.service.a.SomeService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,5 +34,11 @@ public class ApplicationContextTest {
     public void getBean_ByBeanNameAndClass() {
         ServiceA serviceA = applicationContext.getBean("serviceA", ServiceA.class);
         assertNotNull(serviceA);
+    }
+
+    @Test
+    public void getBean_ByBeanNameAndClass_OtherPackage() {
+        SomeService servicePackageA = applicationContext.getBean("servicePackageA", SomeService.class);
+        assertNotNull(servicePackageA);
     }
 }
