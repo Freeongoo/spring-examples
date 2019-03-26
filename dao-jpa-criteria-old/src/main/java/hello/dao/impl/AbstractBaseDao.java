@@ -95,16 +95,14 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
     }
 
     private void setCriteriaRelationField(Criteria criteria, Set<String> aliasStore, String fieldName, List<?> values) {
-        // this validation for simplify - soo complex if use "in" for relation objects
-        if (values.size() > 1) {
-            throw new RuntimeException(String.format("For relation field '%s' must be only one value, for create join query", fieldName));
-        }
-
         String relationFieldAlias = EntityFieldUtils.getRelationFieldAlias(fieldName);
         String relationFieldName = EntityFieldUtils.getRelationFieldName(fieldName);
         criteria = getCriteriaWithAliasIfNeeded(criteria, aliasStore, relationFieldAlias);
 
-        getCriteriaEqByRelationField(criteria, relationFieldName, values.get(0), relationFieldAlias);
+        Class<?> relationFieldClass = ReflectionUtils.getFieldType(getPersistentClass(), relationFieldAlias);
+        Class<?> relationFieldType = ReflectionUtils.getFieldType(relationFieldClass, relationFieldName);
+
+        setCriteriaInByValuesWithCast(criteria, fieldName, values, relationFieldType);
     }
 
     private void setCriteriaInByValuesWithCast(Criteria criteria, String fieldName, List<?> values, Class<?> fieldType) {

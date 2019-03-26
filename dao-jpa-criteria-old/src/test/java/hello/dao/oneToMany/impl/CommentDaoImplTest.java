@@ -142,6 +142,18 @@ public class CommentDaoImplTest extends BaseTest {
     }
 
     @Test
+    public void getByProps_WhenRelationIds() {
+        Map<String, List<?>> props = new HashMap<>();
+        List<Long> ids = new ArrayList<>();
+        ids.add(1L);
+        ids.add(2L);
+        props.put("post.id", ids);
+        List<Comment> comments = commentDao.getByProps(props);
+
+        assertThat(comments.size(), equalTo(4));
+    }
+
+    @Test
     public void getByProps_WhenRelationId_WhenIdIsString() {
         Map<String, List<?>> props = new HashMap<>();
         props.put("post.id", Collections.singletonList("1"));
