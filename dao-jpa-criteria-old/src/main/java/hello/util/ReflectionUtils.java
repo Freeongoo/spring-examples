@@ -5,6 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -164,7 +165,14 @@ public final class ReflectionUtils {
 
         Class<?> fieldType = field.getType();
 
-        if (fieldType.isAssignableFrom(Boolean.class)) {
+        if (fieldType.isAssignableFrom(Date.class)) {
+            if (fieldValue instanceof String) {
+                return DateUtils.parseISO((String) fieldValue);
+            }
+            return fieldValue;
+        }
+
+        else if (fieldType.isAssignableFrom(Boolean.class)) {
             if (fieldValue instanceof String) {
                 String trimmedStr = ((String) fieldValue).trim();
                 return !trimmedStr.equals("") && !trimmedStr.equals("0") && !trimmedStr.toLowerCase().equals("false");

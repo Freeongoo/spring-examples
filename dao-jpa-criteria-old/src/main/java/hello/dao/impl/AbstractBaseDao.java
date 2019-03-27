@@ -4,6 +4,7 @@ import hello.container.FieldHolder;
 import hello.container.OrderType;
 import hello.container.QueryParams;
 import hello.dao.BaseDao;
+import hello.util.DateUtils;
 import hello.util.EntityFieldUtils;
 import hello.util.ReflectionUtils;
 import hello.util.StringUtil;
@@ -106,7 +107,17 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
     }
 
     private void setCriteriaInByValuesWithCast(Criteria criteria, String fieldName, List<?> values, Class<?> fieldType) {
-        if (fieldType.isAssignableFrom(Boolean.class)) {
+        if (fieldType.isAssignableFrom(Date.class)) {
+            criteria.add(Restrictions.in(fieldName, values.stream()
+                    .map(x -> {
+                        if (x instanceof String) {
+                            return DateUtils.parseISO((String) x);
+                        }
+                        return x;
+                    })
+                    .collect(toSet())));
+
+        } else if (fieldType.isAssignableFrom(Boolean.class)) {
             criteria.add(Restrictions.in(fieldName, values.stream()
                     .map(x -> {
                         if (x instanceof String) {
