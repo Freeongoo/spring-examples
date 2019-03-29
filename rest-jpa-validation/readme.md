@@ -2,6 +2,7 @@
 
 Official Doc: https://docs.jboss.org/hibernate/stable/validator/reference/en-US/html_single/?v=6.0  
 Article in RU: https://habr.com/ru/post/424819/
+Article in EN: https://reflectoring.io/bean-validation-with-spring-boot/
 
 Hibernate Validator is the reference implementation of the validation API.
 
