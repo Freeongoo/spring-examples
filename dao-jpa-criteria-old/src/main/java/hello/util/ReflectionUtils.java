@@ -152,19 +152,28 @@ public final class ReflectionUtils {
     }
 
     /**
-     * Get the field values with the types already listed according to the field type
-     *
-     * @param clazz      clazz
-     * @param fieldName  fieldName
+     * @param clazz clazz
+     * @param fieldName fieldName
      * @param fieldValue fieldValue
-     * @return value cast to specific field type
+     * @return casted value
      */
-    public static Object castFieldValue(Class<?> clazz, String fieldName, Object fieldValue) {
+    public static Object castFieldValueByClass(Class<?> clazz, String fieldName, Object fieldValue) {
         Field field = getField(clazz, fieldName)
-                .orElseThrow(() -> new IllegalArgumentException("Cannot find field name: " + fieldName));
+                .orElseThrow(() -> new IllegalArgumentException(String.format("Cannot find field by name: '%s'", fieldName)));
 
         Class<?> fieldType = field.getType();
 
+        return castFieldValueByType(fieldType, fieldValue);
+    }
+
+    /**
+     * Important! If field type is {@link Date} parse in ISO format ("yyyy-MM-dd'T'HH:mm:ss" or "yyyy-MM-dd")
+     *
+     * @param fieldType fieldType
+     * @param fieldValue fieldValue
+     * @return casted value
+     */
+    public static Object castFieldValueByType(Class<?> fieldType, Object fieldValue) {
         if (fieldType.isAssignableFrom(Date.class)) {
             if (fieldValue instanceof String) {
                 return DateUtils.parseISO((String) fieldValue);
@@ -174,8 +183,7 @@ public final class ReflectionUtils {
 
         else if (fieldType.isAssignableFrom(Boolean.class)) {
             if (fieldValue instanceof String) {
-                String trimmedStr = ((String) fieldValue).trim();
-                return !trimmedStr.equals("") && !trimmedStr.equals("0") && !trimmedStr.toLowerCase().equals("false");
+                return convertStringToBoolean((String) fieldValue);
             }
             if (fieldValue instanceof Number) {
                 return !(fieldValue).equals(0);
@@ -185,40 +193,45 @@ public final class ReflectionUtils {
 
         else if (fieldType.isAssignableFrom(Double.class)) {
             if (fieldValue instanceof String) {
-                return Double.valueOf((String) fieldValue);
+                return Double.valueOf((String)fieldValue);
             }
             return ((Number) fieldValue).doubleValue();
         }
 
         else if (fieldType.isAssignableFrom(Long.class)) {
             if (fieldValue instanceof String) {
-                return Long.valueOf((String) fieldValue);
+                return Long.valueOf((String)fieldValue);
             }
             return ((Number) fieldValue).longValue();
         }
 
         else if (fieldType.isAssignableFrom(Float.class)) {
             if (fieldValue instanceof String) {
-                return Float.valueOf((String) fieldValue);
+                return Float.valueOf((String)fieldValue);
             }
             return ((Number) fieldValue).floatValue();
         }
 
         else if (fieldType.isAssignableFrom(Integer.class)) {
             if (fieldValue instanceof String) {
-                return Integer.valueOf((String) fieldValue);
+                return Integer.valueOf((String)fieldValue);
             }
             return ((Number) fieldValue).intValue();
         }
 
         else if (fieldType.isAssignableFrom(Short.class)) {
             if (fieldValue instanceof String) {
-                return Short.valueOf((String) fieldValue);
+                return Short.valueOf((String)fieldValue);
             }
             return ((Number) fieldValue).shortValue();
         }
 
         return fieldValue;
+    }
+
+    private static boolean convertStringToBoolean(String s) {
+        String trim = s.trim();
+        return !trim.equals("") && !trim.equals("0") && !trim.toLowerCase().equals("false");
     }
 
     /**

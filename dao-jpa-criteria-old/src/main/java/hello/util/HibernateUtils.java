@@ -36,7 +36,7 @@ public final class HibernateUtils {
             id = ReflectionUtils.getFieldContent(entity, identifierFieldName);
         }
 
-        return ReflectionUtils.castFieldValue(entity.getClass(), identifierFieldName, id);
+        return ReflectionUtils.castFieldValueByClass(entity.getClass(), identifierFieldName, id);
     }
 
     /**

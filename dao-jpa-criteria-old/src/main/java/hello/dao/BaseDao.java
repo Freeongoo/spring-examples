@@ -35,6 +35,15 @@ public interface BaseDao<T, ID extends Serializable> {
     public List<T> getByProps(Map<String, List<?>> props);
 
     /**
+     * Like {@link #getByProps} but only one field value
+     *
+     * @param fieldName fieldName
+     * @param fieldValue fieldValue
+     * @return list of entities
+     */
+    public List<T> getByProp(String fieldName, Object fieldValue);
+
+    /**
      * When passed empty fieldHolders - return empty list
      * When passed all not exist fields name - return empty list
      *
