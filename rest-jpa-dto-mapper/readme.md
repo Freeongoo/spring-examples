@@ -126,6 +126,41 @@ Using annotations for auto convert Entity to DTO
 - Create abstract controller `AbstractMapperController`
 - Create realization company controller - by extend abstract `CompanyMapperFromAbstractController`
 
+# Custom output data with DTO mapper
+
+For example, consider the `ProductType`, and we want to display the `companyId` and `companyName` of the `Company` 
+when displaying the types of products.
+
+For this we create DTO: `ProductTypeCompanyIdDto`:
+
+```
+public class ProductTypeCompanyIdDto {
+    private Long id;
+    private String name;
+    private Long companyId;
+    private String companyName;
+    // getter and setter
+}
+```
+
+As a result, the `companyId` and `companyName` will be automatically substituted into these fields 
+from the associated `Company` object.
+
+Result:
+```
+    [{
+      "id": 1,
+      "name": "electronics",
+      "companyId": 1,
+      "companyName": "Amazon"
+    }, {
+      "id": 2,
+      "name": "household",
+      "companyId": 1,
+      "companyName": "Amazon"
+    }]
+```
+
 # Testing 
 
 ### DTO by facade
