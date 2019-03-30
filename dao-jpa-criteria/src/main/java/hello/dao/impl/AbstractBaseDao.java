@@ -5,9 +5,7 @@ import hello.container.QueryParams;
 import hello.dao.BaseDao;
 import hello.util.EntityFieldUtils;
 import hello.util.ReflectionUtils;
-import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -16,8 +14,8 @@ import java.io.Serializable;
 import java.util.*;
 
 import static java.util.Collections.singletonList;
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
-import static org.springframework.util.ObjectUtils.isEmpty;
 
 public abstract class AbstractBaseDao<T, ID extends Serializable> implements BaseDao<T, ID> {
 
@@ -98,25 +96,26 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
         Root<T> root = getRoot(criteria);
         criteria.select(root);
 
-        List<Predicate> predicates = new ArrayList<>();
-        props.forEach((fieldName, values) -> createCriteriaByFieldNameAndValues(root, predicates, fieldName, values));
+        List<Predicate> predicates = props.entrySet().stream()
+                .map(e -> getPredicateInByFieldNameAndValues(root, e.getKey(), e.getValue()))
+                .collect(toList());
+
         criteria.where(getCriteriaBuilder().and(predicates.toArray(new Predicate[predicates.size()])));
         return criteria;
     }
 
-    protected void createCriteriaByFieldNameAndValues(Root<T> root, List<Predicate> predicates, String fieldName, List<?> values) {
-        if (values.isEmpty()) return;
+    protected Predicate getPredicateInByFieldNameAndValues(Root<T> root, String fieldName, List<?> values) {
+        if (values.isEmpty()) return null;
 
         if (EntityFieldUtils.isRelationField(fieldName)) {
-            setCriteriaRelationField(root, predicates, fieldName, values);
-            return;
+            return getPredicateInRelationField(root, fieldName, values);
         }
 
         Class<?> fieldType = ReflectionUtils.getFieldType(getPersistentClass(), fieldName);
-        setCriteriaInByValuesWithCast(root, predicates, fieldName, values, fieldType);
+        return getPredicateInByValuesWithCast(root, fieldName, values, fieldType);
     }
 
-    private void setCriteriaRelationField(Root<T> root, List<Predicate> predicates, String fieldName, List<?> values) {
+    private Predicate getPredicateInRelationField(Root<T> root, String fieldName, List<?> values) {
         String relationFieldAlias = EntityFieldUtils.getRelationFieldAlias(fieldName);
         String relationFieldName = EntityFieldUtils.getRelationFieldName(fieldName);
 
@@ -125,24 +124,23 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
 
         Join<T, ?> join = root.join(relationFieldAlias);
 
-        setCriteriaInByValuesByJoinWithCast(join, predicates, relationFieldName, values, relationFieldType);
+        return getPredicateInByValuesByJoinWithCast(join, relationFieldName, values, relationFieldType);
     }
 
-    private void setCriteriaInByValuesByJoinWithCast(Join<T, ?> join, List<Predicate> predicates, String fieldName, List<?> values, Class<?> fieldType) {
+    private Predicate getPredicateInByValuesByJoinWithCast(Join<T, ?> join, String fieldName, List<?> values, Class<?> fieldType) {
         Set<Object> castedValues = getCastedValues(values, fieldType);
         Path<Object> expression = join.get(fieldName);
-        addPredicates(predicates, castedValues, expression);
+        return getPredicateIn(castedValues, expression);
     }
 
-    private void setCriteriaInByValuesWithCast(Root<T> root, List<Predicate> predicates, String fieldName, List<?> values, Class<?> fieldType) {
+    private Predicate getPredicateInByValuesWithCast(Root<T> root, String fieldName, List<?> values, Class<?> fieldType) {
         Set<Object> castedValues = getCastedValues(values, fieldType);
         Path<Object> expression = root.get(fieldName);
-        addPredicates(predicates, castedValues, expression);
+        return getPredicateIn(castedValues, expression);
     }
 
-    private void addPredicates(List<Predicate> predicates, Set<Object> castedValues, Path<Object> expression) {
-        Predicate predicate = expression.in(castedValues);
-        predicates.add(predicate);
+    private Predicate getPredicateIn(Set<Object> castedValues, Path<Object> expression) {
+        return expression.in(castedValues);
     }
 
     private Set<Object> getCastedValues(List<?> values, Class<?> fieldType) {
@@ -153,11 +151,13 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
 
     @Override
     public List<T> getByFields(Collection<FieldHolder> fieldHolders) {
+        //TODO: to do...
         return null;
     }
 
     @Override
     public List<T> universalQuery(Map<String, List<?>> fields, QueryParams queryParams) {
+        //TODO: to do...
         return null;
     }
 }
