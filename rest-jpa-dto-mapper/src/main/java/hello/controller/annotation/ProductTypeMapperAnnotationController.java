@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/mapper-annotation/product-types")
+@RequestMapping(ProductTypeMapperAnnotationController.PATH)
 public class ProductTypeMapperAnnotationController {
+
+    public static final String PATH = "/api/mapper-annotation/product-types";
 
     @Autowired
     private ProductTypeService service;

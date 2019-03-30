@@ -22,7 +22,7 @@ public class ExceptionControllerAdvice {
 
     private void writeResponse(HttpServletResponse response, int code, BaseException e) throws IOException{
         response.setStatus(code);
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
         response.getWriter().write(new ObjectMapper().writeValueAsString(e.getMapForResponse()));
         response.getWriter().flush();
     }

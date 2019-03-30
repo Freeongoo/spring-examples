@@ -21,3 +21,6 @@ spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.H2Dialect
 
 # Liquibase
 spring.liquibase.change-log=classpath:db/liquibase-changelog.xml
+
+# for pretty json output - only for testing
+spring.jackson.serialization.indent_output=true
