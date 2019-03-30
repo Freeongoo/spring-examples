@@ -36,4 +36,88 @@ public class CommentDaoImplTest extends BaseTest {
             assertThat(comment.getPost().getId(), equalTo(1L));
         }
     }
+
+    @Test
+    public void getByProps_WhenId() {
+        Map<String, List<?>> props = new HashMap<>();
+        props.put("id", singletonList(1L));
+        List<Comment> comments = commentDao.getByProps(props);
+
+        assertThat(comments.size(), equalTo(1));
+    }
+
+    @Test
+    public void getByProps_WhenRelationId() {
+        Map<String, List<?>> props = new HashMap<>();
+        props.put("post.id", singletonList(1L));
+        List<Comment> comments = commentDao.getByProps(props);
+
+        assertThat(comments.size(), equalTo(2));
+        for(Comment comment : comments) {
+            assertThat(comment.getPost().getId(), equalTo(1L));
+        }
+    }
+
+    @Test
+    public void getByProps_WhenRelationIds() {
+        Map<String, List<?>> props = new HashMap<>();
+        List<Long> ids = new ArrayList<>();
+        ids.add(1L);
+        ids.add(2L);
+        props.put("post.id", ids);
+        List<Comment> comments = commentDao.getByProps(props);
+
+        assertThat(comments.size(), equalTo(4));
+    }
+
+    @Test
+    public void getByProps_WhenRelationId_WhenIdIsString() {
+        Map<String, List<?>> props = new HashMap<>();
+        props.put("post.id", singletonList("1"));
+        List<Comment> comments = commentDao.getByProps(props);
+
+        assertThat(comments.size(), equalTo(2));
+        for(Comment comment : comments) {
+            assertThat(comment.getPost().getId(), equalTo(1L));
+        }
+    }
+
+    @Test
+    public void getByProps_WhenRelationId_AndName() {
+        Map<String, List<?>> props = new HashMap<>();
+        props.put("post.id", singletonList(1L));
+        props.put("name", singletonList("Comment#1"));
+        List<Comment> comments = commentDao.getByProps(props);
+
+        assertThat(comments.size(), equalTo(1));
+        for(Comment comment : comments) {
+            assertThat(comment.getPost().getId(), equalTo(1L));
+        }
+    }
+
+    @Test
+    public void getByProps_WhenRelationName() {
+        Map<String, List<?>> props = new HashMap<>();
+        props.put("post.name", singletonList("Post#1"));
+        List<Comment> comments = commentDao.getByProps(props);
+
+        assertThat(comments.size(), equalTo(2));
+        for(Comment comment : comments) {
+            assertThat(comment.getPost().getId(), equalTo(1L));
+        }
+    }
+
+    @Test
+    public void getByProps_WhenRelationNamePostAndAuthor() {
+        Map<String, List<?>> props = new HashMap<>();
+        props.put("post.name", singletonList("Post#1"));
+        props.put("author.name", singletonList("Author#1"));
+        List<Comment> comments = commentDao.getByProps(props);
+
+        assertThat(comments.size(), equalTo(1));
+        for(Comment comment : comments) {
+            assertThat(comment.getPost().getId(), equalTo(1L));
+            assertThat(comment.getAuthor().getId(), equalTo(1L));
+        }
+    }
 }

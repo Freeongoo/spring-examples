@@ -3,20 +3,20 @@ package hello.dao.impl;
 import hello.container.FieldHolder;
 import hello.container.QueryParams;
 import hello.dao.BaseDao;
+import hello.util.EntityFieldUtils;
+import hello.util.ReflectionUtils;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.query.Query;
+import org.hibernate.criterion.Restrictions;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
+import static java.util.Collections.singletonList;
+import static java.util.stream.Collectors.toSet;
 import static org.springframework.util.ObjectUtils.isEmpty;
 
 public abstract class AbstractBaseDao<T, ID extends Serializable> implements BaseDao<T, ID> {
@@ -79,12 +79,76 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
 
     @Override
     public List<T> getByProps(Map<String, List<?>> props) {
-        return null;
+        CriteriaQuery<T> criteria = getCriteriaByProps(props);
+
+        return getSession().createQuery(criteria).getResultList();
     }
 
     @Override
     public List<T> getByProp(String fieldName, Object fieldValue) {
-        return null;
+        Map<String, List<?>> mapProps = new HashMap<>();
+        mapProps.put(fieldName, singletonList(fieldValue));
+        return getByProps(mapProps);
+    }
+
+    protected CriteriaQuery<T> getCriteriaByProps(Map<String, List<?>> props) {
+        Objects.requireNonNull(props, "Param 'props' cannot be null, sorry");
+
+        CriteriaQuery<T> criteria = getCriteriaQuery();
+        Root<T> root = getRoot(criteria);
+        criteria.select(root);
+
+        List<Predicate> predicates = new ArrayList<>();
+        props.forEach((fieldName, values) -> createCriteriaByFieldNameAndValues(root, predicates, fieldName, values));
+        criteria.where(getCriteriaBuilder().and(predicates.toArray(new Predicate[predicates.size()])));
+        return criteria;
+    }
+
+    protected void createCriteriaByFieldNameAndValues(Root<T> root, List<Predicate> predicates, String fieldName, List<?> values) {
+        if (values.isEmpty()) return;
+
+        if (EntityFieldUtils.isRelationField(fieldName)) {
+            setCriteriaRelationField(root, predicates, fieldName, values);
+            return;
+        }
+
+        Class<?> fieldType = ReflectionUtils.getFieldType(getPersistentClass(), fieldName);
+        setCriteriaInByValuesWithCast(root, predicates, fieldName, values, fieldType);
+    }
+
+    private void setCriteriaRelationField(Root<T> root, List<Predicate> predicates, String fieldName, List<?> values) {
+        String relationFieldAlias = EntityFieldUtils.getRelationFieldAlias(fieldName);
+        String relationFieldName = EntityFieldUtils.getRelationFieldName(fieldName);
+
+        Class<?> relationFieldClass = ReflectionUtils.getFieldType(getPersistentClass(), relationFieldAlias);
+        Class<?> relationFieldType = ReflectionUtils.getFieldType(relationFieldClass, relationFieldName);
+
+        Join<T, ?> join = root.join(relationFieldAlias);
+
+        setCriteriaInByValuesByJoinWithCast(join, predicates, relationFieldName, values, relationFieldType);
+    }
+
+    private void setCriteriaInByValuesByJoinWithCast(Join<T, ?> join, List<Predicate> predicates, String fieldName, List<?> values, Class<?> fieldType) {
+        Set<Object> castedValues = getCastedValues(values, fieldType);
+        Path<Object> expression = join.get(fieldName);
+        addPredicates(predicates, castedValues, expression);
+    }
+
+    private void setCriteriaInByValuesWithCast(Root<T> root, List<Predicate> predicates, String fieldName, List<?> values, Class<?> fieldType) {
+        Set<Object> castedValues = getCastedValues(values, fieldType);
+        Path<Object> expression = root.get(fieldName);
+        addPredicates(predicates, castedValues, expression);
+    }
+
+    private void addPredicates(List<Predicate> predicates, Set<Object> castedValues, Path<Object> expression) {
+        Predicate predicate = expression.in(castedValues);
+        predicates.add(predicate);
+    }
+
+    private Set<Object> getCastedValues(List<?> values, Class<?> fieldType) {
+        return values.stream()
+                .map(v -> ReflectionUtils.castFieldValueByType(fieldType, v))
+                .collect(toSet());
     }
 
     @Override
@@ -96,6 +160,4 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
     public List<T> universalQuery(Map<String, List<?>> fields, QueryParams queryParams) {
         return null;
     }
-
-
 }
