@@ -11,8 +11,12 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
@@ -132,7 +136,7 @@ public class CommentDaoImplTest extends BaseTest {
     @Test
     public void getByProps_WhenRelationId() {
         Map<String, List<?>> props = new HashMap<>();
-        props.put("post.id", Collections.singletonList(1L));
+        props.put("post.id", singletonList(1L));
         List<Comment> comments = commentDao.getByProps(props);
 
         assertThat(comments.size(), equalTo(2));
@@ -156,7 +160,7 @@ public class CommentDaoImplTest extends BaseTest {
     @Test
     public void getByProps_WhenRelationId_WhenIdIsString() {
         Map<String, List<?>> props = new HashMap<>();
-        props.put("post.id", Collections.singletonList("1"));
+        props.put("post.id", singletonList("1"));
         List<Comment> comments = commentDao.getByProps(props);
 
         assertThat(comments.size(), equalTo(2));
@@ -168,8 +172,8 @@ public class CommentDaoImplTest extends BaseTest {
     @Test
     public void getByProps_WhenRelationId_AndName() {
         Map<String, List<?>> props = new HashMap<>();
-        props.put("post.id", Collections.singletonList(1L));
-        props.put("name", Collections.singletonList("Comment#1"));
+        props.put("post.id", singletonList(1L));
+        props.put("name", singletonList("Comment#1"));
         List<Comment> comments = commentDao.getByProps(props);
 
         assertThat(comments.size(), equalTo(1));
@@ -181,7 +185,7 @@ public class CommentDaoImplTest extends BaseTest {
     @Test
     public void getByProps_WhenRelationName() {
         Map<String, List<?>> props = new HashMap<>();
-        props.put("post.name", Collections.singletonList("Post#1"));
+        props.put("post.name", singletonList("Post#1"));
         List<Comment> comments = commentDao.getByProps(props);
 
         assertThat(comments.size(), equalTo(2));
@@ -193,8 +197,8 @@ public class CommentDaoImplTest extends BaseTest {
     @Test
     public void getByProps_WhenRelationNamePostAndAuthor() {
         Map<String, List<?>> props = new HashMap<>();
-        props.put("post.name", Collections.singletonList("Post#1"));
-        props.put("author.name", Collections.singletonList("Author#1"));
+        props.put("post.name", singletonList("Post#1"));
+        props.put("author.name", singletonList("Author#1"));
         List<Comment> comments = commentDao.getByProps(props);
 
         assertThat(comments.size(), equalTo(1));
@@ -228,7 +232,7 @@ public class CommentDaoImplTest extends BaseTest {
     @Test
     public void universalQuery_WhenFieldByPostId_SortByName_LimitOne() {
         Map<String, List<?>> props = new HashMap<>();
-        props.put("post.id", Collections.singletonList(1L));
+        props.put("post.id", singletonList(1L));
         QueryParams queryParams = QueryParams.of("name", OrderType.DESC, 1, null);
         List<Comment> comments = commentDao.universalQuery(props, queryParams);
 
@@ -241,7 +245,7 @@ public class CommentDaoImplTest extends BaseTest {
     @Test
     public void universalQuery_WhenFieldByPostId_SortById_LimitOne() {
         Map<String, List<?>> props = new HashMap<>();
-        props.put("post.id", Collections.singletonList(1L));
+        props.put("post.id", singletonList(1L));
         QueryParams queryParams = QueryParams.of("id", OrderType.DESC, 1, null);
         List<Comment> comments = commentDao.universalQuery(props, queryParams);
 
@@ -254,7 +258,7 @@ public class CommentDaoImplTest extends BaseTest {
     @Test
     public void universalQuery_WhenFieldByPostId_SortById_WithoutOrderAndLimit() {
         Map<String, List<?>> props = new HashMap<>();
-        props.put("post.id", Collections.singletonList(1L));
+        props.put("post.id", singletonList(1L));
         QueryParams queryParams = QueryParams.of("id", null, null, null);
         List<Comment> comments = commentDao.universalQuery(props, queryParams);
 
@@ -265,7 +269,7 @@ public class CommentDaoImplTest extends BaseTest {
     @Test
     public void universalQuery_WhenFieldByPostId_SortById_WithoutOrder_WithLimitStart() {
         Map<String, List<?>> props = new HashMap<>();
-        props.put("post.id", Collections.singletonList(1L));
+        props.put("post.id", singletonList(1L));
         QueryParams queryParams = QueryParams.of("id", null, 1, 1);
         List<Comment> comments = commentDao.universalQuery(props, queryParams);
 

@@ -7,13 +7,17 @@ import hello.entity.single.Employee;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
-
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 @DatabaseSetup({"/employee.xml"})
 public class EmployeeDaoImplTest extends BaseTest {
@@ -97,7 +101,7 @@ public class EmployeeDaoImplTest extends BaseTest {
     @Test
     public void getByProps_ById_WhenNotExistId() {
         Map<String, List<?>> props = new HashMap<>();
-        props.put("id", Collections.singletonList(-1L));
+        props.put("id", singletonList(-1L));
         List<Employee> employees = employeeDao.getByProps(props);
 
         assertThat(employees.size(), equalTo(0));
@@ -106,7 +110,7 @@ public class EmployeeDaoImplTest extends BaseTest {
     @Test
     public void getByProps_ById() {
         Map<String, List<?>> props = new HashMap<>();
-        props.put("id", Collections.singletonList(1L));
+        props.put("id", singletonList(1L));
         List<Employee> employees = employeeDao.getByProps(props);
 
         assertThat(employees.size(), equalTo(1));
@@ -118,7 +122,7 @@ public class EmployeeDaoImplTest extends BaseTest {
     @Test
     public void getByProps_ById_WhenIdIsString() {
         Map<String, List<?>> props = new HashMap<>();
-        props.put("id", Collections.singletonList("1"));
+        props.put("id", singletonList("1"));
         List<Employee> employees = employeeDao.getByProps(props);
 
         assertThat(employees.size(), equalTo(1));
@@ -130,7 +134,7 @@ public class EmployeeDaoImplTest extends BaseTest {
     @Test
     public void getByProps_ById_WhenIdIsDouble() {
         Map<String, List<?>> props = new HashMap<>();
-        props.put("id", Collections.singletonList(1.));
+        props.put("id", singletonList(1.));
         List<Employee> employees = employeeDao.getByProps(props);
 
         assertThat(employees.size(), equalTo(1));
@@ -142,7 +146,7 @@ public class EmployeeDaoImplTest extends BaseTest {
     @Test
     public void getByProps_ByName() {
         Map<String, List<?>> props = new HashMap<>();
-        props.put("name", Arrays.asList("John", "NotExistName"));
+        props.put("name", asList("John", "NotExistName"));
         List<Employee> employees = employeeDao.getByProps(props);
 
         assertThat(employees.size(), equalTo(1));
