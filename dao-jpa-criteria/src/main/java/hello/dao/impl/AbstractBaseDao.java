@@ -6,6 +6,7 @@ import hello.dao.BaseDao;
 import hello.util.EntityFieldUtils;
 import hello.util.ReflectionUtils;
 import org.hibernate.Session;
+import org.springframework.util.Assert;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -13,9 +14,11 @@ import javax.persistence.criteria.*;
 import java.io.Serializable;
 import java.util.*;
 
+import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
+import static org.springframework.util.ObjectUtils.isEmpty;
 
 public abstract class AbstractBaseDao<T, ID extends Serializable> implements BaseDao<T, ID> {
 
@@ -151,8 +154,78 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
 
     @Override
     public List<T> getByFields(Collection<FieldHolder> fieldHolders) {
-        //TODO: to do...
-        return null;
+        Objects.requireNonNull(fieldHolders, "Param 'fieldHolders' cannot be null, sorry");
+
+        if (isEmpty(fieldHolders)) {
+            return emptyList();
+        }
+
+        CriteriaQuery<T> criteria = getCriteriaQuery();
+        Root<T> root = getRoot(criteria);
+        criteria.select(root);
+
+        List<Predicate> predicates = fieldHolders.stream()
+                .map(f -> getPredicateEqByFieldHolder(root, f))
+                .collect(toList());
+
+        criteria.where(getCriteriaBuilder().and(predicates.toArray(new Predicate[predicates.size()])));
+        return getSession().createQuery(criteria).getResultList();
+    }
+
+    private Predicate getPredicateEqByFieldHolder(Root<T> root, FieldHolder fieldHolder) {
+        Assert.notNull(fieldHolder.getName(), "Field name cannot be null");
+
+        if (isEmpty(fieldHolder.getRelationFieldName())) {
+            return getPredicateEqByFieldWithCast(root, fieldHolder);
+        }
+
+        return getPredicateEqByRelationField(root, fieldHolder);
+    }
+
+    private Predicate getPredicateEqByFieldWithCast(Root<T> root, FieldHolder fieldHolder) {
+        return getPredicateEqByFieldWithCast(root, fieldHolder.getName(), fieldHolder.getValue());
+    }
+
+    protected Predicate getPredicateEqByFieldWithCast(Root<T> root, String fieldName, Object fieldValue) {
+        Object fieldValueCasted = getCastedValue(fieldName, fieldValue);
+        return getPredicateEqByField(root, fieldName, fieldValueCasted);
+    }
+
+    private Object getCastedValue(String fieldName, Object fieldValue) {
+        if (fieldValue == null) {
+            return null;
+        }
+
+        return ReflectionUtils.castFieldValueByClass(getPersistentClass(), fieldName, fieldValue);
+    }
+
+    protected Predicate getPredicateEqByRelationField(Root<T> root, String fieldName, Object fieldValue, String relationFieldName) {
+        Class<?> relationFieldClass = ReflectionUtils.getFieldType(getPersistentClass(), relationFieldName);
+        Object valueFromRelationObject = ReflectionUtils.castFieldValueByClass(relationFieldClass, fieldName, fieldValue);
+
+        Join<T, ?> join = root.join(relationFieldName);
+
+        return getPredicateEqByFieldByJoin(join, fieldName, valueFromRelationObject);
+    }
+
+    /**
+     * Important! equals without cast type - do the cast yourself
+     */
+    protected Predicate getPredicateEqByFieldByJoin(Join<T, ?> join, String fieldName, Object fieldValue) {
+        Path<Object> path = join.get(fieldName);
+        return getCriteriaBuilder().equal(path, fieldValue);
+    }
+
+    /**
+     * Important! equals without cast type - do the cast yourself
+     */
+    protected Predicate getPredicateEqByField(Root<T> root, String fieldName, Object fieldValue) {
+        Path<Object> path = root.get(fieldName);
+        return getCriteriaBuilder().equal(path, fieldValue);
+    }
+
+    private Predicate getPredicateEqByRelationField(Root<T> root, FieldHolder fieldHolder) {
+        return getPredicateEqByRelationField(root, fieldHolder.getName(), fieldHolder.getValue(), fieldHolder.getRelationFieldName());
     }
 
     @Override

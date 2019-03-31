@@ -3,8 +3,6 @@ package hello.dao.oneToMany.impl;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import hello.BaseTest;
 import hello.container.FieldHolder;
-import hello.container.OrderType;
-import hello.container.QueryParams;
 import hello.dao.oneToMany.CommentDao;
 import hello.entity.oneToMany.Comment;
 import org.junit.Test;
@@ -119,5 +117,101 @@ public class CommentDaoImplTest extends BaseTest {
             assertThat(comment.getPost().getId(), equalTo(1L));
             assertThat(comment.getAuthor().getId(), equalTo(1L));
         }
+    }
+
+    @Test
+    public void getByFields_WhenEmptyFields() {
+        ArrayList<FieldHolder> fields = new ArrayList<>();
+        List<Comment> comments = commentDao.getByFields(fields);
+
+        assertThat(comments.size(), equalTo(0));
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void getByFields_WhenPassedNull() {
+        List<Comment> comments = commentDao.getByFields(null);
+    }
+
+    @Test
+    public void getByFields_ByName_WhenNotExist() {
+        ArrayList<FieldHolder> fields = new ArrayList<>();
+        fields.add(new FieldHolder("name", "NotExistName"));
+        List<Comment> comments = commentDao.getByFields(fields);
+
+        assertThat(comments.size(), equalTo(0));
+    }
+
+    @Test(expected = InvalidDataAccessApiUsageException.class)
+    public void getByFields_ByName_WhenNotExistFieldName() {
+        ArrayList<FieldHolder> fields = new ArrayList<>();
+        fields.add(new FieldHolder("nameNotExist", "Comment#1"));
+        List<Comment> comments = commentDao.getByFields(fields);
+
+        assertThat(comments.size(), equalTo(0));
+    }
+
+    @Test
+    public void getByFields_ById() {
+        ArrayList<FieldHolder> fields = new ArrayList<>();
+        fields.add(new FieldHolder("id", 1));
+        List<Comment> comments = commentDao.getByFields(fields);
+
+        assertThat(comments.size(), equalTo(1));
+        assertThat(comments, containsInAnyOrder(
+                hasProperty("id", is(1L))
+        ));
+    }
+
+    @Test
+    public void getByFields_ById_WheIdIsString() {
+        ArrayList<FieldHolder> fields = new ArrayList<>();
+        fields.add(new FieldHolder("id", "1"));
+        List<Comment> comments = commentDao.getByFields(fields);
+
+        assertThat(comments.size(), equalTo(1));
+        assertThat(comments, containsInAnyOrder(
+                hasProperty("id", is(1L))
+        ));
+    }
+
+    @Test
+    public void getByFields_ByNameAndPostId_WhenExist() {
+        ArrayList<FieldHolder> fields = new ArrayList<>();
+        fields.add(new FieldHolder("name", "Comment#1"));
+        fields.add(new FieldHolder("id", 1L, "post"));
+        List<Comment> comments = commentDao.getByFields(fields);
+
+        assertThat(comments.size(), equalTo(1));
+        assertThat(comments, containsInAnyOrder(
+                hasProperty("name", is("Comment#1"))
+        ));
+    }
+
+    @Test
+    public void getByFields_ByPostIdAndAuthorId_WhenExist() {
+        ArrayList<FieldHolder> fields = new ArrayList<>();
+        fields.add(new FieldHolder("id", 1L, "post"));
+        fields.add(new FieldHolder("id", 1L, "author"));
+        List<Comment> comments = commentDao.getByFields(fields);
+
+        assertThat(comments.size(), equalTo(1));
+        assertThat(comments, containsInAnyOrder(
+                hasProperty("name", is("Comment#1"))
+        ));
+    }
+
+    @Test
+    public void getByFields_ByPostIdNameAndAuthorIdName_WhenExist() {
+        ArrayList<FieldHolder> fields = new ArrayList<>();
+        fields.add(new FieldHolder("id", 1L, "post"));
+        fields.add(new FieldHolder("name", "Post#1", "post"));
+        fields.add(new FieldHolder("id", 1L, "author"));
+        fields.add(new FieldHolder("name", "Author#1", "author"));
+        List<Comment> comments = commentDao.getByFields(fields);
+
+        assertThat(comments.size(), equalTo(1));
+        assertThat(comments, containsInAnyOrder(
+                hasProperty("name", is("Comment#1"))
+        ));
     }
 }
