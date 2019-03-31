@@ -1,11 +1,14 @@
 package hello.dao.impl;
 
 import hello.container.FieldHolder;
+import hello.container.OrderType;
 import hello.container.QueryParams;
 import hello.dao.BaseDao;
 import hello.util.EntityFieldUtils;
 import hello.util.ReflectionUtils;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 import org.springframework.util.Assert;
 
 import javax.persistence.EntityManager;
@@ -16,8 +19,7 @@ import java.util.*;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
-import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
+import static java.util.stream.Collectors.*;
 import static org.springframework.util.ObjectUtils.isEmpty;
 
 public abstract class AbstractBaseDao<T, ID extends Serializable> implements BaseDao<T, ID> {
@@ -99,6 +101,10 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
         Root<T> root = getRoot(criteria);
         criteria.select(root);
 
+        return getCriteriaByPropsByRoot(props, criteria, root);
+    }
+
+    private CriteriaQuery<T> getCriteriaByPropsByRoot(Map<String, List<?>> props, CriteriaQuery<T> criteria, Root<T> root) {
         List<Predicate> predicates = props.entrySet().stream()
                 .map(e -> getPredicateInByFieldNameAndValues(root, e.getKey(), e.getValue()))
                 .collect(toList());
@@ -230,7 +236,37 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
 
     @Override
     public List<T> universalQuery(Map<String, List<?>> fields, QueryParams queryParams) {
-        //TODO: to do...
-        return null;
+        Objects.requireNonNull(fields, "Param 'props' cannot be null, sorry");
+
+        CriteriaQuery<T> criteria = getCriteriaQuery();
+        Root<T> root = getRoot(criteria);
+        criteria.select(root);
+
+        CriteriaQuery<T> criteriaByProps = getCriteriaByPropsByRoot(fields, criteria, root);
+
+        Query<T> queryByQueryParams = getQueryByQueryParams(root, criteriaByProps, queryParams);
+
+        return queryByQueryParams.getResultList();
+    }
+
+    private Query<T> getQueryByQueryParams(Root<T> root, CriteriaQuery<T> criteria, QueryParams queryParams) {
+        if (queryParams.getSortBy() != null) {
+            Path<Object> path = root.get(queryParams.getSortBy());
+            if (queryParams.getOrderType() == null || queryParams.getOrderType().equals(OrderType.ASC)) {
+                criteria.orderBy(getCriteriaBuilder().asc(path));
+            } else if (queryParams.getOrderType().equals(OrderType.DESC)) {
+                criteria.orderBy(getCriteriaBuilder().desc(path));
+            }
+        }
+
+        Query<T> query = getSession().createQuery(criteria);
+
+        if (queryParams.getStart() != null)
+            query.setFirstResult(queryParams.getStart());
+
+        if (queryParams.getLimit() != null)
+            query.setMaxResults(queryParams.getLimit());
+
+        return query;
     }
 }
