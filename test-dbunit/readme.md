@@ -123,3 +123,14 @@ You must config `@DatabaseSetup`:
         assertEquals(6, authors.size());
     }
 ```
+
+# Important! When use @MockBean
+
+config must be:
+```
+@TestExecutionListeners(value = {
+        TransactionalTestExecutionListener.class,
+        DependencyInjectionTestExecutionListener.class,
+        DbUnitTestExecutionListener.class
+}, mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS)
+```
