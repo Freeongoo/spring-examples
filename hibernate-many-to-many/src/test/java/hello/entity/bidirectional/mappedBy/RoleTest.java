@@ -4,6 +4,7 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import hello.AbstractJpaTest;
 import org.junit.Test;
 
+import javax.persistence.PersistenceException;
 import java.util.Set;
 
 import static java.util.Collections.singleton;
@@ -76,5 +77,43 @@ public class RoleTest extends AbstractJpaTest {
 
         Role roleFromDb = entityManager.persistFlushFind(role);
         assertThat(roleFromDb.getUsers().size(), equalTo(1));
+    }
+
+    @Test(expected = PersistenceException.class)
+    public void deleteRole_ShouldThrowException() {
+        Role role = entityManager.find(Role.class, 1L);
+        entityManager.remove(role);
+        flushAndClean();
+    }
+
+    @Test
+    public void deleteRole_WhenBeforeDeleteAllRelationsUsers_ShouldBeOk() {
+        Role role = entityManager.find(Role.class, 1L);
+        Set<User> users = role.getUsers();
+        users.forEach(u -> entityManager.remove(u));
+
+        entityManager.remove(role);
+        flushAndClean();
+
+        Role roleFromDb = entityManager.find(Role.class, 1L);
+        assertThat(roleFromDb, equalTo(null));
+    }
+
+    @Test
+    public void deleteRole_WhenBeforeDeleteAllRelations_ShouldBeOk() {
+        Role role = entityManager.find(Role.class, 1L);
+        Set<User> users = role.getUsers();
+        // delete only relations not users
+        users.forEach(u -> {
+            Set<Role> roles = u.getRoles();
+            roles.remove(role);
+            u.setRoles(roles);
+        });
+
+        entityManager.remove(role);
+        flushAndClean();
+
+        Role roleFromDb = entityManager.find(Role.class, 1L);
+        assertThat(roleFromDb, equalTo(null));
     }
 }

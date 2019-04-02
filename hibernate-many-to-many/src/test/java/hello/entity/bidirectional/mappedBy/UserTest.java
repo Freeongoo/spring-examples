@@ -84,4 +84,22 @@ public class UserTest extends AbstractJpaTest {
         User userFromDb = entityManager.persistFlushFind(user);
         assertThat(userFromDb.getRoles().size(), equalTo(1));
     }
+
+    @Test
+    public void deleteUser_ShouldRelationDeleted() {
+        User user = entityManager.find(User.class, 1L);
+        entityManager.remove(user);
+        flushAndClean();
+
+        // check than role not deleted with user
+        Role role = entityManager.find(Role.class, 1L);
+        assertThat(role, is(notNullValue()));
+
+        // check removed relation
+        Set<User> users = role.getUsers();
+        assertThat(users.size(), equalTo(1));
+        assertThat(users, containsInAnyOrder(
+                hasProperty("id", is(2L))
+        ));
+    }
 }
