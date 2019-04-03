@@ -1,28 +1,21 @@
 package hello.dao.impl;
 
-import hello.container.FieldHolder;
-import hello.container.OrderType;
-import hello.container.QueryParams;
+import hello.container.*;
 import hello.dao.BaseDao;
+import hello.service.CriteriaAliasService;
 import hello.util.EntityFieldUtils;
 import hello.util.ReflectionUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
@@ -35,6 +28,9 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
 
     @PersistenceContext
     private EntityManager em;
+
+    @Autowired
+    private CriteriaAliasService criteriaAliasService;
 
     protected Session getSession() {
         return em.unwrap(Session.class);
@@ -90,16 +86,24 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
         Objects.requireNonNull(props, "Param 'props' cannot be null, sorry");
 
         Criteria criteria = createEntityCriteria();
-        Set<String> aliasStore = new HashSet<>();
-        props.forEach((fieldName, values) -> createCriteriaByFieldNameAndValues(criteria, aliasStore, fieldName, values));
+
+        Set<String> criteriaAlias = criteriaAliasService.getCriteriaAlias(props);
+        setCriteriaAlias(criteria, criteriaAlias);
+
+        props.forEach((fieldName, values) -> createCriteriaByFieldNameAndValues(criteria, fieldName, values));
         return criteria;
     }
 
-    protected void createCriteriaByFieldNameAndValues(Criteria criteria, Set<String> aliasStore, String fieldName, List<?> values) {
+    private void setCriteriaAlias(Criteria criteria, Set<String> criteriaAlias) {
+        if (isEmpty(criteriaAlias)) return;
+        criteriaAlias.forEach(a -> criteria.createAlias(a, a));
+    }
+
+    protected void createCriteriaByFieldNameAndValues(Criteria criteria, String fieldName, List<?> values) {
         if (values.isEmpty()) return;
 
         if (EntityFieldUtils.isRelationField(fieldName)) {
-            setCriteriaRelationField(criteria, aliasStore, fieldName, values);
+            setCriteriaRelationField(criteria, fieldName, values);
             return;
         }
 
@@ -107,10 +111,9 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
         setCriteriaInByValuesWithCast(criteria, fieldName, values, fieldType);
     }
 
-    private void setCriteriaRelationField(Criteria criteria, Set<String> aliasStore, String fieldName, List<?> values) {
+    private void setCriteriaRelationField(Criteria criteria, String fieldName, List<?> values) {
         String relationFieldAlias = EntityFieldUtils.getRelationFieldAlias(fieldName);
         String relationFieldName = EntityFieldUtils.getRelationFieldName(fieldName);
-        setCriteriaWithAliasIfNeeded(criteria, aliasStore, relationFieldAlias);
 
         Class<?> relationFieldClass = ReflectionUtils.getFieldType(getPersistentClass(), relationFieldAlias);
         Class<?> relationFieldType = ReflectionUtils.getFieldType(relationFieldClass, relationFieldName);
@@ -135,15 +138,18 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
         }
 
         Criteria criteria = createEntityCriteria();
-        Set<String> aliasStore = new HashSet<>();
+
+        Set<String> criteriaAlias = criteriaAliasService.getCriteriaAlias(fieldHolders);
+        setCriteriaAlias(criteria, criteriaAlias);
+
         for (FieldHolder fieldHolder : fieldHolders) {
-            criteria = getCriteriaByFieldHolder(criteria, aliasStore, fieldHolder);
+            criteria = getCriteriaByFieldHolder(criteria, fieldHolder);
         }
 
         return criteria.list();
     }
 
-    private Criteria getCriteriaByFieldHolder(Criteria criteria, Set<String> aliasStore, FieldHolder fieldHolder) {
+    private Criteria getCriteriaByFieldHolder(Criteria criteria, FieldHolder fieldHolder) {
         Assert.notNull(fieldHolder.getName(), "Field name cannot be null");
 
         if (isEmpty(fieldHolder.getRelationFieldName())) {
@@ -151,17 +157,9 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
             return criteria;
         }
 
-        setCriteriaWithAliasIfNeeded(criteria, aliasStore, fieldHolder.getRelationFieldName());
         setCriteriaEqByRelationField(criteria, fieldHolder);
 
         return criteria;
-    }
-
-    private void setCriteriaWithAliasIfNeeded(Criteria criteria, Set<String> aliasStore, String relationFieldAlias) {
-        if (!aliasStore.contains(relationFieldAlias)) {
-            criteria = criteria.createAlias(relationFieldAlias, relationFieldAlias);
-            aliasStore.add(relationFieldAlias);
-        }
     }
 
     @Override
@@ -193,8 +191,8 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
     /**
      * Important! equals without cast type - do the cast yourself
      *
-     * @param criteria criteria
-     * @param fieldName fieldName
+     * @param criteria   criteria
+     * @param fieldName  fieldName
      * @param fieldValue fieldValue
      */
     protected void setCriteriaEqByField(Criteria criteria, String fieldName, Object fieldValue) {
@@ -206,24 +204,33 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
     }
 
     protected Criteria setCriteriaEqByFieldWithCast(Criteria criteria, String fieldName, Object fieldValue) {
-        Object fieldValueCasted;
-        if (fieldValue == null) {
-            fieldValueCasted = null;
-        } else {
-            fieldValueCasted = ReflectionUtils.castFieldValueByClass(getPersistentClass(), fieldName, fieldValue);
-        }
+        Object fieldValueCasted = getCastedFieldValue(fieldName, fieldValue);
 
         criteria.add(Restrictions.eq(fieldName, fieldValueCasted));
         return criteria;
     }
 
     /**
+     * Important return null - for correct query for criteria
+     *
+     * @param fieldName  fieldName
+     * @param fieldValue fieldValue
+     * @return Object or null
+     */
+    private Object getCastedFieldValue(String fieldName, Object fieldValue) {
+        if (fieldValue == null) {
+            return null;
+        }
+        return ReflectionUtils.castFieldValueByClass(getPersistentClass(), fieldName, fieldValue);
+    }
+
+    /**
      * Important! Before use, you must add an alias in the Criteria for relation field
      * but except for the field "id" - not need create alias
      *
-     * @param criteria criteria
-     * @param fieldName fieldName
-     * @param fieldValue fieldValue
+     * @param criteria          criteria
+     * @param fieldName         fieldName
+     * @param fieldValue        fieldValue
      * @param relationFieldName relationFieldName
      * @return Criteria
      */
@@ -239,8 +246,8 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
     }
 
     /**
-     * @param criteria criteria
-     * @param idValue idValue
+     * @param criteria          criteria
+     * @param idValue           idValue
      * @param relationFieldName relationFieldName
      */
     protected void setCriteriaEqByRelationId(Criteria criteria, Object idValue, String relationFieldName) {
