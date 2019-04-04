@@ -1,0 +1,12 @@
+<dataset>
+    <Author id="1" name="Author#1"/>
+    <Author id="2" name="Author#2"/>
+
+    <Book id="1" name="Book#1"/>
+    <Book id="2" name="Book#2"/>
+
+    <author_book author_id="1" book_id="1" />
+    <author_book author_id="1" book_id="2" />
+    <author_book author_id="2" book_id="1" />
+    <author_book author_id="2" book_id="2" />
+</dataset>
