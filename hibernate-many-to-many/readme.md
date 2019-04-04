@@ -22,7 +22,15 @@ only when the list is assigned by the relationship owner (User)
 
 Where `Book` and `Author` is owners of relations.
 
-it is important to understand that in this case, 
+It is important to understand that in this case, 
 when each entity is the owner of the relationship, 
 then to create a relation, it is enough to add collections to one of them. 
 If you try to add relations at once in two entities, an exception will be thrown.
+
+### Bidirectional mappedBy (with all cascade)
+
+`/src/main/java/hello/entity/bidirectional/withCascade`
+
+The good news is that exceptions will never be generated.
+Relations is induced only by the relation owner, 
+but unlike from without cascade saves automatically depends not persistent object
