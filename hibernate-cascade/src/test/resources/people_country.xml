@@ -1,0 +1,12 @@
+<dataset>
+    <People id="1" name="People#1"/>
+    <People id="2" name="People#2"/>
+
+    <Country id="1" name="Country#1"/>
+    <Country id="2" name="Country#2"/>
+
+    <country_people people_id="1" country_id="1" />
+    <country_people people_id="1" country_id="2" />
+    <country_people people_id="2" country_id="1" />
+    <country_people people_id="2" country_id="2" />
+</dataset>
