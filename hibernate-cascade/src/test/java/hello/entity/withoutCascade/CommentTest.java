@@ -12,7 +12,7 @@ import static org.junit.Assert.assertThat;
 public class CommentTest extends AbstractJpaTest {
 
     @Test
-    public void deleteComment() {
+    public void deleteComment_ShouldBeDeleted() {
         Comment comment = entityManager.find(Comment.class, 1L);
         entityManager.remove(comment);
 
@@ -21,12 +21,12 @@ public class CommentTest extends AbstractJpaTest {
         Comment commentAfterDelete = entityManager.find(Comment.class, 1L);
         assertThat(commentAfterDelete, equalTo(null));
 
-        Post post = entityManager.find(Post.class, 1L);
-        assertThat(post.getComments().size(), equalTo(1));
+        Post post1 = entityManager.find(Post.class, 1L);
+        assertThat(post1.getComments().size(), equalTo(1));
     }
 
     @Test
-    public void setCommentNewPost() {
+    public void setCommentNewPost_ShouldBeAdded_BecauseCommentIsOwnOfRelations() {
         Comment comment5 = entityManager.find(Comment.class, 5L); // without relation with Post
         Post post = entityManager.find(Post.class, 1L);
 

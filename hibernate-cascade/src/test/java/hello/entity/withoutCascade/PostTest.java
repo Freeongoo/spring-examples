@@ -32,7 +32,7 @@ public class PostTest extends AbstractJpaTest {
     }
 
     @Test
-    public void removePost_WhenBeforeRemoveLinkDependenceComments() {
+    public void removePost_WhenBeforeRemoveLinkDependenceComments_ShouldBeRemovedOnlyRelations() {
         Post post = entityManager.find(Post.class, 1L);
 
         // remove only link to parent and persist
@@ -52,7 +52,7 @@ public class PostTest extends AbstractJpaTest {
     }
 
     @Test
-    public void removePost_WhenBeforeRemoveDependenceComments() {
+    public void removePost_WhenBeforeRemoveDependenceComments_ShouldBeRemovedObjects() {
         Post post = entityManager.find(Post.class, 1L);
 
         // remove post children's
@@ -70,7 +70,7 @@ public class PostTest extends AbstractJpaTest {
     }
 
     @Test
-    public void tryDeletePostDependenciesByCleanOnlyCollections() {
+    public void tryDeletePostDependenciesByCleanOnlyCollections_ShouldBeNothingDeleted() {
         Post post = entityManager.find(Post.class, 1L);
 
         post.setComments(null);
@@ -93,7 +93,7 @@ public class PostTest extends AbstractJpaTest {
     }
 
     @Test
-    public void tryAddToPostNewAccount_WhenOnlySetInCollection() {
+    public void tryAddToPostNewAccount_WhenOnlySetInCollection_ShouldBeNothingAdded() {
         Comment comment5 = entityManager.find(Comment.class, 5L); // without relation with Post
         Post post = entityManager.find(Post.class, 1L);
 
@@ -112,7 +112,7 @@ public class PostTest extends AbstractJpaTest {
     }
 
     @Test
-    public void tryAddToPostNewAccount_WhenSetParentObjectForNewDeps() {
+    public void tryAddToPostNewAccount_WhenSetParentObjectForNewDeps_ShouldBeAdded() {
         Comment comment5 = entityManager.find(Comment.class, 5L); // without relation with Post
         Post post = entityManager.find(Post.class, 1L);
 

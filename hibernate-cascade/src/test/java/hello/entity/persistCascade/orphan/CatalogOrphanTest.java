@@ -2,8 +2,6 @@ package hello.entity.persistCascade.orphan;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import hello.AbstractJpaTest;
-import hello.entity.withoutCascade.Comment;
-import hello.entity.withoutCascade.Post;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -11,8 +9,13 @@ import org.junit.rules.ExpectedException;
 import javax.persistence.PersistenceException;
 
 import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
+/**
+ * When `mappedBy = "client", orphanRemoval = true` - nothing difference when only
+ * `mappedBy = "client", cascade = CascadeType.REMOVE`
+ * except for the situation when we can not directly pass to the null collection
+ */
 @DatabaseSetup("/persistCascade/orphan/catalog_good_orphan.xml")
 public class CatalogOrphanTest extends AbstractJpaTest {
 
