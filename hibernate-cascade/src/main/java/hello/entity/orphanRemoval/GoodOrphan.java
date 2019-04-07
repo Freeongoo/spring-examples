@@ -1,4 +1,4 @@
-package hello.entity.persistCascade.orphan;
+package hello.entity.orphanRemoval;
 
 import hello.entity.AbstractBaseEntity;
 

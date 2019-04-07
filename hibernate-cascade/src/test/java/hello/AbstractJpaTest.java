@@ -13,7 +13,7 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
 @RunWith(SpringRunner.class)
-@DataJpaTest()
+@DataJpaTest
 @TestPropertySource(locations="/application-test.properties")
 @TestExecutionListeners({
         TransactionalTestExecutionListener.class,

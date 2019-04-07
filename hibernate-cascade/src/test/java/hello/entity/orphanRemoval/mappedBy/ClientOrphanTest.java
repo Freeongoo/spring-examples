@@ -1,4 +1,4 @@
-package hello.entity.removeCascade.orphan;
+package hello.entity.orphanRemoval.mappedBy;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import hello.AbstractJpaTest;
@@ -7,11 +7,10 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import javax.persistence.PersistenceException;
-
 import java.util.List;
 
 import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 /**
  * When `mappedBy = "client", orphanRemoval = true` - nothing difference when only
@@ -62,7 +61,6 @@ public class ClientOrphanTest extends AbstractJpaTest {
     @Test
     public void tryDeleteClientDependenciesByCleanOnlyCollections_WhenSetNullCollections_ShouldThrowException() {
         this.thrown.expect(PersistenceException.class);
-        this.thrown.expectMessage("org.hibernate.HibernateException: A collection with cascade=\"all-delete-orphan\" was no longer referenced by the owning entity instance: hello.entity.removeCascade.orphan.ClientOrphan.accountOrphanList");
 
         ClientOrphan ClientOrphan = entityManager.find(ClientOrphan.class, 1L);
 

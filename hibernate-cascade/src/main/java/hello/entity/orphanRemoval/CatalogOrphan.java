@@ -1,8 +1,7 @@
-package hello.entity.persistCascade.orphan;
+package hello.entity.orphanRemoval;
 
 import hello.entity.AbstractBaseEntity;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -12,7 +11,7 @@ import java.util.List;
 @Table(name = "catalog_orphan")
 public class CatalogOrphan extends AbstractBaseEntity<Long> {
 
-    @OneToMany(mappedBy = "catalogOrphan", cascade = CascadeType.PERSIST, orphanRemoval = true)
+    @OneToMany(orphanRemoval = true)
     private List<GoodOrphan> goodOrphans;
 
     public List<GoodOrphan> getGoodOrphans() {

@@ -1,4 +1,4 @@
-package hello.entity.removeCascade.orphan;
+package hello.entity.orphanRemoval.mappedBy;
 
 import hello.entity.AbstractBaseEntity;
 
