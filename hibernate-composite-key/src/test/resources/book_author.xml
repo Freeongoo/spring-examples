@@ -1,0 +1,11 @@
+<dataset>
+    <author
+            id="1"
+            name="Author#1"
+    />
+    <book
+            id="RTFG-4323-SDFE-1212"
+            author_id="1"
+            name="Book#1"
+    />
+</dataset>

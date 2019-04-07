@@ -1,4 +1,4 @@
-package hello.entity.composite;
+package hello.entity.composite.simpleFields;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;

@@ -1,4 +1,4 @@
-package hello.entity.composite;
+package hello.entity.composite.simpleFields;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import hello.AbstractJpaTest;

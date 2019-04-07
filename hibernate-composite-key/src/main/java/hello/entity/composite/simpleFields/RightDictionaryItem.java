@@ -1,4 +1,4 @@
-package hello.entity.composite;
+package hello.entity.composite.simpleFields;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
