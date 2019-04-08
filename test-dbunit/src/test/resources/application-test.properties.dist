@@ -2,9 +2,9 @@
 spring.h2.console.enabled=true
 
 # ===============================
-# DB
+# DB H2
 # ===============================
-spring.datasource.url=jdbc:h2:mem:testdb;MODE=MySQL
+spring.datasource.url=jdbc:h2:mem:testdb;MODE=MySQL;DB_CLOSE_ON_EXIT=false
 spring.datasource.driverClassName=org.h2.Driver
 
 # ===============================
@@ -14,7 +14,7 @@ spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.MySQL5InnoDBDial
 spring.jpa.properties.hibernate.id.new_generator_mappings = false
 spring.jpa.properties.hibernate.format_sql = true
 spring.jpa.properties.hibernate.use_sql_comments=true
-spring.jpa.hibernate.ddl-auto = create-drop
+spring.jpa.hibernate.ddl-auto = create
 
 # ===============================
 # Logging sql and params

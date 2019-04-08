@@ -43,19 +43,19 @@ public class EmployeeRepositoryFromAbstractTest extends AbstractTest {
         expected.setId(1L);
 
         // when
-        Employee actual = employeeRepository.findByName("John");
+        Optional<Employee> actual = employeeRepository.findByName("John");
 
         // then
-        assertThat(actual, equalTo(expected));
+        assertThat(actual, equalTo(Optional.of(expected)));
     }
 
     @Test
     public void findByName_WhenNotExist_ShouldBeNull() {
         // when
-        Employee actual = employeeRepository.findByName("NotExist");
+        Optional<Employee> actual = employeeRepository.findByName("NotExist");
 
         // then
-        assertNull(actual);
+        assertThat(actual, equalTo(Optional.empty()));
     }
 
     @Test

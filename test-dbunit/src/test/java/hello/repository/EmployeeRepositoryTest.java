@@ -8,6 +8,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestExecutionListeners;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
@@ -17,6 +18,7 @@ import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
@@ -31,6 +33,7 @@ import static org.junit.Assert.*;
         DbUnitTestExecutionListener.class
 })
 @Transactional
+@TestPropertySource(locations="/application-test.properties")
 public class EmployeeRepositoryTest {
 
     @PersistenceContext
@@ -46,19 +49,19 @@ public class EmployeeRepositoryTest {
         expected.setId(1L);
 
         // when
-        Employee actual = employeeRepository.findByName("John");
+        Optional<Employee> actual = employeeRepository.findByName("John");
 
         // then
-        assertThat(actual, equalTo(expected));
+        assertThat(actual, equalTo(Optional.of(expected)));
     }
 
     @Test
     public void findByName_WhenNotExist_ShouldBeNull() {
         // when
-        Employee actual = employeeRepository.findByName("NotExist");
+        Optional<Employee> actual = employeeRepository.findByName("NotExist");
 
         // then
-        assertNull(actual);
+        assertThat(actual, equalTo(Optional.empty()));
     }
 
     @Test

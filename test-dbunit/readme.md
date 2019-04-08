@@ -1,5 +1,13 @@
 # Testing Spring Boot 2.x with DBUnit
 
+## Configuration
+
+For main and test dirs:
+```
+cp application.properties.dist application.properties
+cp application-test.properties.dist application-test.properties
+```
+
 ## Dependencies
 
 1. Add dependencies for testing spring:
