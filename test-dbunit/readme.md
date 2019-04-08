@@ -69,6 +69,62 @@
 })
 ```
 
+## How to configure data insertion in an abstract base test file
+
+To do this, you need to manually parse the DBUnit file and insert it into the setUp method in test abstract file.
+
+Example abstract base test file for all tests:
+```
+    @RunWith(SpringRunner.class)
+    @SpringBootTest
+    @TestExecutionListeners({
+            TransactionalTestExecutionListener.class,
+            DependencyInjectionTestExecutionListener.class,
+            DbUnitTestExecutionListener.class
+    })
+    @Transactional
+    public abstract class AbstractTest {
+    
+        protected DataSourceDatabaseTester dataSourceDatabaseTester;
+    
+        @Autowired
+        protected DataSource dataSource;
+    
+        @Before
+        public void setUp() throws Exception {
+            dataSourceDatabaseTester = new DataSourceDatabaseTester(dataSource);
+            IDataSet dataSet = new FlatXmlDataSet(getClass().getResource("/global-data.xml"));
+            dataSourceDatabaseTester.setDataSet(dataSet);
+            dataSourceDatabaseTester.onSetup();
+        }
+    }
+```
+
+Using in some test:
+```
+    @DatabaseSetup(value = "/data.xml", type = DatabaseOperation.INSERT)
+    public class EmployeeRepositoryFromAbstractTest extends AbstractTest {
+    
+        @Autowired
+        private EmployeeRepository employeeRepository;
+    
+        @Override
+        @Before
+        public void setUp() throws Exception {
+            super.setUp();
+        }
+    
+        @Test
+        public void findFromGlobalInsert() {
+            List<Employee> all = employeeRepository.findAll();
+            System.out.println(all);
+    
+            Optional<Employee> employee = employeeRepository.findById(100L);
+            assertTrue(employee.isPresent());
+        }
+    }
+```
+
 ### Config connect to DB if custom connect
 
 If use custom bean for connect, like this:

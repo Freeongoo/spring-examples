@@ -1,9 +1,10 @@
-package hello.repository;
+package hello;
 
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
-import com.github.springtestdbunit.annotation.DatabaseSetup;
-import hello.entity.Employee;
-import org.junit.Test;
+import org.dbunit.DataSourceDatabaseTester;
+import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.xml.FlatXmlDataSet;
+import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,12 +13,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
+import javax.sql.DataSource;
 import javax.transaction.Transactional;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.*;
-
-@DatabaseSetup("/data.xml")
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @TestExecutionListeners({
@@ -26,26 +24,18 @@ import static org.junit.Assert.*;
         DbUnitTestExecutionListener.class
 })
 @Transactional
-public class EmployeeRepositoryTest {
+public abstract class AbstractTest {
+
+    protected DataSourceDatabaseTester dataSourceDatabaseTester;
 
     @Autowired
-    private EmployeeRepository employeeRepository;
+    protected DataSource dataSource;
 
-    @Test
-    public void findByName_WhenExist() {
-        Employee actual = employeeRepository.findByName("John");
-
-        // expectation
-        Employee expected = new Employee("John", "admin");
-        expected.setId(1L);
-
-        assertThat(actual, equalTo(expected));
-    }
-
-    @Test
-    public void findByName_WhenNotExist() {
-        Employee actual = employeeRepository.findByName("NotExist");
-
-        assertNull(actual);
+    @Before
+    public void setUp() throws Exception {
+        dataSourceDatabaseTester = new DataSourceDatabaseTester(dataSource);
+        IDataSet dataSet = new FlatXmlDataSet(getClass().getResource("/global-data.xml"));
+        dataSourceDatabaseTester.setDataSet(dataSet);
+        dataSourceDatabaseTester.onSetup();
     }
 }
