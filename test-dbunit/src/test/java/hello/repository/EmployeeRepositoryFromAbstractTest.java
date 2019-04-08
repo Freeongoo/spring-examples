@@ -14,6 +14,7 @@ import java.util.Optional;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
 
+/** Using "type" as DatabaseOperation.INSERT for adding data to table "employee" not erase */
 @DatabaseSetup(value = "/data.xml", type = DatabaseOperation.INSERT)
 public class EmployeeRepositoryFromAbstractTest extends AbstractTest {
 
@@ -27,29 +28,47 @@ public class EmployeeRepositoryFromAbstractTest extends AbstractTest {
     }
 
     @Test
-    public void findFromGlobalInsert() {
-        List<Employee> all = employeeRepository.findAll();
-        System.out.println(all);
-
+    public void findFromGlobalInsert_ShouldBeExist() {
+        // when
         Optional<Employee> employee = employeeRepository.findById(100L);
+
+        // then
         assertTrue(employee.isPresent());
     }
 
     @Test
-    public void findByName_WhenExist() {
-        Employee actual = employeeRepository.findByName("John");
-
-        // expectation
+    public void findByName_WhenExist_ShouldBeExist() {
+        // given
         Employee expected = new Employee("John", "admin");
         expected.setId(1L);
 
+        // when
+        Employee actual = employeeRepository.findByName("John");
+
+        // then
         assertThat(actual, equalTo(expected));
     }
 
     @Test
-    public void findByName_WhenNotExist() {
+    public void findByName_WhenNotExist_ShouldBeNull() {
+        // when
         Employee actual = employeeRepository.findByName("NotExist");
 
+        // then
         assertNull(actual);
+    }
+
+    @Test
+    public void createNew_ShouldBeMore() {
+        // given
+        Employee employee = new Employee("John", "admin");
+
+        // when
+        employeeRepository.save(employee);
+        flushAndClean();
+
+        // then
+        List<Employee> all = employeeRepository.findAll();
+        assertThat(all.size(), equalTo(4));
     }
 }

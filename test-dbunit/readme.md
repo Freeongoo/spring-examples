@@ -1,4 +1,4 @@
-# Testing Spring Boot with DBUnit
+# Testing Spring Boot 2.x with DBUnit
 
 ## Dependencies
 
@@ -148,7 +148,7 @@ You must manually config connect in test for DBUnit, like this:
 @DbUnitConfiguration(databaseConnection="getDataSource")
 ```
 
-where `getDataSource` - name of bean
+where `getDataSource` - is name of bean
 
 ## how to work with DBUnit when there is already data in the selected table
 
@@ -179,9 +179,9 @@ You must config `@DatabaseSetup`:
     }
 ```
 
-# Important! When use @MockBean
+# Important! When used @MockBean
 
-config must be:
+Configuration must be:
 ```
 @TestExecutionListeners(value = {
         TransactionalTestExecutionListener.class,

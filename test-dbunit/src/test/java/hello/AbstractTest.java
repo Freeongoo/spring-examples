@@ -14,6 +14,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.sql.DataSource;
 import javax.transaction.Transactional;
 
@@ -42,10 +44,18 @@ public abstract class AbstractTest {
     @Autowired
     protected DataSource dataSource;
 
+    @PersistenceContext
+    protected EntityManager entityManager;
+
     @Before
     public void setUp() throws Exception {
         dataSourceDatabaseTester = new DataSourceDatabaseTester(dataSource);
         seedData(globalDataSet);
+    }
+
+    protected void flushAndClean() {
+        entityManager.flush();
+        entityManager.clear();
     }
 
     /**
