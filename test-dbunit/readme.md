@@ -1,6 +1,5 @@
 # Testing Spring Boot with DBUnit
 
-
 ## Dependencies
 
 1. Add dependencies for testing spring:
