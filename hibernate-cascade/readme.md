@@ -11,18 +11,16 @@ For main and test dirs:
 
 See tests: `/src/test/java/hello/entity/withoutCascade`
 
-### Without Cascade Type - remove
+ManyToMany: `/src/main/java/hello/entity/withoutCascade/manyToMany`
+
+### With Cascade Type - remove
 
 See tests: `/src/test/java/hello/entity/removeCascade`
-See tests with orphan: `/src/test/java/hello/entity/removeCascade/orphan`
 
-### With all cascade @ManyToMany
-
-`/src/test/java/hello/entity/allCascade/manyToMany`
-
-### Without Cascade Type - persist
+### With Cascade Type - persist
 
 See tests: `/src/test/java/hello/entity/persistCascade`
-See tests with orphan: `/src/test/java/hello/entity/persistCascade/orphan`
 
-ManyToMany: `/src/main/java/hello/entity/withoutCascade/manyToMany`
+### With Cascade Type - all
+
+ManyToMany: `/src/test/java/hello/entity/allCascade/manyToMany`
