@@ -4,12 +4,9 @@ import hello.AbstractJpaTest;
 import org.junit.Test;
 
 import javax.persistence.PersistenceException;
-import java.util.List;
 
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 public class PersonTest extends AbstractJpaTest {
 
