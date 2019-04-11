@@ -10,6 +10,10 @@ For main and test dirs:
 
 ## Testing
 
+### With `orphanRemove = false`
+
+Test: `/src/test/java/hello/entity/withoutOrphanRemoval/AuthorTest.java`
+
 ### With `orphanRemove = true`
 
 Test: `/src/test/java/hello/entity/orphanRemoval/PersonTest.java`
