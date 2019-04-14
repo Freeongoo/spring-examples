@@ -1,0 +1,16 @@
+## Spring DATASOURCE (DataSourceAutoConfiguration & DataSourceProperties)
+spring.datasource.url = jdbc:mysql://localhost:3306/liquibase?useSSL=false
+spring.datasource.username = root
+spring.datasource.password = root
+
+## Hibernate Properties
+# The SQL dialect makes Hibernate generate better SQL for the chosen database
+spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.MySQL5InnoDBDialect
+
+## This is important
+# we use liquibase - set none
+spring.jpa.hibernate.ddl-auto = none
+
+## Liquibase
+spring.liquibase.change-log=classpath:db/liquibase-changelog.xml
+spring.liquibase.contexts=prod

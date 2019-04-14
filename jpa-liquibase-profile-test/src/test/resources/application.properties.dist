@@ -23,4 +23,5 @@ spring.jpa.hibernate.ddl-auto=none
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.H2Dialect
 
 # Liquibase
-spring.liquibase.enabled=false
+spring.liquibase.change-log=classpath:db/liquibase-changelog.xml
+spring.liquibase.contexts=test
