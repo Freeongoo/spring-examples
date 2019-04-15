@@ -77,7 +77,7 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
         }
 
         String strInIds = mapOldNewValue.keySet().stream()
-                .map(String::valueOf)
+                .map(str -> "'" + str + "'")
                 .collect(joining(", ", "(", ")"));
 
         StringBuilder builder = new StringBuilder();
@@ -89,12 +89,13 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
         builder.append(" = ");
         builder.append(" case ");
         builder.append(fieldName);
+        builder.append(" ");
         for (Map.Entry<?, ?> entry : mapOldNewValue.entrySet()) {
-            builder.append(" when ");
+            builder.append(" when '");
             builder.append(entry.getKey());
-            builder.append(" then ");
+            builder.append("' then '");
             builder.append(entry.getValue());
-            builder.append(" ");
+            builder.append("' ");
         }
         builder.append(" end ");
         builder.append(" where ");

@@ -157,7 +157,7 @@ public class EmployeeDaoImplTest extends BaseTest {
     }
 
     @Test
-    public void updateMultiple() {
+    public void updateMultiple_WhenLongFieldType() {
         Map<Long, Long> map = new HashMap<>();
         map.put(20L, 25L);
         map.put(30L, 31L);
@@ -166,5 +166,17 @@ public class EmployeeDaoImplTest extends BaseTest {
 
         Optional<Employee> employee = employeeDao.getById(1L);
         employee.ifPresent(e -> assertThat(e.getAge(), equalTo(25L)));
+    }
+
+    @Test
+    public void updateMultiple_WhenStringFieldType() {
+        Map<String, String> map = new HashMap<>();
+        map.put("Mike", "Mike Super");
+        map.put("John", "John Super");
+        employeeDao.updateMultiple("name", map);
+        flushAndClean();
+
+        Optional<Employee> employee = employeeDao.getById(1L);
+        employee.ifPresent(e -> assertThat(e.getName(), equalTo("John Super")));
     }
 }
