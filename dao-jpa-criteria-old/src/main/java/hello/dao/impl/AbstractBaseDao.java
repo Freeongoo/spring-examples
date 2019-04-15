@@ -5,8 +5,7 @@ import hello.dao.BaseDao;
 import hello.service.CriteriaAliasService;
 import hello.util.EntityFieldUtils;
 import hello.util.ReflectionUtils;
-import org.hibernate.Criteria;
-import org.hibernate.Session;
+import org.hibernate.*;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +18,7 @@ import java.util.*;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toSet;
 import static org.springframework.util.ObjectUtils.isEmpty;
 
@@ -66,6 +66,45 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
     @Override
     public void delete(T entity) {
         getSession().delete(entity);
+    }
+
+    @Override
+    public void updateMultiple(String fieldName, Map<?, ?> mapOldNewValue) {
+        Objects.requireNonNull(fieldName, "Param 'fieldName' cannot be null");
+
+        if (isEmpty(mapOldNewValue)) {
+            return;
+        }
+
+        String strInIds = mapOldNewValue.keySet().stream()
+                .map(String::valueOf)
+                .collect(joining(", ", "(", ")"));
+
+        StringBuilder builder = new StringBuilder();
+
+        builder.append(" update ");
+        builder.append(getPersistentClass().getSimpleName());
+        builder.append(" set ");
+        builder.append(fieldName);
+        builder.append(" = ");
+        builder.append(" case ");
+        builder.append(fieldName);
+        for (Map.Entry<?, ?> entry : mapOldNewValue.entrySet()) {
+            builder.append(" when ");
+            builder.append(entry.getKey());
+            builder.append(" then ");
+            builder.append(entry.getValue());
+            builder.append(" ");
+        }
+        builder.append(" end ");
+        builder.append(" where ");
+        builder.append(fieldName);
+        builder.append(" in ");
+        builder.append(strInIds);
+
+        String queryString = builder.toString();
+        Query query = getSession().createQuery(queryString);
+        query.executeUpdate();
     }
 
     @Override

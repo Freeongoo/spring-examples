@@ -49,6 +49,7 @@ public class EmployeeDaoImplTest extends BaseTest {
     public void getById_WhenExist() {
         Optional<Employee> optionalEmployee = employeeDao.getById(1L);
         Employee expectedEmployee = new Employee("John", "admin");
+        expectedEmployee.setAge(20L);
         expectedEmployee.setId(1L);
 
         assertThat(optionalEmployee, equalTo(Optional.of(expectedEmployee)));
@@ -153,5 +154,17 @@ public class EmployeeDaoImplTest extends BaseTest {
         assertThat(employees, containsInAnyOrder(
                 hasProperty("name", is("John"))
         ));
+    }
+
+    @Test
+    public void updateMultiple() {
+        Map<Long, Long> map = new HashMap<>();
+        map.put(20L, 25L);
+        map.put(30L, 31L);
+        employeeDao.updateMultiple("age", map);
+        flushAndClean();
+
+        Optional<Employee> employee = employeeDao.getById(1L);
+        employee.ifPresent(e -> assertThat(e.getAge(), equalTo(25L)));
     }
 }

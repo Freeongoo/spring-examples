@@ -14,6 +14,7 @@ import java.util.Objects;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Employee extends AbstractBaseEntity {
 
+    private Long age;
     private String name;
     private String role;
 
@@ -22,6 +23,14 @@ public class Employee extends AbstractBaseEntity {
     public Employee(String name, String role) {
         this.name = name;
         this.role = role;
+    }
+
+    public Long getAge() {
+        return age;
+    }
+
+    public void setAge(Long age) {
+        this.age = age;
     }
 
     public String getRole() {
@@ -46,7 +55,8 @@ public class Employee extends AbstractBaseEntity {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Employee employee = (Employee) o;
-        return Objects.equals(name, employee.name) &&
+        return Objects.equals(age, employee.age) &&
+                Objects.equals(name, employee.name) &&
                 Objects.equals(role, employee.role);
     }
 
