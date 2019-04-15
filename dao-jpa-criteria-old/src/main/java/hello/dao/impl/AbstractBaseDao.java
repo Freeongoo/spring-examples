@@ -76,9 +76,7 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
             return;
         }
 
-        String strInIds = mapOldNewValue.keySet().stream()
-                .map(str -> "'" + str + "'")
-                .collect(joining(", ", "(", ")"));
+        String queryInFromList = getSqlQueryInFromList(mapOldNewValue.keySet());
 
         StringBuilder builder = new StringBuilder();
 
@@ -100,12 +98,23 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
         builder.append(" end ");
         builder.append(" where ");
         builder.append(fieldName);
-        builder.append(" in ");
-        builder.append(strInIds);
+        builder.append(queryInFromList);
 
         String queryString = builder.toString();
         Query query = getSession().createQuery(queryString);
         query.executeUpdate();
+    }
+
+    protected String getSqlQueryInFromList(Collection<?> values) {
+        String str = values.stream()
+                .map(val -> {
+                    if (val instanceof String) {
+                        return "'" + val + "'";
+                    }
+                    return val.toString();
+                })
+                .collect(joining(", ", "(", ")"));
+        return " in " + str;
     }
 
     @Override
