@@ -1,12 +1,9 @@
 package hello.dao.impl;
 
-import hello.container.FieldHolder;
-import hello.container.OrderType;
-import hello.container.QueryParams;
+import hello.container.*;
 import hello.dao.BaseDao;
 import hello.util.EntityFieldUtils;
 import hello.util.ReflectionUtils;
-import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.springframework.util.Assert;
@@ -268,5 +265,54 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
             query.setMaxResults(queryParams.getLimit());
 
         return query;
+    }
+
+    @Override
+    public void updateMultiple(String fieldName, Map<?, ?> mapOldNewValue) {
+        Objects.requireNonNull(fieldName, "Param 'fieldName' cannot be null");
+
+        if (isEmpty(mapOldNewValue)) {
+            return;
+        }
+
+        String queryInFromList = getSqlQueryInFromList(mapOldNewValue.keySet());
+
+        StringBuilder builder = new StringBuilder();
+
+        builder.append(" update ");
+        builder.append(getPersistentClass().getSimpleName());
+        builder.append(" set ");
+        builder.append(fieldName);
+        builder.append(" = ");
+        builder.append(" case ");
+        builder.append(fieldName);
+        builder.append(" ");
+        for (Map.Entry<?, ?> entry : mapOldNewValue.entrySet()) {
+            builder.append(" when '");
+            builder.append(entry.getKey());
+            builder.append("' then '");
+            builder.append(entry.getValue());
+            builder.append("' ");
+        }
+        builder.append(" end ");
+        builder.append(" where ");
+        builder.append(fieldName);
+        builder.append(queryInFromList);
+
+        String queryString = builder.toString();
+        Query query = getSession().createQuery(queryString);
+        query.executeUpdate();
+    }
+
+    protected String getSqlQueryInFromList(Collection<?> values) {
+        String str = values.stream()
+                .map(val -> {
+                    if (val instanceof String) {
+                        return "'" + val + "'";
+                    }
+                    return val.toString();
+                })
+                .collect(joining(", ", "(", ")"));
+        return " in " + str;
     }
 }

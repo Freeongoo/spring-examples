@@ -23,6 +23,23 @@ public interface BaseDao<T, ID extends Serializable> {
     public void delete(T entity);
 
     /**
+     * The advantage of this update method is that it performs multiple updates in a single query. Very fast
+     *
+     * Example:
+     * <pre>{@code
+     *       UPDATE `planned_operation` SET position_in_list = CASE position_in_list
+     *                  WHEN 10 THEN 1
+     *                  WHEN 20 THEN 2
+     *               END
+     *        WHERE position_in_list IN (10, 20);
+     * }</pre>
+     *
+     * @param fieldName fieldName
+     * @param mapOldNewValue mapOldNewValue
+     */
+    public void updateMultiple(String fieldName, Map<?, ?> mapOldNewValue);
+
+    /**
      * When passed empty map or all not exist fields - return all
      * When passed existing fields by not exist values - return empty list
      *
