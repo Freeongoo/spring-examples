@@ -1,0 +1,12 @@
+<dataset>
+    <post id="1" name="Post#1"/>
+    <post id="2" name="Post#2"/>
+
+    <comment id="1" name="Comment#1"/>
+    <comment id="2" name="Comment#2"/>
+
+    <post_comment post_id="1" comment_id="1" />
+    <post_comment post_id="1" comment_id="2" />
+    <post_comment post_id="2" comment_id="1" />
+    <post_comment post_id="2" comment_id="2" />
+</dataset>

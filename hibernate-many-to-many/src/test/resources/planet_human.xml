@@ -1,0 +1,12 @@
+<dataset>
+    <planet id="1" name="Planet#1"/>
+    <planet id="2" name="Planet#2"/>
+
+    <human id="1" name="Human#1"/>
+    <human id="2" name="Human#2"/>
+
+    <planet_human planet_id="1" human_id="1" />
+    <planet_human planet_id="1" human_id="2" />
+    <planet_human planet_id="2" human_id="1" />
+    <planet_human planet_id="2" human_id="2" />
+</dataset>

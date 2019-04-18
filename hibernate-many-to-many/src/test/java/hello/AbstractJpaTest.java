@@ -1,6 +1,7 @@
 package hello;
 
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
+import hello.sqltracker.AssertSqlCount;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ public abstract class AbstractJpaTest {
 
     @Before
     public void setUp() {
+        AssertSqlCount.reset();
         System.out.println("\n\n\n************************ Begin Test ************************");
     }
 
