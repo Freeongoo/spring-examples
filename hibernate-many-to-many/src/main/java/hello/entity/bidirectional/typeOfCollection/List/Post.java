@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "post")
-public class Post extends AbstractBaseEntity<Long> {
+public class Post extends AbstractBaseEntity {
 
     @ManyToMany
     @JoinTable(name = "post_comment",

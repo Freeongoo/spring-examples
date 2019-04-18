@@ -10,7 +10,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "comment")
-public class Comment extends AbstractBaseEntity<Long> {
+public class Comment extends AbstractBaseEntity {
 
     @ManyToMany(mappedBy = "comments")
     private List<Post> posts = new ArrayList<>();

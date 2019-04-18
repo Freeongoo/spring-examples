@@ -1,0 +1,12 @@
+<dataset>
+    <glass id="1" name="Glass#1"/>
+    <glass id="2" name="Glass#2"/>
+
+    <glass_holder id="1" name="GlassHolder#1"/>
+    <glass_holder id="2" name="GlassHolder#2"/>
+
+    <glass_glass_holder glass_id="1" glass_holder_id="1" />
+    <glass_glass_holder glass_id="1" glass_holder_id="2" />
+    <glass_glass_holder glass_id="2" glass_holder_id="1" />
+    <glass_glass_holder glass_id="2" glass_holder_id="2" />
+</dataset>

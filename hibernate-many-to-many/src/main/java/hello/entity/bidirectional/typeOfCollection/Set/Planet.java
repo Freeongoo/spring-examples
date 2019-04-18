@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "planet")
-public class Planet extends AbstractBaseEntity<Long> {
+public class Planet extends AbstractBaseEntity {
 
     @ManyToMany
     @JoinTable(name = "planet_human",

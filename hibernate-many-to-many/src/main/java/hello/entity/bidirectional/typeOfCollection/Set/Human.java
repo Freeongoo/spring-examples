@@ -1,7 +1,6 @@
 package hello.entity.bidirectional.typeOfCollection.Set;
 
 import hello.entity.AbstractBaseEntity;
-import hello.entity.bidirectional.typeOfCollection.List.Post;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
@@ -11,7 +10,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "human")
-public class Human extends AbstractBaseEntity<Long> {
+public class Human extends AbstractBaseEntity {
 
     @ManyToMany(mappedBy = "humans")
     private Set<Planet> planets = new HashSet<>();

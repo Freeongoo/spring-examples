@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "people")
-public class People extends AbstractBaseEntity<Long> {
+public class People extends AbstractBaseEntity {
 
     @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(name = "country_people",
