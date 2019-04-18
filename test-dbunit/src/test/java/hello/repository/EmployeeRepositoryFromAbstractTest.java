@@ -2,7 +2,7 @@ package hello.repository;
 
 import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
-import hello.AbstractTest;
+import hello.AbstractJpaTest;
 import hello.entity.Employee;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
 
 /** Using "type" as DatabaseOperation.INSERT for adding data to table "employee" not erase */
 @DatabaseSetup(value = "/data.xml", type = DatabaseOperation.INSERT)
-public class EmployeeRepositoryFromAbstractTest extends AbstractTest {
+public class EmployeeRepositoryFromAbstractTest extends AbstractJpaTest {
 
     @Autowired
     private EmployeeRepository employeeRepository;
