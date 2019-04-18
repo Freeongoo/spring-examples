@@ -16,7 +16,7 @@ import java.util.Set;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Client extends AbstractBaseEntity<Long> {
 
-    @BatchSize(size=100)
+    @BatchSize(size = 25)
     @OneToMany(mappedBy = "client")
     private Set<Account> accounts;
 

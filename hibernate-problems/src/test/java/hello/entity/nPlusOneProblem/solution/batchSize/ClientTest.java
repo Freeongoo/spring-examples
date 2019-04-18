@@ -1,9 +1,7 @@
 package hello.entity.nPlusOneProblem.solution.batchSize;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
-import hello.BaseTest;
-import hello.entity.nPlusOneProblem.solution.batchSize.Account;
-import hello.entity.nPlusOneProblem.solution.batchSize.Client;
+import hello.AbstractJpaTest;
 import hello.repository.nPlusOneProblem.solution.batchSize.ClientRepository;
 import hello.sqltracker.AssertSqlCount;
 import org.junit.Test;
@@ -12,8 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 import java.util.Set;
 
+// see in Client @BatchSize(size = 25)
 @DatabaseSetup({"/client.xml", "/account.xml"})
-public class ClientTest extends BaseTest {
+public class ClientTest extends AbstractJpaTest {
 
     @Autowired
     private ClientRepository clientRepository;
