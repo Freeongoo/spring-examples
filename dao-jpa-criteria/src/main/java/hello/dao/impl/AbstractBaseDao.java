@@ -14,6 +14,7 @@ import javax.persistence.criteria.*;
 import java.io.Serializable;
 import java.util.*;
 
+import static hello.util.SQLInjectionEscaper.escapeString;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.*;
@@ -267,6 +268,7 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
         return query;
     }
 
+    // not work with prepare statement (.setParameter), using "escapeString" for protection - JPQL not support with "case" sql
     @Override
     public void updateMultiple(String fieldName, Map<?, ?> mapOldNewValue) {
         Objects.requireNonNull(fieldName, "Param 'fieldName' cannot be null");
@@ -275,29 +277,29 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
             return;
         }
 
-        String queryInFromList = getSqlQueryInFromList(mapOldNewValue.keySet());
+        String sqlQueryIn = getSqlQueryInFromList(mapOldNewValue.keySet());
 
         StringBuilder builder = new StringBuilder();
 
         builder.append(" update ");
         builder.append(getPersistentClass().getSimpleName());
         builder.append(" set ");
-        builder.append(fieldName);
+        builder.append(escapeString(fieldName, true));
         builder.append(" = ");
         builder.append(" case ");
-        builder.append(fieldName);
+        builder.append(escapeString(fieldName, true));
         builder.append(" ");
         for (Map.Entry<?, ?> entry : mapOldNewValue.entrySet()) {
             builder.append(" when '");
-            builder.append(entry.getKey());
+            builder.append(escapeString(entry.getKey().toString(), true));
             builder.append("' then '");
-            builder.append(entry.getValue());
+            builder.append(escapeString(entry.getValue().toString(), true));
             builder.append("' ");
         }
         builder.append(" end ");
         builder.append(" where ");
-        builder.append(fieldName);
-        builder.append(queryInFromList);
+        builder.append(escapeString(fieldName, true));
+        builder.append(sqlQueryIn);
 
         String queryString = builder.toString();
         Query query = getSession().createQuery(queryString);
@@ -308,9 +310,9 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
         String str = values.stream()
                 .map(val -> {
                     if (val instanceof String) {
-                        return "'" + val + "'";
+                        return "'" + escapeString(((String) val), true) + "'";
                     }
-                    return val.toString();
+                    return escapeString((val.toString()), true);
                 })
                 .collect(joining(", ", "(", ")"));
         return " in " + str;
