@@ -1,6 +1,7 @@
 package hello;
 
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
+import hello.sqltracker.AssertSqlCount;
 import org.dbunit.DataSourceDatabaseTester;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
@@ -29,7 +30,7 @@ import javax.transaction.Transactional;
 })
 @Transactional
 @TestPropertySource(locations="/application-test.properties")
-public abstract class AbstractTest {
+public abstract class AbstractJpaTest {
 
     private DataSourceDatabaseTester dataSourceDatabaseTester;
 
@@ -37,7 +38,7 @@ public abstract class AbstractTest {
 
     static {
         try {
-            globalDataSet = new FlatXmlDataSetBuilder().build(AbstractTest.class.getResource("/global-data.xml"));
+            globalDataSet = new FlatXmlDataSetBuilder().build(AbstractJpaTest.class.getResource("/global-data.xml"));
         } catch (DataSetException e) {
             throw new RuntimeException("Cannot read DBUnit file", e);
         }
@@ -51,6 +52,8 @@ public abstract class AbstractTest {
 
     @Before
     public void setUp() throws Exception {
+        AssertSqlCount.reset();
+
         dataSourceDatabaseTester = new DataSourceDatabaseTester(dataSource);
         seedData(globalDataSet);
     }

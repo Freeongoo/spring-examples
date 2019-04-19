@@ -2,7 +2,7 @@
 spring.h2.console.enabled=true
 
 # ===============================
-# DB H2
+# DB
 # ===============================
 spring.datasource.url=jdbc:h2:mem:testdb;MODE=MySQL;DB_CLOSE_ON_EXIT=false
 spring.datasource.driverClassName=org.h2.Driver
@@ -14,7 +14,11 @@ spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.MySQL5InnoDBDial
 spring.jpa.properties.hibernate.id.new_generator_mappings = false
 spring.jpa.properties.hibernate.format_sql = true
 spring.jpa.properties.hibernate.use_sql_comments=true
-spring.jpa.hibernate.ddl-auto = create
+spring.jpa.hibernate.ddl-auto = create-drop
+# for disable show_log from annotation @DataJpaTest
+spring.jpa.properties.hibernate.show_sql = false
+# for check count queries
+spring.jpa.properties.hibernate.session_factory.statement_inspector=hello.sqltracker.StatementInspectorImpl
 
 # ===============================
 # Logging sql and params

@@ -1,7 +1,11 @@
 # Learn Hibernate orphanRemove
 
+You should set the orphanRemoval attribute of the @OneToMany association 
+to true. And you also need to set the cascade attribute to 
+CascadeType.PERSIST or CascadeType.ALL.
+
 The point is that children, after the relation with the parent element has been removed, 
-will be deleted when the option is set `orphanRemove = true`.
+will be deleted.
 
 ## Configuration
 

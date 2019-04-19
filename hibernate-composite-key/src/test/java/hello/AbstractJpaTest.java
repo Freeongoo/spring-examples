@@ -1,6 +1,7 @@
 package hello;
 
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
+import hello.sqltracker.AssertSqlCount;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
 @RunWith(SpringRunner.class)
-@DataJpaTest()
+@DataJpaTest
 @TestPropertySource(locations="/application-test.properties")
 @TestExecutionListeners({
         TransactionalTestExecutionListener.class,
@@ -27,6 +28,7 @@ public abstract class AbstractJpaTest {
 
     @Before
     public void setUp() {
+        AssertSqlCount.reset();
         System.out.println("\n\n\n************************ Begin Test ************************");
     }
 

@@ -1,7 +1,7 @@
 package hello.entity.nPlusOneProblem;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
-import hello.BaseTest;
+import hello.AbstractJpaTest;
 import hello.repository.nPlusOneProblem.PostRepository;
 import hello.sqltracker.AssertSqlCount;
 import org.junit.Test;
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 @DatabaseSetup({"/post.xml", "/comment.xml"})
-public class NPlusOneProblemPostTest extends BaseTest {
+public class NPlusOneProblemPostTest extends AbstractJpaTest {
 
     @Autowired
     private PostRepository postRepository;

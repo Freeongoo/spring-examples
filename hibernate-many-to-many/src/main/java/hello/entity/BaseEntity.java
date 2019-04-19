@@ -1,16 +1,10 @@
 package hello.entity;
 
-/**
- * not the best idea to do generic <ID> for primary key
- * since when working with an entity through reflection, it will receive a type as an {@link Object}
- *
- * @param <ID> primary key
- */
-public interface BaseEntity<ID> {
+public interface BaseEntity {
 
-    ID getId();
+    Long getId();
 
-    void setId(ID id);
+    void setId(Long id);
 
     String getName();
 

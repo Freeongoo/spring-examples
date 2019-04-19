@@ -7,6 +7,14 @@ For main and test dirs:
 
 ## Testing
 
+### Bidirectional type of collection (List or Collection or Set)
+
+`/src/main/java/hello/entity/bidirectional/typeOfCollection/List`
+`/src/main/java/hello/entity/bidirectional/typeOfCollection/Collection`
+`/src/main/java/hello/entity/bidirectional/typeOfCollection/Set`
+
+it is preferable to use `Set` less queries
+
 ### Bidirectional mappedBy (without any cascade)
 
 `/src/main/java/hello/entity/bidirectional/mappedBy`

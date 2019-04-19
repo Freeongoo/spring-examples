@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "role")
-public class Role extends AbstractBaseEntity<Long> {
+public class Role extends AbstractBaseEntity {
 
     @ManyToMany(mappedBy = "roles")
     private Set<User> users = new HashSet<>();

@@ -11,7 +11,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "country")
-public class Country extends AbstractBaseEntity<Long> {
+public class Country extends AbstractBaseEntity {
 
     @ManyToMany(
             cascade = {CascadeType.ALL},

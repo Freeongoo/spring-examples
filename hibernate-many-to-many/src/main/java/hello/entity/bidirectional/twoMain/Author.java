@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "author")
-public class Author extends AbstractBaseEntity<Long> {
+public class Author extends AbstractBaseEntity {
 
     @ManyToMany
     @JoinTable(name = "author_book",
