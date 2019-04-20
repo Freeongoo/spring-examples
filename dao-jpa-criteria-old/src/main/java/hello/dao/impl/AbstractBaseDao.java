@@ -91,11 +91,11 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
         builder.append(escapeValue(fieldName));
         builder.append(" ");
         for (Map.Entry<?, ?> entry : mapOldNewValue.entrySet()) {
-            builder.append(" when '");
-            builder.append(escapeValue(entry.getKey()));
-            builder.append("' then '");
-            builder.append(escapeValue(entry.getValue()));
-            builder.append("' ");
+            builder.append(" when ");
+            builder.append(":v_old" + convertToParamName(entry.getKey()));
+            builder.append(" then ");
+            builder.append(":v_new" + convertToParamName(entry.getValue()));
+            builder.append(" ");
         }
         builder.append(" end ");
         builder.append(" where ");
@@ -104,17 +104,26 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
 
         String queryString = builder.toString();
         Query query = getSession().createQuery(queryString);
+
+        for (Map.Entry<?, ?> entry : mapOldNewValue.entrySet()) {
+            query.setParameter("v_old" + convertToParamName(entry.getKey()), entry.getKey());
+            query.setParameter("v_new" + convertToParamName(entry.getValue()), entry.getValue());
+        }
+
         query.executeUpdate();
+    }
+
+    protected String convertToParamName(Object object) {
+        if (object instanceof Number) {
+            return object.toString();
+        }
+
+        return object.toString().replaceAll("\\s+", "_");
     }
 
     protected String getSqlQueryInFromList(Collection<?> values) {
         String str = values.stream()
-                .map(val -> {
-                    if (val instanceof String) {
-                        return "'" + escapeValue(val) + "'";
-                    }
-                    return escapeValue(val).toString();
-                })
+                .map(val -> ":v_old" + val)
                 .collect(joining(", ", "(", ")"));
         return " in " + str;
     }
