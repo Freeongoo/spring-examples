@@ -284,21 +284,21 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
         builder.append(" update ");
         builder.append(getPersistentClass().getSimpleName());
         builder.append(" set ");
-        builder.append(escapeString(fieldName, true));
+        builder.append(escapeValue(fieldName));
         builder.append(" = ");
         builder.append(" case ");
-        builder.append(escapeString(fieldName, true));
+        builder.append(escapeValue(fieldName));
         builder.append(" ");
         for (Map.Entry<?, ?> entry : mapOldNewValue.entrySet()) {
             builder.append(" when '");
-            builder.append(escapeString(entry.getKey().toString(), true));
+            builder.append(escapeValue(entry.getKey()));
             builder.append("' then '");
-            builder.append(escapeString(entry.getValue().toString(), true));
+            builder.append(escapeValue(entry.getValue()));
             builder.append("' ");
         }
         builder.append(" end ");
         builder.append(" where ");
-        builder.append(escapeString(fieldName, true));
+        builder.append(escapeValue(fieldName));
         builder.append(sqlQueryIn);
 
         String queryString = builder.toString();
@@ -310,11 +310,19 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
         String str = values.stream()
                 .map(val -> {
                     if (val instanceof String) {
-                        return "'" + escapeString(((String) val), true) + "'";
+                        return "'" + escapeValue(val) + "'";
                     }
-                    return escapeString((val.toString()), true);
+                    return escapeValue(val).toString();
                 })
                 .collect(joining(", ", "(", ")"));
         return " in " + str;
+    }
+
+    private Object escapeValue(Object val) {
+        if (val instanceof Number) {
+            return val;
+        }
+
+        return escapeString((val.toString()), true);
     }
 }
