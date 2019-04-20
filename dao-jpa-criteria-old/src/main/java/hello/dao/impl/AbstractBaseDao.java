@@ -69,7 +69,6 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
         getSession().delete(entity);
     }
 
-    // not work with prepare statement (.setParameter), using "escapeString" for protection - JPQL not support with "case" sql
     @Override
     public void updateMultiple(String fieldName, Map<?, ?> mapOldNewValue) {
         Objects.requireNonNull(fieldName, "Param 'fieldName' cannot be null");
