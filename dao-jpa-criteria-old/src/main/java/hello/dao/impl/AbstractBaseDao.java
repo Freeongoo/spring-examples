@@ -122,7 +122,7 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
 
     protected String getSqlQueryInFromList(Collection<?> values) {
         String str = values.stream()
-                .map(val -> ":v_old" + val)
+                .map(val -> ":v_old" + convertToParamName(val))
                 .collect(joining(", ", "(", ")"));
         return " in " + str;
     }
