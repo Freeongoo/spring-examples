@@ -28,7 +28,22 @@ spring.jpa.properties.hibernate.cache.region.factory_class=org.hibernate.cache.e
 spring.jpa.properties.javax.persistence.sharedCache.mode=ENABLE_SELECTIVE
 ```
 
-#### 3. Annotated Entity Cacheable
+`ENABLE_SELECTIVE` - Caching is enabled for all entities for `Cacheable(true)`
+`ALL` - All entities and entity-related state and data are cached.
+
+#### 3. @EnableCaching in Application
+
+```
+@EnableCaching
+@SpringBootApplication
+public class Application {
+	public static void main(String[] args) {
+		SpringApplication.run(Application.class, args);
+    }       
+}            
+```
+
+#### 4. Annotated Entity Cacheable
 
 ```
 @Entity
