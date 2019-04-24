@@ -1,0 +1,9 @@
+<dataset>
+
+    <Role id="1" name="Role#1"/>
+    <Role id="2" name="Role#2"/>
+
+    <User id="1" role_id="1" name="User#1"/>
+    <User id="2" role_id="2" name="User#2"/>
+
+</dataset>
