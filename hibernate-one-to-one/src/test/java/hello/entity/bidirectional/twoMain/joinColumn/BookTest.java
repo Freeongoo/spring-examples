@@ -1,4 +1,4 @@
-package hello.entity.bidirectional.twoMain;
+package hello.entity.bidirectional.twoMain.joinColumn;
 
 import hello.AbstractJpaTest;
 import org.junit.Test;

@@ -1,6 +1,8 @@
-package hello.entity.bidirectional.twoMain;
+package hello.entity.bidirectional.twoMain.joinColumn;
 
 import hello.AbstractJpaTest;
+import hello.entity.bidirectional.twoMain.joinColumn.Author;
+import hello.entity.bidirectional.twoMain.joinColumn.Book;
 import hello.sqltracker.AssertSqlCount;
 import org.junit.Test;
 
