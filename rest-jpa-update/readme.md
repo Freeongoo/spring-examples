@@ -42,3 +42,56 @@ Pros:
 Cons:
 * cannot detect passed from json null field or not passed nothing to field
 * wrong behavior when there are no fields in json - these fields will be updated to null anyway
+
+## Raw Json version
+
+See test: `/src/test/java/hello/controller/rawJson/EmployeeRawJsonControllerTest.java`
+
+In controller: 
+```
+@PatchMapping("/{id}")
+public Employee update(@RequestBody String json, @PathVariable Long id) {
+    return service.update(id, json);
+}
+```
+
+In service:
+```
+@Service
+public class EmployeeRawJsonService {
+
+    @Autowired
+    private EmployeeRepository employeeRepository;
+
+    public Employee update(Long id, String json) {
+        Optional<Employee> optionalEmployee = employeeRepository.findById(id);
+        return optionalEmployee
+                .map(e -> getUpdatedFromJson(e, json))
+                .orElseThrow(() -> new ResourceNotFoundException("Not exist by id", OBJECT_NOT_FOUND));
+    }
+
+    private Employee getUpdatedFromJson(Employee employee, String json) {
+        Long id = employee.getId();
+
+        updateFromJson(employee, json);
+
+        employee.setId(id);
+        return employeeRepository.save(employee);
+    }
+
+    private void updateFromJson(Employee employee, String json) {
+        try {
+            new ObjectMapper().readerForUpdating(employee).readValue(json);
+        } catch (IOException e) {
+            throw new RuntimeException("Cannot update from json", e);
+        }
+    }
+}
+```
+
+Pros:
+* correct behavior when there are no fields in json - these fields will not be updated
+
+Cons:
+* manual deserialization
+* cannot auto add Bean Validation from the box
