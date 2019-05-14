@@ -7,6 +7,7 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import hello.advice.ExceptionControllerAdvice;
 import hello.controller.single.EmployeeController;
 import hello.entity.single.Employee;
+import hello.repository.single.EmployeeRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,12 +21,17 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 import static com.jcabi.matchers.RegexMatchers.matchesPattern;
 import static hello.controller.single.EmployeeController.PATH;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.junit.Assert.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -47,6 +53,12 @@ public class EmployeeControllerTest {
 
     @Autowired
     private EmployeeController employeeController;
+
+    @Autowired
+    private EmployeeRepository employeeRepository;
+
+    @PersistenceContext
+    private EntityManager em;
 
     @Before
     public void setup() {
@@ -113,7 +125,7 @@ public class EmployeeControllerTest {
     public void update_ShouldReturnCreated() throws Exception {
         int id = 1;
         String name = "AhaHa";
-        String role = "admin";
+        String role = "roleNew";
         Employee expectedEmployee = new Employee(name, role);
 
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
@@ -125,6 +137,42 @@ public class EmployeeControllerTest {
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(header().string("location", matchesPattern("http://localhost/employees/\\d+")));
+
+        // additional check - not need
+        em.flush();
+        em.clear();
+
+        Optional<Employee> optionalEmployee = employeeRepository.findById(1L);
+        Employee employee = optionalEmployee.orElseThrow(() -> new RuntimeException("cannot find"));
+        assertThat(employee.getName(), equalTo(name));
+        assertThat(employee.getRole(), equalTo(role));
+    }
+
+    @Test
+    public void update_WhenUpdateOnlyOne() throws Exception {
+        int id = 1;
+        String name = "AhaHa";
+        Employee expectedEmployee = new Employee();
+        expectedEmployee.setName(name);
+
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        String json = ow.writeValueAsString(expectedEmployee);
+
+        this.mockMvc.perform(put(employeeRouteWithParam, id)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(json))
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(header().string("location", matchesPattern("http://localhost/employees/\\d+")));
+
+        // additional check - not need
+        em.flush();
+        em.clear();
+
+        Optional<Employee> optionalEmployee = employeeRepository.findById(1L);
+        Employee employee = optionalEmployee.orElseThrow(() -> new RuntimeException("cannot find"));
+        assertThat(employee.getName(), equalTo(name));
+        assertThat(employee.getRole(), equalTo(null)); //TODO: may be not expected...
     }
 
     @Test
