@@ -2,25 +2,17 @@ package hello.mockMvc.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
+import hello.AbstractJpaTest;
 import hello.advice.ExceptionControllerAdvice;
 import hello.controller.single.EmployeeController;
 import hello.entity.single.Employee;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
-import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import javax.transaction.Transactional;
 
 import static com.jcabi.matchers.RegexMatchers.matchesPattern;
 import static hello.controller.single.EmployeeController.PATH;
@@ -30,17 +22,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest
-@RunWith(SpringRunner.class)
-@Transactional
-// DBUnit config:
 @DatabaseSetup("/employee.xml")
-@TestExecutionListeners({
-        TransactionalTestExecutionListener.class,
-        DependencyInjectionTestExecutionListener.class,
-        DbUnitTestExecutionListener.class
-})
-public class EmployeeControllerTest {
+public class EmployeeControllerTest extends AbstractJpaTest {
 
     private MockMvc mockMvc;
     private static String employeeRouteWithParam = PATH + "/{id}";

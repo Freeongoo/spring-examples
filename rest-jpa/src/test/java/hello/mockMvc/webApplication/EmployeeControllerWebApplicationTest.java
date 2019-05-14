@@ -1,23 +1,14 @@
 package hello.mockMvc.webApplication;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
+import hello.AbstractJpaTest;
 import hello.entity.single.Employee;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
-import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import static com.jcabi.matchers.RegexMatchers.matchesPattern;
@@ -28,17 +19,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@Transactional
-// DBUnit config:
 @DatabaseSetup("/employee.xml")
-@TestExecutionListeners({
-        TransactionalTestExecutionListener.class,
-        DependencyInjectionTestExecutionListener.class,
-        DbUnitTestExecutionListener.class
-})
-public class EmployeeControllerWebApplicationTest {
+public class EmployeeControllerWebApplicationTest extends AbstractJpaTest {
 
     @Autowired
     private WebApplicationContext context;
@@ -74,8 +56,7 @@ public class EmployeeControllerWebApplicationTest {
         String role = "admin";
         Employee expectedEmployee = new Employee(name, role);
 
-        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        String json = ow.writeValueAsString(expectedEmployee);
+        String json = toJson(expectedEmployee);
 
         this.mockMvc.perform(post(PATH)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -114,8 +95,7 @@ public class EmployeeControllerWebApplicationTest {
         String role = "admin";
         Employee expectedEmployee = new Employee(name, role);
 
-        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        String json = ow.writeValueAsString(expectedEmployee);
+        String json = toJson(expectedEmployee);
 
         this.mockMvc.perform(put(employeeRouteWithParam, id)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -132,8 +112,7 @@ public class EmployeeControllerWebApplicationTest {
         String role = "admin";
         Employee expectedEmployee = new Employee(name, role);
 
-        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        String json = ow.writeValueAsString(expectedEmployee);
+        String json = toJson(expectedEmployee);
 
         this.mockMvc.perform(put(employeeRouteWithParam, id)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)

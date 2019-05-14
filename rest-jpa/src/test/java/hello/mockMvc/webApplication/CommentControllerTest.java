@@ -1,29 +1,18 @@
 package hello.mockMvc.webApplication;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
+import hello.AbstractJpaTest;
 import hello.entity.oneToMany.Comment;
 import hello.repository.oneToMany.CommentRepository;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
-import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.Optional;
 
 import static hello.controller.oneToMany.CommentController.PATH;
@@ -36,23 +25,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@Transactional
-// DBUnit config:
 @DatabaseSetup({"/post.xml", "/comment.xml"})
-@TestExecutionListeners({
-        TransactionalTestExecutionListener.class,
-        DependencyInjectionTestExecutionListener.class,
-        DbUnitTestExecutionListener.class
-})
-public class CommentControllerTest {
+public class CommentControllerTest extends AbstractJpaTest {
 
     @Autowired
     private WebApplicationContext context;
-
-    @PersistenceContext
-    private EntityManager em;
 
     @Autowired
     private CommentRepository commentRepository;
@@ -95,8 +72,7 @@ public class CommentControllerTest {
         Comment comment = new Comment(name);
         comment.setPostId(postId);
 
-        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        String json = ow.writeValueAsString(comment);
+        String json = toJson(comment);
 
         this.mockMvc.perform(post(PATH, 1)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -113,8 +89,7 @@ public class CommentControllerTest {
         String name = "Comment new";
         Comment comment = new Comment(name);
 
-        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        String json = ow.writeValueAsString(comment);
+        String json = toJson(comment);
 
         this.mockMvc.perform(post(PATH, 1)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -152,8 +127,7 @@ public class CommentControllerTest {
         Comment comment = new Comment(name);
         comment.setPostId(postId);
 
-        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        String json = ow.writeValueAsString(comment);
+        String json = toJson(comment);
 
         this.mockMvc.perform(put(commentRouteWithIdParam, id)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -181,8 +155,7 @@ public class CommentControllerTest {
         Comment comment = new Comment(name);
         comment.setPostId(postId);
 
-        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        String json = ow.writeValueAsString(comment);
+        String json = toJson(comment);
 
         this.mockMvc.perform(put(commentRouteWithIdParam, idNotExist)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
@@ -199,8 +172,7 @@ public class CommentControllerTest {
         Comment comment = new Comment(name);
         comment.setPostId(idNotExistPostId);
 
-        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        String json = ow.writeValueAsString(comment);
+        String json = toJson(comment);
 
         this.mockMvc.perform(put(commentRouteWithIdParam, id)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
