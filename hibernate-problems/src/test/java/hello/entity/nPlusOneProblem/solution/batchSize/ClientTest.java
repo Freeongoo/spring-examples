@@ -8,7 +8,6 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
-import java.util.Set;
 
 // see in Client @BatchSize(size = 25)
 @DatabaseSetup({"/client.xml", "/account.xml"})
@@ -23,7 +22,7 @@ public class ClientTest extends AbstractJpaTest {
         System.out.println("get all posts, not run select comments - Lazy");
 
         for (Client client: clients) {
-            Set<Account> accounts = client.getAccounts();
+            List<Account> accounts = client.getAccounts();
             accounts.forEach(a -> System.out.println(a.getName()));
         }
 

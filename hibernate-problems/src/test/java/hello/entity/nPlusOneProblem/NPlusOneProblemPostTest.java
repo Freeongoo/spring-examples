@@ -8,7 +8,6 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
-import java.util.Set;
 
 @DatabaseSetup({"/post.xml", "/comment.xml"})
 public class NPlusOneProblemPostTest extends AbstractJpaTest {
@@ -24,7 +23,7 @@ public class NPlusOneProblemPostTest extends AbstractJpaTest {
         for (Post post: posts) {
             // since we have a lazy breeze
             // at each iteration when receiving the list - a separate "select" will be performed
-            Set<Comment> comments = post.getComments();
+            List<Comment> comments = post.getComments();
             comments.forEach(c -> System.out.println(c.getName()));
         }
 

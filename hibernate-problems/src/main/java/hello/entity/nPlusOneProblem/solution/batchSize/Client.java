@@ -8,7 +8,7 @@ import org.hibernate.annotations.BatchSize;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "client")
@@ -18,7 +18,7 @@ public class Client extends AbstractBaseEntity<Long> {
 
     @BatchSize(size = 25)
     @OneToMany(mappedBy = "client")
-    private Set<Account> accounts;
+    private List<Account> accounts;
 
     public Client() {
     }
@@ -27,11 +27,11 @@ public class Client extends AbstractBaseEntity<Long> {
         this.name = name;
     }
 
-    public Set<Account> getAccounts() {
+    public List<Account> getAccounts() {
         return accounts;
     }
 
-    public void setAccounts(Set<Account> accounts) {
+    public void setAccounts(List<Account> accounts) {
         this.accounts = accounts;
     }
 }
