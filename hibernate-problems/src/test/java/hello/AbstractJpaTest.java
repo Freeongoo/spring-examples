@@ -2,6 +2,7 @@ package hello;
 
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import hello.sqltracker.AssertSqlCount;
+import org.hibernate.Session;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,8 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
+
+import javax.persistence.EntityManager;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest()
@@ -24,7 +27,12 @@ import org.springframework.test.context.transaction.TransactionalTestExecutionLi
 public abstract class AbstractJpaTest {
 
     @Autowired
-    protected TestEntityManager entityManager;
+    protected TestEntityManager testEntityManager;
+
+    protected Session getSession() {
+        EntityManager entityManager = testEntityManager.getEntityManager();
+        return entityManager.unwrap(Session.class);
+    }
 
     @Before
     public void setUp() {
@@ -34,7 +42,7 @@ public abstract class AbstractJpaTest {
 
     protected void flushAndClean() {
         System.out.println("\n**** flush and clean ****\n");
-        entityManager.flush();
-        entityManager.clear();
+        testEntityManager.flush();
+        testEntityManager.clear();
     }
 }
