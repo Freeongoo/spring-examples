@@ -9,4 +9,6 @@
     <Comment id="2" name="Comment#2" post_id="1" author_id="2"/>
     <Comment id="3" name="Comment#3" post_id="2" author_id="1"/>
     <Comment id="4" name="Comment#4" post_id="2" author_id="2"/>
+
+    <Comment id="5" post_id="2" author_id="2"/>
 </dataset>

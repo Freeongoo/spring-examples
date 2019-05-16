@@ -189,6 +189,14 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
     }
 
     private void setCriteriaInByValuesWithCast(Criteria criteria, String fieldName, List<?> values, Class<?> fieldType) {
+        boolean isExistNullValue = values.stream()
+                .anyMatch(Objects::isNull);
+
+        if (isExistNullValue) {
+            criteria.add(Restrictions.isNull(fieldName));
+            return;
+        }
+
         Set<Object> castedValues = values.stream()
                 .map(v -> ReflectionUtils.castFieldValueByType(fieldType, v))
                 .collect(toSet());
