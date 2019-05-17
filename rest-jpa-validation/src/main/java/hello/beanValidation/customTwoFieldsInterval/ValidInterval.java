@@ -14,6 +14,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Repeatable(ValidIntervals.class)   // for repeated annotation
 public @interface ValidInterval {
 
+    public static final String MESSAGE_ALTERNATIVE = "startField: '{startField}' cannot be more and equal than endField: '{endField}'";
+
     String startField();
 
     String endField();
