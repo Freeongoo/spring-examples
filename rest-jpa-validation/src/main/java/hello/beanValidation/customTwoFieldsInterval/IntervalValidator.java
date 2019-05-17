@@ -4,6 +4,7 @@ import hello.util.ReflectionUtils;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+import java.util.Date;
 
 public class IntervalValidator implements ConstraintValidator<ValidInterval, Object> {
 
@@ -24,9 +25,13 @@ public class IntervalValidator implements ConstraintValidator<ValidInterval, Obj
         if (start == null || end == null) return true;
 
         if (start instanceof Number && end instanceof Number) {
-            return ((Number) start).doubleValue() < ((Number) end).doubleValue();
+            return ((Number) start).doubleValue() <= ((Number) end).doubleValue();
         }
 
-        throw new RuntimeException("Can compare only number fields");
+        if (start instanceof Date && end instanceof Date) {
+            return ((Date) start).getTime() <= ((Date) end).getTime();
+        }
+
+        throw new RuntimeException("Can compare only number fields or date");
     }
 }
