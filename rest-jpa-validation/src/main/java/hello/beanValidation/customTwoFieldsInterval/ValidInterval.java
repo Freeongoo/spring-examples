@@ -18,6 +18,8 @@ public @interface ValidInterval {
 
     String endField();
 
+    boolean isMayBeEqual() default true;
+
     String message() default "startField: '{startField}' cannot be more than endField: '{endField}'";
 
     Class<?>[] groups() default { };

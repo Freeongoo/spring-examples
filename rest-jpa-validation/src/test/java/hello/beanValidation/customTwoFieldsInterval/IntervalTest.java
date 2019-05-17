@@ -53,4 +53,14 @@ public class IntervalTest {
         // if not empty - exist error
         assertEquals(2, validate.size());
     }
+
+    @Test
+    public void validate_WhenInterval_WhenEquals() {
+        Interval interval = new Interval(3., 3., 2, 2);
+
+        Set<ConstraintViolation<Interval>> validate = validator.validate(interval);
+
+        // if not empty - exist error
+        assertEquals(1, validate.size());
+    }
 }

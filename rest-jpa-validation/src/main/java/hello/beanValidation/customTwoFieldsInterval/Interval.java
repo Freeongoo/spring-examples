@@ -1,7 +1,7 @@
 package hello.beanValidation.customTwoFieldsInterval;
 
 @ValidInterval(startField = "start", endField = "finish")
-@ValidInterval(startField = "from", endField = "to")
+@ValidInterval(startField = "from", endField = "to", isMayBeEqual = false)
 public class Interval {
 
     private Double start;

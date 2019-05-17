@@ -10,11 +10,13 @@ public class IntervalValidator implements ConstraintValidator<ValidInterval, Obj
 
     private String startField;
     private String endField;
+    private boolean isMayBeEqual;
 
     @Override
     public void initialize(ValidInterval constraintAnnotation) {
         startField = constraintAnnotation.startField();
         endField = constraintAnnotation.endField();
+        isMayBeEqual = constraintAnnotation.isMayBeEqual();
     }
 
     @Override
@@ -25,11 +27,23 @@ public class IntervalValidator implements ConstraintValidator<ValidInterval, Obj
         if (start == null || end == null) return true;
 
         if (start instanceof Number && end instanceof Number) {
-            return ((Number) start).doubleValue() <= ((Number) end).doubleValue();
+            double doubleStart = ((Number) start).doubleValue();
+            double doubleFinish = ((Number) end).doubleValue();
+
+            if (isMayBeEqual) {
+                return doubleStart <= doubleFinish;
+            }
+            return doubleStart < doubleFinish;
         }
 
         if (start instanceof Date && end instanceof Date) {
-            return ((Date) start).getTime() <= ((Date) end).getTime();
+            long timeFrom = ((Date) start).getTime();
+            long timeTo = ((Date) end).getTime();
+
+            if (isMayBeEqual) {
+                return timeFrom <= timeTo;
+            }
+            return timeFrom <= timeTo;
         }
 
         throw new RuntimeException("Can compare only number fields or date");
