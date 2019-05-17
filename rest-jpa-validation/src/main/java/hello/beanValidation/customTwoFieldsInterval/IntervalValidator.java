@@ -21,6 +21,8 @@ public class IntervalValidator implements ConstraintValidator<ValidInterval, Obj
         Object start = ReflectionUtils.getFieldContent(bean, startField);
         Object end = ReflectionUtils.getFieldContent(bean, endField);
 
+        if (start == null || end == null) return true;
+
         if (start instanceof Number && end instanceof Number) {
             return ((Number) start).doubleValue() < ((Number) end).doubleValue();
         }
