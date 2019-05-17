@@ -11,6 +11,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(TYPE)  // for class
 @Retention(RUNTIME)
 @Constraint(validatedBy = { IntervalValidator.class })
+@Repeatable(ValidIntervals.class)   // for repeated annotation
 public @interface ValidInterval {
 
     String startField();

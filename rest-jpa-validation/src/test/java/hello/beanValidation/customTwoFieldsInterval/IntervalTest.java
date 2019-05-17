@@ -1,17 +1,12 @@
 package hello.beanValidation.customTwoFieldsInterval;
 
-import hello.beanValidation.customTwoFieldsDate.Operation;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 
 import javax.validation.*;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Set;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author dorofeev
@@ -30,7 +25,7 @@ public class IntervalTest {
     }
 
     @Test
-    public void validate() {
+    public void validate_WhenDouble() {
         Interval interval = new Interval(3., 1.);
 
         Set<ConstraintViolation<Interval>> validate = validator.validate(interval);
@@ -39,4 +34,23 @@ public class IntervalTest {
         assertEquals(1, validate.size());
     }
 
+    @Test
+    public void validate_WhenInteger() {
+        Interval interval = new Interval(2, 1);
+
+        Set<ConstraintViolation<Interval>> validate = validator.validate(interval);
+
+        // if not empty - exist error
+        assertEquals(1, validate.size());
+    }
+
+    @Test
+    public void validate_WhenIntegerAndDouble() {
+        Interval interval = new Interval(3., 1., 2, 1);
+
+        Set<ConstraintViolation<Interval>> validate = validator.validate(interval);
+
+        // if not empty - exist error
+        assertEquals(2, validate.size());
+    }
 }
