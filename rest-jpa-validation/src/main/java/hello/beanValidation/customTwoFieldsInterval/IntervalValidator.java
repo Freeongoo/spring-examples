@@ -43,7 +43,7 @@ public class IntervalValidator implements ConstraintValidator<ValidInterval, Obj
             if (isMayBeEqual) {
                 return timeFrom <= timeTo;
             }
-            return timeFrom <= timeTo;
+            return timeFrom < timeTo;
         }
 
         throw new RuntimeException("Can compare only number fields or date");
