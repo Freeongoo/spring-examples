@@ -95,3 +95,53 @@ Pros:
 Cons:
 * manual deserialization
 * cannot auto add Bean Validation from the box
+
+## Reflection
+
+### Reflection update fields written by ourselves
+
+See test: `/src/test/java/hello/controller/reflection/self/EmployeeReflectionSelfControllerTest.java`
+
+In controller:
+```
+@RestController
+@RequestMapping(EmployeeReflectionSelfController.PATH)
+public class EmployeeReflectionSelfController {
+
+    public final static String PATH = "/reflection-self-employees";
+
+    @Autowired
+    private EmployeeReflectionSelfService service;
+
+    @PatchMapping("/{id}")
+    public Employee update(@RequestBody Map<String, Object> requestMap, @PathVariable Long id) {
+        return service.update(id, requestMap);
+    }
+}
+```
+
+In service:
+```
+@Service
+public class EmployeeReflectionSelfService {
+
+    @Autowired
+    private EmployeeRepository employeeRepository;
+
+    public Employee update(Long id, Map<String, Object> requestMap) {
+        Optional<Employee> optionalEmployee = employeeRepository.findById(id);
+        return optionalEmployee
+                .map(e -> getUpdatedFromMap(e, requestMap))
+                .orElseThrow(() -> new ResourceNotFoundException("Not exist by id", OBJECT_NOT_FOUND));
+    }
+
+    private Employee getUpdatedFromMap(Employee employeeFromDb, Map<String, Object> requestMap) {
+        Long id = employeeFromDb.getId();
+
+        requestMap.forEach((key, value) -> ReflectionUtils.setFieldContent(employeeFromDb, key, value));
+
+        employeeFromDb.setId(id);
+        return employeeRepository.save(employeeFromDb);
+    }
+}
+```
