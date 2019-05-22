@@ -1,4 +1,4 @@
-package hello.beanValidation.customTwoFieldsValidation;
+package hello.beanValidation.customTwoFieldsDate;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

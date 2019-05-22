@@ -1,4 +1,4 @@
-package hello.beanValidation.customTwoFieldsValidation;
+package hello.beanValidation.customTwoFieldsDate;
 
 import org.junit.Before;
 import org.junit.Test;

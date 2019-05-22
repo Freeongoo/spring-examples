@@ -134,6 +134,18 @@ public class CommentDaoImplTest extends BaseTest {
     }
 
     @Test
+    public void getByProps_WhenFieldEqualNull() {
+        Map<String, List<?>> props = new HashMap<>();
+        props.put("name", singletonList(null));
+        List<Comment> comments = commentDao.getByProps(props);
+
+        assertThat(comments.size(), equalTo(1));
+        for(Comment comment : comments) {
+            assertThat(comment.getId(), equalTo(5L));
+        }
+    }
+
+    @Test
     public void getByProps_WhenRelationId() {
         Map<String, List<?>> props = new HashMap<>();
         props.put("post.id", singletonList(1L));
@@ -154,7 +166,7 @@ public class CommentDaoImplTest extends BaseTest {
         props.put("post.id", ids);
         List<Comment> comments = commentDao.getByProps(props);
 
-        assertThat(comments.size(), equalTo(4));
+        assertThat(comments.size(), equalTo(5));
     }
 
     @Test

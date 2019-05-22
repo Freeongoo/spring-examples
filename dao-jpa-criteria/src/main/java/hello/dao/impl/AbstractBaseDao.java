@@ -141,9 +141,17 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
     }
 
     private Predicate getPredicateInByValuesWithCast(Root<T> root, String fieldName, List<?> values, Class<?> fieldType) {
-        Set<Object> castedValues = getCastedValues(values, fieldType);
-        Path<Object> expression = root.get(fieldName);
-        return getPredicateIn(castedValues, expression);
+        boolean isExistNullValue = values.stream()
+                .anyMatch(Objects::isNull);
+
+        if (isExistNullValue) {
+            Path<Object> expression = root.get(fieldName);
+            return expression.isNull();
+        } else {
+            Set<Object> castedValues = getCastedValues(values, fieldType);
+            Path<Object> expression = root.get(fieldName);
+            return getPredicateIn(castedValues, expression);
+        }
     }
 
     private Predicate getPredicateIn(Set<Object> castedValues, Path<Object> expression) {
