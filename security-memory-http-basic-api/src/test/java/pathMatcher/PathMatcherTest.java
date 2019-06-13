@@ -126,6 +126,14 @@ public class PathMatcherTest {
     }
 
     @Test
+    public void withOrWithoutSlash_WheWithoutFirstSlash() {
+        String pattern = "/help/**";
+        String sample = "/help";
+
+        Assert.assertTrue(pathMatcher.match(pattern, sample));
+    }
+
+    @Test
     public void nullOrAnyDirs() {
         String pattern = "/**";
         String sample = "/aa/bb/cc";
