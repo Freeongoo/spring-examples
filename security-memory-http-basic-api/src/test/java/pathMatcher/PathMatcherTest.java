@@ -126,9 +126,34 @@ public class PathMatcherTest {
     }
 
     @Test
-    public void withOrWithoutSlash_WheWithoutFirstSlash() {
+    public void withOrWithoutSlash_WhenWithoutFirstSlash() {
         String pattern = "/help/**";
         String sample = "/help";
+
+        Assert.assertTrue(pathMatcher.match(pattern, sample));
+    }
+
+    @Test
+    public void withOrWithoutSlash_WhenDoubleSlash() {
+        String pattern = "/help//**";
+        String sample = "/help";
+
+        Assert.assertTrue(pathMatcher.match(pattern, sample));
+    }
+
+
+    @Test
+    public void withOrWithoutSlash_WhenDoubleSlash2() {
+        String pattern = "/help//**";
+        String sample = "/help/";
+
+        Assert.assertTrue(pathMatcher.match(pattern, sample));
+    }
+
+    @Test
+    public void withOrWithoutSlash_WhenDoubleSlash3() {
+        String pattern = "/help//**";
+        String sample = "/help/2/33";
 
         Assert.assertTrue(pathMatcher.match(pattern, sample));
     }
