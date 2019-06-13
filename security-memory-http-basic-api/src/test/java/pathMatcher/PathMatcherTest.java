@@ -16,7 +16,7 @@ public class PathMatcherTest {
     }
 
     @Test
-    public void oneChar() {
+    public void oneChar_ShouldBeTrue() {
         pathMatcher = new AntPathMatcher();
 
         String pattern = "/?";
@@ -27,7 +27,7 @@ public class PathMatcherTest {
     }
 
     @Test
-    public void oneChar_WhenMore() {
+    public void oneChar_WhenMore_ShouldBeFalse() {
         pathMatcher = new AntPathMatcher();
 
         String pattern = "/?";
@@ -38,7 +38,7 @@ public class PathMatcherTest {
     }
 
     @Test
-    public void oneCharOrMany_WhenMany() {
+    public void oneCharOrMany_WhenMany_ShouldBeTrue() {
         String pattern = "/?*";
         String sample = "/a123123";
 
@@ -47,9 +47,27 @@ public class PathMatcherTest {
     }
 
     @Test
-    public void oneCharOrMany_WhenManyWithSlesh() {
+    public void oneCharOrMany_WhenManyWithGetParams_ShouldBeTrue() {
+        String pattern = "/abc/?*";
+        String sample = "/abc/a123123?from=1";
+
+        Assert.assertTrue(pathMatcher.match(pattern, sample));
+
+    }
+
+    @Test
+    public void oneCharOrMany_WhenManyWithSlash() {
         String pattern = "/?*/";
         String sample = "/a1sfdsd23123/";
+
+        Assert.assertTrue(pathMatcher.match(pattern, sample));
+
+    }
+
+    @Test
+    public void oneCharOrMany_WhenManyWithSlash2() {
+        String pattern = "/abc/?*";
+        String sample = "/abc/a1sfdsd23123";
 
         Assert.assertTrue(pathMatcher.match(pattern, sample));
 
@@ -89,6 +107,22 @@ public class PathMatcherTest {
 
         Assert.assertFalse(pathMatcher.match(pattern, sample));
 
+    }
+
+    @Test
+    public void withOrWithoutSlash_WhenWithoutSlash() {
+        String pattern = "/**";
+        String sample = "/abc";
+
+        Assert.assertTrue(pathMatcher.match(pattern, sample));
+    }
+
+    @Test
+    public void withOrWithoutSlash_WhenWithSlash() {
+        String pattern = "/help/**";
+        String sample = "/help/abc/";
+
+        Assert.assertTrue(pathMatcher.match(pattern, sample));
     }
 
     @Test
