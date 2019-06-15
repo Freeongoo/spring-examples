@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import hello.entity.AbstractBaseEntity;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity
 @Table(name = "comment")
@@ -15,12 +14,12 @@ public class Comment extends AbstractBaseEntity {
 
     private String name;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "post_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id")
     private Post post;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "author_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id")
     private Author author;
 
     public Comment() {

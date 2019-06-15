@@ -3,9 +3,12 @@ package hello.dao.impl;
 import hello.container.*;
 import hello.dao.BaseDao;
 import hello.service.CriteriaAliasService;
+import hello.util.CollectionUtils;
 import hello.util.EntityFieldUtils;
 import hello.util.ReflectionUtils;
 import org.hibernate.*;
+import org.hibernate.criterion.CriteriaSpecification;
+import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -163,7 +166,7 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
 
     private void setCriteriaAlias(Criteria criteria, Set<String> criteriaAlias) {
         if (isEmpty(criteriaAlias)) return;
-        criteriaAlias.forEach(a -> criteria.createAlias(a, a));
+        criteriaAlias.forEach(a -> criteria.createAlias(a, a, CriteriaSpecification.LEFT_JOIN));
     }
 
     protected void createCriteriaByFieldNameAndValues(Criteria criteria, String fieldName, List<?> values) {
@@ -189,19 +192,36 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
     }
 
     private void setCriteriaInByValuesWithCast(Criteria criteria, String fieldName, List<?> values, Class<?> fieldType) {
-        boolean isExistNullValue = values.stream()
-                .anyMatch(Objects::isNull);
+        Set<Object> castedValues = getCastedValuesByType(values, fieldType);
 
-        if (isExistNullValue) {
-            criteria.add(Restrictions.isNull(fieldName));
-            return;
+        boolean isExistNullValues = CollectionUtils.isExistNull(castedValues);
+
+        if (!isExistNullValues) {
+            criteria.add(Restrictions.in(fieldName, castedValues));
+        } else {
+            setCriteriaWithInAndIsNullByValues(criteria, fieldName, castedValues);
         }
+    }
 
-        Set<Object> castedValues = values.stream()
-                .map(v -> ReflectionUtils.castFieldValueByType(fieldType, v))
+    private void setCriteriaWithInAndIsNullByValues(Criteria criteria, String fieldName, Set<Object> castedValues) {
+        Criterion criterionIsNull = Restrictions.isNull(fieldName);
+        Collection<Object> nonNullValues = CollectionUtils.getCollectionWithoutNull(castedValues);
+        if (isEmpty(nonNullValues)) {
+            criteria.add(criterionIsNull);
+        } else {
+            Criterion criterionIn = Restrictions.in(fieldName, nonNullValues);
+            Criterion allCommon = Restrictions.or(criterionIsNull, criterionIn);
+            criteria.add(allCommon);
+        }
+    }
+
+    private Set<Object> getCastedValuesByType(List<?> values, Class<?> fieldType) {
+        return values.stream()
+                .map(v -> {
+                    if (v == null) return null;
+                    return ReflectionUtils.castFieldValueByType(fieldType, v);
+                })
                 .collect(toSet());
-
-        criteria.add(Restrictions.in(fieldName, castedValues));
     }
 
     @Override

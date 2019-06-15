@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.*;
@@ -146,6 +147,50 @@ public class CommentDaoImplTest extends BaseTest {
     }
 
     @Test
+    public void getByProps_WhenFieldEqualNullAnNonNull() {
+        Map<String, List<?>> props = new HashMap<>();
+        props.put("name", asList(null, "Comment#1"));
+        List<Comment> comments = commentDao.getByProps(props);
+
+        assertThat(comments.size(), equalTo(2));
+        assertThat(comments, containsInAnyOrder(
+                hasProperty("id", is(1L)),
+                hasProperty("id", is(5L))
+        ));
+    }
+
+    @Test
+    public void getByProps_WhenFieldPostNameIsNull() {
+        Map<String, List<?>> props = new HashMap<>();
+        props.put("post.name", singletonList(null));
+        List<Comment> comments = commentDao.getByProps(props);
+
+        assertThat(comments.size(), equalTo(3));
+        assertThat(comments, containsInAnyOrder(
+                hasProperty("id", is(6L)),
+                hasProperty("id", is(7L)),
+                hasProperty("id", is(8L))
+        ));
+    }
+
+    @Test
+    public void getByProps_WhenFieldPostNameIsNullAndNonNull() {
+        Map<String, List<?>> props = new HashMap<>();
+        props.put("post.name", asList(null, "Post#2"));
+        List<Comment> comments = commentDao.getByProps(props);
+
+        assertThat(comments.size(), equalTo(6));
+        assertThat(comments, containsInAnyOrder(
+                hasProperty("id", is(3L)),
+                hasProperty("id", is(4L)),
+                hasProperty("id", is(5L)),
+                hasProperty("id", is(6L)),
+                hasProperty("id", is(7L)),
+                hasProperty("id", is(8L))
+        ));
+    }
+
+    @Test
     public void getByProps_WhenRelationId() {
         Map<String, List<?>> props = new HashMap<>();
         props.put("post.id", singletonList(1L));
@@ -228,7 +273,7 @@ public class CommentDaoImplTest extends BaseTest {
 
         assertThat(comments.size(), equalTo(1));
         for(Comment comment : comments) {
-            assertThat(comment.getName(), equalTo("Comment#4"));
+            assertThat(comment.getName(), equalTo("Comment#8"));
         }
     }
 

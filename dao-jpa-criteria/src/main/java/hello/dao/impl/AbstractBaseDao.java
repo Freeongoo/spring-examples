@@ -2,6 +2,7 @@ package hello.dao.impl;
 
 import hello.container.*;
 import hello.dao.BaseDao;
+import hello.util.CollectionUtils;
 import hello.util.EntityFieldUtils;
 import hello.util.ReflectionUtils;
 import org.hibernate.Session;
@@ -129,7 +130,7 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
         Class<?> relationFieldClass = ReflectionUtils.getFieldType(getPersistentClass(), relationFieldAlias);
         Class<?> relationFieldType = ReflectionUtils.getFieldType(relationFieldClass, relationFieldName);
 
-        Join<T, ?> join = root.join(relationFieldAlias);
+        Join<T, ?> join = root.join(relationFieldAlias, JoinType.LEFT);
 
         return getPredicateInByValuesByJoinWithCast(join, relationFieldName, values, relationFieldType);
     }
@@ -137,30 +138,48 @@ public abstract class AbstractBaseDao<T, ID extends Serializable> implements Bas
     private Predicate getPredicateInByValuesByJoinWithCast(Join<T, ?> join, String fieldName, List<?> values, Class<?> fieldType) {
         Set<Object> castedValues = getCastedValues(values, fieldType);
         Path<Object> expression = join.get(fieldName);
-        return getPredicateIn(castedValues, expression);
+
+        return getPredicateInOrNullDependsOfCollection(castedValues, expression);
     }
 
     private Predicate getPredicateInByValuesWithCast(Root<T> root, String fieldName, List<?> values, Class<?> fieldType) {
-        boolean isExistNullValue = values.stream()
-                .anyMatch(Objects::isNull);
+        Set<Object> castedValues = getCastedValues(values, fieldType);
+        Path<Object> expression = root.get(fieldName);
 
-        if (isExistNullValue) {
-            Path<Object> expression = root.get(fieldName);
-            return expression.isNull();
-        } else {
-            Set<Object> castedValues = getCastedValues(values, fieldType);
-            Path<Object> expression = root.get(fieldName);
+        return getPredicateInOrNullDependsOfCollection(castedValues, expression);
+    }
+
+    private Predicate getPredicateInOrNullDependsOfCollection(Set<Object> castedValues, Path<Object> expression) {
+        boolean isExistNullValues = CollectionUtils.isExistNull(castedValues);
+
+        if (!isExistNullValues) {
             return getPredicateIn(castedValues, expression);
+        } else {
+            return getPredicateInOrNull(castedValues, expression);
         }
     }
 
-    private Predicate getPredicateIn(Set<Object> castedValues, Path<Object> expression) {
+    private Predicate getPredicateInOrNull(Collection<Object> castedValues, Path<Object> expression) {
+        Predicate isNullPredicate = expression.isNull();
+        Collection<Object> nonNullValues = CollectionUtils.getCollectionWithoutNull(castedValues);
+        if (isEmpty(nonNullValues)) {
+            return isNullPredicate;
+        } else {
+            Predicate inPredicate = getPredicateIn(nonNullValues, expression);
+            return getCriteriaBuilder().or(isNullPredicate, inPredicate);
+        }
+    }
+
+    private Predicate getPredicateIn(Collection<Object> castedValues, Path<Object> expression) {
         return expression.in(castedValues);
     }
 
     private Set<Object> getCastedValues(List<?> values, Class<?> fieldType) {
         return values.stream()
-                .map(v -> ReflectionUtils.castFieldValueByType(fieldType, v))
+                .map(v -> {
+                    if (v == null) return null;
+                    return ReflectionUtils.castFieldValueByType(fieldType, v);
+                })
                 .collect(toSet());
     }
 

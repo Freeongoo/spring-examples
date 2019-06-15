@@ -1,9 +1,11 @@
 <dataset>
     <Post id="1" name="Post#1"/>
     <Post id="2" name="Post#2"/>
+    <Post id="3" />
 
     <Author id="1" name="Author#1"/>
     <Author id="2" name="Author#2"/>
+    <Author id="3" />
 
     <Comment id="1" name="Comment#1" post_id="1" author_id="1"/>
     <Comment id="2" name="Comment#2" post_id="1" author_id="2"/>
@@ -11,4 +13,9 @@
     <Comment id="4" name="Comment#4" post_id="2" author_id="2"/>
 
     <Comment id="5" post_id="2" author_id="2"/>
+
+    <Comment id="6" name="Comment#6" post_id="3" author_id="2"/>
+    <Comment id="7" name="Comment#7" post_id="3" author_id="3"/>
+
+    <Comment id="8" name="Comment#8" author_id="3"/>
 </dataset>
