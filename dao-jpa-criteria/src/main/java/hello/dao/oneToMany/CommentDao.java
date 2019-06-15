@@ -8,4 +8,8 @@ import java.util.List;
 public interface CommentDao extends BaseDao<Comment, Long> {
 
     public List<Comment> findByPostId(Long postId);
+
+    public List<Comment> findNotInPassedIds(List<Long> ids);
+
+    public List<Comment> findLikeName(String partOfName);
 }

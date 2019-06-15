@@ -39,6 +39,30 @@ public class CommentDaoImplTest extends BaseTest {
     }
 
     @Test
+    public void findNotInPassedIds() {
+        List<Long> ids = new ArrayList<>();
+        ids.add(1L);
+        ids.add(2L);
+        ids.add(3L);
+        ids.add(4L);
+        ids.add(5L);
+        ids.add(6L);
+        ids.add(7L);
+        List<Comment> comments = commentDao.findNotInPassedIds(ids);
+
+        assertThat(comments.size(), equalTo(1));
+        Comment comment = comments.iterator().next();
+        assertThat(comment.getId(), equalTo(8L));
+    }
+
+    @Test
+    public void findLikeName() {
+        List<Comment> comments = commentDao.findLikeName("omm");
+
+        assertThat(comments.size(), equalTo(7));
+    }
+
+    @Test
     public void getByProps_WhenFieldEqualNull() {
         Map<String, List<?>> props = new HashMap<>();
         props.put("name", singletonList(null));
