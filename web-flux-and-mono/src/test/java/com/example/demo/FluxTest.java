@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Flux;
 
@@ -17,6 +18,44 @@ class FluxTest extends AbstractTest {
 
         // Получаем данные и обрабатываем по мере поступления
         fluxUsers.subscribe(System.out::println);
+    }
+
+    // complete - не выводится так как было прокинуто исключение, которое мы обработали и вывели
+    @Test
+    void fluxError_WhenHandleError() {
+        Flux<Integer> ints = Flux.range(1, 6)
+                .map(i -> {
+                    if (i <= 3) return i;
+                    throw new RuntimeException("Got to 4");
+                });
+        ints.subscribe(
+                i -> System.out.println(i),
+                error -> System.err.println("Error: " + error),
+                () -> System.out.println("complete")
+        );
+    }
+
+    @Test
+    void fluxError_WhenNotHandleError() {
+        Assertions.assertThrows(RuntimeException.class, () -> {
+            Flux<Integer> ints = Flux.range(1, 6)
+                    .map(i -> {
+                        if (i <= 3) return i;
+                        throw new RuntimeException("Got to 4");
+                    });
+            ints.subscribe(
+                    i -> System.out.println(i)
+            );
+        });
+    }
+
+    @Test
+    void fluxWithRequestCount() {
+        Flux<Integer> ints = Flux.range(1, 4);
+        ints.subscribe(i -> System.out.println(i),
+                error -> System.err.println("Error " + error),
+                () -> System.out.println("Done"),
+                sub -> sub.request(2));
     }
 
     @Test
