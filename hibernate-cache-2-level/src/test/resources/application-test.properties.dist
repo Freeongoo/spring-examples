@@ -25,10 +25,15 @@ spring.jpa.properties.hibernate.session_factory.statement_inspector=hello.sqltra
 # ===============================
 logging.level.org.hibernate.SQL = DEBUG
 logging.level.org.hibernate.type.descriptor.sql.BasicBinder=TRACE
+logging.level.org.hibernate.cache = TRACE
+logging.level.org.hibernate.stat = DEBUG
+
+logging.level.net.sf.ehcache=TRACE
 
 # ===============================
 # JPA cache config
 # ===============================
+spring.jpa.properties.hibernate.generate_statistics=true
 spring.jpa.properties.hibernate.cache.use_second_level_cache=true
 spring.jpa.properties.hibernate.cache.use_query_cache=true
 spring.jpa.properties.hibernate.cache.region.factory_class=org.hibernate.cache.ehcache.EhCacheRegionFactory

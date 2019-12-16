@@ -4,11 +4,13 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import hello.AbstractJpaTest;
 import hello.repository.cache.GoodRepository;
 import hello.sqltracker.AssertSqlCount;
+import org.assertj.core.api.Assertions;
 import org.hibernate.Cache;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Collection;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.equalTo;
@@ -76,5 +78,21 @@ public class GoodReadOnlyTest extends AbstractJpaTest {
         GoodReadOnly good2 = entityManager.find(GoodReadOnly.class, 1L);
 
         AssertSqlCount.assertSelectCount(1);
+    }
+
+    @Test
+    public void findByName_CacheLevelTwoNotWork_ShouldBeMoreThanOneQuery() {
+        Cache secondLevelCache = session.getSessionFactory().getCache();
+        secondLevelCache.evictEntityData(GoodReadOnly.class, 2L);
+
+        Collection<GoodReadOnly> collection = goodRepository.findByName("Good#2");
+        Assertions.assertThat(collection.size()).isEqualTo(1);
+
+        flushAndClean();
+
+        Collection<GoodReadOnly> collectionAgain = goodRepository.findByName("Good#2");
+        Assertions.assertThat(collectionAgain.size()).isEqualTo(1);
+
+        AssertSqlCount.assertSelectCount(2);
     }
 }
