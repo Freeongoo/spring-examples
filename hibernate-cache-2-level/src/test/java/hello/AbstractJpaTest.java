@@ -2,12 +2,9 @@ package hello;
 
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import hello.sqltracker.AssertSqlCount;
-import net.sf.ehcache.CacheManager;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.junit.Before;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.TestPropertySource;

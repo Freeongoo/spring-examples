@@ -15,7 +15,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-@DatabaseSetup({"/good.xml"})
+@DatabaseSetup({"/good-read-only.xml"})
 public class GoodReadOnlyTest extends AbstractJpaTest {
 
     private Cache secondLevelCache;
@@ -44,7 +44,7 @@ public class GoodReadOnlyTest extends AbstractJpaTest {
     }
 
     @Test
-    public void findById_WhenJpaRepository() {
+    public void findById_WhenMultiplyGetByIdByJpaRepository_ShouldBeOneSelectRequest() {
         Cache secondLevelCache = session.getSessionFactory().getCache();
         secondLevelCache.evictEntityData(GoodReadOnly.class, 1L);
 
@@ -56,11 +56,16 @@ public class GoodReadOnlyTest extends AbstractJpaTest {
         Optional<GoodReadOnly> goodOptionalAgain = goodRepository.findById(1L);
         assertTrue(goodOptionalAgain.isPresent());
 
+        flushAndClean();
+
+        Optional<GoodReadOnly> goodOptionalAgainAgain = goodRepository.findById(1L);
+        assertTrue(goodOptionalAgainAgain.isPresent());
+
         AssertSqlCount.assertSelectCount(1);
     }
 
     @Test
-    public void findById2_WhenEntityManager() {
+    public void findById_WhenMultiplyGetByIdByEntityManager_ShouldBeOneSelectRequest() {
         Cache secondLevelCache = session.getSessionFactory().getCache();
         secondLevelCache.evictEntityData(GoodReadOnly.class, 1L);
 
