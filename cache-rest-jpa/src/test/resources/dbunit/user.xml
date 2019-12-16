@@ -1,0 +1,27 @@
+<dataset>
+    <user id="1" name="John" />
+    <user id="2" name="Mike" />
+
+    <role id="1" name="Admin Role's" />
+    <role id="2" name="User Role's" />
+
+    <rule id="1" name="Rule#1" read="true" create="true" update="true"/>
+    <rule id="2" name="Rule#2" read="true" create="false" update="true"/>
+    <rule id="3" name="Rule#3" read="true" create="true" update="false"/>
+
+    <rule id="4" name="Rule#4" read="true" create="false" update="false"/>
+    <rule id="5" name="Rule#5" read="true" create="false" update="false"/>
+    <rule id="6" name="Rule#6" read="true" create="false" update="false"/>
+
+    <user_role user_id="1" role_id="1" />
+    <user_role user_id="1" role_id="2" />
+    <user_role user_id="2" role_id="1" />
+
+    <role_rule role_id="1" rule_id="1" />
+    <role_rule role_id="1" rule_id="2" />
+    <role_rule role_id="1" rule_id="3" />
+
+    <role_rule role_id="2" rule_id="4" />
+    <role_rule role_id="2" rule_id="5" />
+    <role_rule role_id="2" rule_id="6" />
+</dataset>
