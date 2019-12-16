@@ -95,4 +95,20 @@ public class GoodReadOnlyTest extends AbstractJpaTest {
 
         AssertSqlCount.assertSelectCount(2);
     }
+
+    @Test
+    public void findByName_UsingCacheFromSpring_ShouldBeOneQuery() {
+        Cache secondLevelCache = session.getSessionFactory().getCache();
+        secondLevelCache.evictEntityData(GoodReadOnly.class, 2L);
+
+        Collection<GoodReadOnly> collection = goodRepository.findByNameByCache("Good#2");
+        Assertions.assertThat(collection.size()).isEqualTo(1);
+
+        flushAndClean();
+
+        Collection<GoodReadOnly> collectionAgain = goodRepository.findByNameByCache("Good#2");
+        Assertions.assertThat(collectionAgain.size()).isEqualTo(1);
+
+        AssertSqlCount.assertSelectCount(1);
+    }
 }

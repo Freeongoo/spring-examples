@@ -76,3 +76,6 @@ public class GoodReadOnly extends AbstractBaseEntity<Long> {
 ### CacheConcurrencyStrategy.READ_ONLY
 
 /src/test/java/hello/entity/cache/GoodReadOnlyTest.java
+
+Notes! in method `findByName_CacheLevelTwoNotWork_ShouldBeMoreThanOneQuery` hibernate cache level 2 not work.
+For such methods you need to use a different cache - for example, the spring cache (`findByName_UsingCacheFromSpring_ShouldBeOneQuery`)
