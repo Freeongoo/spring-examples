@@ -1,4 +1,4 @@
-package hello.controller.annotation;
+package hello.controller;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import hello.AbstractJpaTest;

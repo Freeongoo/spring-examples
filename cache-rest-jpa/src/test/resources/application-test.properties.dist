@@ -30,3 +30,8 @@ spring.jackson.serialization.indent_output=true
 # ===============================
 logging.level.org.hibernate.SQL = DEBUG
 logging.level.org.hibernate.type.descriptor.sql.BasicBinder=TRACE
+
+# ===============================
+# Spring cache log
+# ===============================
+logging.level.org.springframework.cache = TRACE
