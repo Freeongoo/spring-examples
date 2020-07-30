@@ -115,3 +115,7 @@ public class GreetingController {
 1. Click to connect to WebSocket route: '/gs-guide-websocket'
 2. After connect to WebSocket auto subscribe to topic: '/topic/greetings' (it means to receive all messages that were sent to this topic)
 3. Click "send" (send name) to route: '/app/hello' and return greeting message
+
+## Example test send notification
+
+`/test/java/com/example/messagingstompwebsocket/WebSocketClientTest.java`
