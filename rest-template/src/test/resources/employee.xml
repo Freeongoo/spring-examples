@@ -1,0 +1,4 @@
+<dataset>
+    <Employee id="1" name="John" role="admin"/>
+    <Employee id="2" name="Mike" role="user"/>
+</dataset>
