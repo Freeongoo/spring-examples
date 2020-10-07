@@ -61,6 +61,8 @@ public abstract class AbstractJpaTest {
 
     private static void initAndStartTestContainer() {
         mysqlContainer = new MySQLContainer<>("mysql:5.7")
+                .withUrlParam("characterEncoding", "UTF-8")
+                .withUrlParam("serverTimezone", "UTC")
                 .withDatabaseName("test")
                 .withUsername("test")
                 .withPassword("test")

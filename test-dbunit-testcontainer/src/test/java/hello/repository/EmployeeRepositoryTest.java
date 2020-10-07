@@ -75,6 +75,8 @@ public class EmployeeRepositoryTest {
     private static void initAndStartTestContainer() {
         mysqlContainer = new MySQLContainer<>("mysql:5.7")
                 .withDatabaseName("test")
+                .withUrlParam("characterEncoding", "UTF-8")
+                .withUrlParam("serverTimezone", "UTC")
                 .withUsername("test")
                 .withPassword("test")
                 .withCreateContainerCmdModifier(cmd -> cmd
