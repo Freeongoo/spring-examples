@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="test-rest-jpa" />
+        <module name="rest-hibernate" />
+        <module name="test-dbunit" />
+        <module name="spring-boot-demo" />
+        <module name="rest-jpa" />
+        <module name="test-dbunit-testcontainer" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="rest-hibernate" target="1.8" />
+      <module name="rest-jpa" target="1.8" />
+      <module name="spring-boot-demo" target="1.8" />
+      <module name="test-dbunit" target="1.8" />
+      <module name="test-dbunit-testcontainer" target="1.8" />
+      <module name="test-rest-jpa" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="test-dbunit" options="-parameters" />
+      <module name="test-dbunit-testcontainer" options="-parameters" />
+    </option>
+  </component>
+</project>

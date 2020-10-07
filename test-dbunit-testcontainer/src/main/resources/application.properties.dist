@@ -1,0 +1,20 @@
+# ===============================
+# DB
+# ===============================
+spring.datasource.url = jdbc:mysql://localhost:3306/rest?useSSL=false&serverTimezone=UTC
+spring.datasource.username = root
+spring.datasource.password = root
+
+# ===============================
+# JPA
+# ===============================
+spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.MySQL5InnoDBDialect
+spring.jpa.properties.hibernate.id.new_generator_mappings = false
+spring.jpa.properties.hibernate.format_sql = true
+spring.jpa.hibernate.ddl-auto = update
+
+# ===============================
+# Logging sql and params - if needed
+# ===============================
+# logging.level.org.hibernate.SQL = DEBUG
+# logging.level.org.hibernate.type.descriptor.sql.BasicBinder=TRACE
