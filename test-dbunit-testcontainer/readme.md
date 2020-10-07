@@ -119,7 +119,7 @@ Therefore, here it is necessary to rewrite our properties in Spring,
 for example like this:
 
 ```
-@ContextConfiguration(initializers = AbstractJpaTest.Initializer.class)
+@ContextConfiguration(initializers = AbstractTest.Initializer.class)
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public abstract class AbstractTest {
