@@ -40,11 +40,9 @@ import javax.transaction.Transactional;
 @TestPropertySource(locations="/application-test.properties")
 public abstract class AbstractJpaTest {
 
-    private static IDataSet globalDataSet;
+    private static final IDataSet globalDataSet;
 
     public static MySQLContainer<?> mysqlContainer;
-
-    private JdbcDatabaseTester jdbcDatabaseTester;
 
     static {
 
@@ -105,7 +103,7 @@ public abstract class AbstractJpaTest {
      * @throws Exception Exception
      */
     private void seedDataToDatabase(IDataSet dataSet) throws Exception {
-        jdbcDatabaseTester = new JdbcDatabaseTester(mysqlContainer.getDriverClassName(), mysqlContainer.getJdbcUrl(), mysqlContainer.getUsername(), mysqlContainer.getPassword());
+        JdbcDatabaseTester jdbcDatabaseTester = new JdbcDatabaseTester(mysqlContainer.getDriverClassName(), mysqlContainer.getJdbcUrl(), mysqlContainer.getUsername(), mysqlContainer.getPassword());
         jdbcDatabaseTester.setSetUpOperation(DatabaseOperation.REFRESH);
         jdbcDatabaseTester.setTearDownOperation(DatabaseOperation.NONE);
         jdbcDatabaseTester.setDataSet(dataSet);

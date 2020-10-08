@@ -44,7 +44,7 @@ import static org.junit.Assert.assertThat;
 @TestPropertySource(locations="/application-test.properties")
 public class EmployeeRepositoryTest {
 
-    public static MySQLContainer mysqlContainer;
+    public static MySQLContainer<?> mysqlContainer;
 
     @PersistenceContext
     protected EntityManager entityManager;
