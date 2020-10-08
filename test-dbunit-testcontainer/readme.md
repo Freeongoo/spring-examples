@@ -86,7 +86,7 @@ cp application-test.properties.dist application-test.properties
 ## Config TestContainer for MySQL
 
 Before starting all tests, you need to create a static variable of our container 
-and initialize it.
+and initialize it (with correct encoding for Russian characters).
 
 ```
 public static MySQLContainer mysqlContainer;
@@ -97,16 +97,16 @@ public static void setUpClass() {
 }
 
 private static void initAndStartTestContainer() {
-    mysqlContainer = new MySQLContainer<>("mysql:5.7")
+     mysqlContainer = new MySQLContainer<>("mysql:5.7")
+            .withUrlParam("characterEncoding", "UTF-8")
+            .withUrlParam("serverTimezone", "UTC")
             .withDatabaseName("test")
             .withUsername("test")
             .withPassword("test")
-            .withCreateContainerCmdModifier(cmd -> cmd
-                    .withHostName("localhost")
-                    .withPortBindings(new PortBinding(Ports.Binding.bindPort(3309), new ExposedPort(3306)))
-            );
+            .withUrlParam("useSSL", "false")
+            .withCommand("--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci");;
 
-    mysqlContainer.start();
+     mysqlContainer.start();
 }
 ```
 
@@ -143,8 +143,8 @@ public abstract class AbstractTest {
 
 ## How to configure data insertion in an abstract base test file to TestContainer
 
-To do this, you need to manually parse the DBUnit file and insert it into the 
-setUp method in test abstract file.
+To do this for DBUnit, you need to manually parse the DBUnit file and 
+insert it into the setUp method in test abstract file.
 
 Example abstract base test file for all tests:
 ```
@@ -158,6 +158,7 @@ Example abstract base test file for all tests:
     @Transactional
     public abstract class AbstractTest {
     
+        private static IDataSet globalDataSet;
         private JdbcDatabaseTester jdbcDatabaseTester;
     
         @Autowired
@@ -174,14 +175,20 @@ Example abstract base test file for all tests:
     
         @Before
         public void setUp() throws Exception {
-            seedDataToDatabase();   // init some data from DBUnit xml file
+            seedDataToDatabase(globalDataSet);
         }
-    
-        private void seedDataToDatabase() throws Exception {
+        
+        /**
+        * Add data before test start
+        * 
+        * @param dataSet  dataSet
+        * @throws Exception Exception
+        */
+        private void seedDataToDatabase(IDataSet dataSet) throws Exception {
             jdbcDatabaseTester = new JdbcDatabaseTester(mysqlContainer.getDriverClassName(), mysqlContainer.getJdbcUrl(), mysqlContainer.getUsername(), mysqlContainer.getPassword());
             jdbcDatabaseTester.setSetUpOperation(DatabaseOperation.REFRESH);
             jdbcDatabaseTester.setTearDownOperation(DatabaseOperation.NONE);
-            jdbcDatabaseTester.setDataSet(globalDataSet);
+            jdbcDatabaseTester.setDataSet(dataSet);
             jdbcDatabaseTester.onSetup();
         }
     }

@@ -1,10 +1,6 @@
 package hello;
 
-import com.github.dockerjava.api.model.ExposedPort;
-import com.github.dockerjava.api.model.PortBinding;
-import com.github.dockerjava.api.model.Ports;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
-import hello.repository.EmployeeRepositoryTest;
 import hello.sqltracker.AssertSqlCount;
 import org.dbunit.JdbcDatabaseTester;
 import org.dbunit.dataset.DataSetException;
@@ -46,7 +42,7 @@ public abstract class AbstractJpaTest {
 
     private static IDataSet globalDataSet;
 
-    public static MySQLContainer mysqlContainer;
+    public static MySQLContainer<?> mysqlContainer;
 
     private JdbcDatabaseTester jdbcDatabaseTester;
 
@@ -66,10 +62,8 @@ public abstract class AbstractJpaTest {
                 .withDatabaseName("test")
                 .withUsername("test")
                 .withPassword("test")
-                .withCreateContainerCmdModifier(cmd -> cmd
-                        .withHostName("localhost")
-                        .withPortBindings(new PortBinding(Ports.Binding.bindPort(3309), new ExposedPort(3306)))
-                );
+                .withUrlParam("useSSL", "false")
+                .withCommand("--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci");
 
         mysqlContainer.start();
     }
@@ -101,14 +95,20 @@ public abstract class AbstractJpaTest {
     public void setUp() throws Exception {
         AssertSqlCount.reset();
 
-        seedDataToDatabase();
+        seedDataToDatabase(globalDataSet);
     }
 
-    private void seedDataToDatabase() throws Exception {
+    /**
+     * Add data before test start
+     *
+     * @param dataSet  dataSet
+     * @throws Exception Exception
+     */
+    private void seedDataToDatabase(IDataSet dataSet) throws Exception {
         jdbcDatabaseTester = new JdbcDatabaseTester(mysqlContainer.getDriverClassName(), mysqlContainer.getJdbcUrl(), mysqlContainer.getUsername(), mysqlContainer.getPassword());
         jdbcDatabaseTester.setSetUpOperation(DatabaseOperation.REFRESH);
         jdbcDatabaseTester.setTearDownOperation(DatabaseOperation.NONE);
-        jdbcDatabaseTester.setDataSet(globalDataSet);
+        jdbcDatabaseTester.setDataSet(dataSet);
         jdbcDatabaseTester.onSetup();
     }
 

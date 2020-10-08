@@ -1,8 +1,5 @@
 package hello.repository;
 
-import com.github.dockerjava.api.model.ExposedPort;
-import com.github.dockerjava.api.model.PortBinding;
-import com.github.dockerjava.api.model.Ports;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import hello.entity.Employee;
@@ -32,11 +29,6 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 /**
- * It is important to understand that a completely different port for the database is specified here - 3310.
- * In order not to conflict with another test: AbstractJpaTest.java
- *
- *
- *
  * it is preferable to use an abstract class. Here for example only.
  */
 @ContextConfiguration(initializers = EmployeeRepositoryTest.Initializer.class)
@@ -79,10 +71,8 @@ public class EmployeeRepositoryTest {
                 .withUrlParam("serverTimezone", "UTC")
                 .withUsername("test")
                 .withPassword("test")
-                .withCreateContainerCmdModifier(cmd -> cmd
-                        .withHostName("localhost")
-                        .withPortBindings(new PortBinding(Ports.Binding.bindPort(3310), new ExposedPort(3306)))
-                );
+                .withUrlParam("useSSL", "false")
+                .withCommand("--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci");
 
         mysqlContainer.start();
     }
@@ -103,6 +93,21 @@ public class EmployeeRepositoryTest {
 
         // then
         assertThat(actual, equalTo(Optional.of(expected)));
+    }
+
+    @Test
+    public void delete() {
+        // given
+        Optional<Employee> actual = employeeRepository.findByName("John");
+        actual.ifPresent(e -> employeeRepository.delete(e));
+
+        entityManager.flush();
+        entityManager.clear();
+
+        Optional<Employee> optionalNotExist = employeeRepository.findByName("John");
+
+        // then
+        assertThat(optionalNotExist, equalTo(Optional.empty()));
     }
 
     @Test
