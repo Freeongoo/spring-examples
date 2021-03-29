@@ -2,16 +2,15 @@ package hello.service.without_transaction.impl;
 
 import hello.dao.EmployeeDao;
 import hello.model.Employee;
-import hello.service.without_transaction.EmployeeService;
+import hello.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Service("EmployeeServiceWithoutTransaction")
-public class EmployeeServiceImpl implements EmployeeService {
+@Service
+public class EmployeeServiceWithoutTransactional implements EmployeeService {
 
     @Autowired
     EmployeeDao employeeDao;

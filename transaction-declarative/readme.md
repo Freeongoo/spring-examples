@@ -1,8 +1,8 @@
 # Example use declarative transaction
 
-For service layer - for class
-
-`/src/main/java/hello/service/transaction/impl/EmployeeServiceImpl.java`
+Create two service from one interface `EmployeeService`
+- `EmployeeServiceWithTransactional` with annotation @Transactional
+- `EmployeeServiceWithoutTransactional` without annotation @Transactional
 
 ## Configuration
 

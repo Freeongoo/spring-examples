@@ -1,10 +1,11 @@
-package hello.service.without_transaction;
+package hello.service;
 
 import hello.model.Employee;
 
 import java.util.List;
 
 public interface EmployeeService {
+
     void insert(Employee emp);
 
     int insertWithReturnInsertedId(Employee emp);

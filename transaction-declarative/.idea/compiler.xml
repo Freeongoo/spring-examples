@@ -6,18 +6,22 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="file-upload" />
+        <module name="transaction-declarative" />
+        <module name="spring-examples" />
+        <module name="jdbc-template" />
+        <module name="gs-serving-web-content" />
         <module name="file-upload-simple" />
         <module name="form-with-validate" />
-        <module name="gs-serving-web-content" />
-        <module name="jdbc-template" />
-        <module name="spring-examples" />
-        <module name="transaction-declarative" />
+        <module name="file-upload" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="jdbc-template" target="1.8" />
       <module name="transaction-declarative" target="1.8" />
     </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="transaction-declarative" options="-parameters" />
+    </option>
   </component>
 </project>

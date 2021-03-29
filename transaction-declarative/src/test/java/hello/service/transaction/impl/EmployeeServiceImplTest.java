@@ -1,11 +1,9 @@
 package hello.service.transaction.impl;
 
 import hello.model.Employee;
-import hello.service.transaction.EmployeeService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
@@ -17,6 +15,7 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 @ContextConfiguration(classes = EmployeeServiceImplTestConfig.class)
@@ -25,9 +24,9 @@ import static org.junit.Assert.assertThat;
         @Sql("/db.sql"),
 })
 public class EmployeeServiceImplTest {
+
     @Autowired
-    @Qualifier("EmployeeServiceWithTransaction")
-    private EmployeeService service;
+    private EmployeeServiceWithTransactional service;
 
     @Test
     public void insertList() {
@@ -46,21 +45,25 @@ public class EmployeeServiceImplTest {
     }
 
     @Test
-    public void insertList_WhenDuplicateByEmail() {
+    public void insertList_WhenDuplicateByEmail_ShouldNothingSavedAllRollback() {
         String sameEmail = "email@email.com";
         Employee employee1 = new Employee(1, "dd", sameEmail);
         Employee employee2 = new Employee(2, "dd2", sameEmail);
 
-        List<Employee> expectedList = new ArrayList<>();
-        expectedList.add(employee1);
-        expectedList.add(employee2);
+        List<Employee> employees = new ArrayList<>();
+        employees.add(employee1);
+        employees.add(employee2);
 
         // will rollback
+        boolean isDuplicateKeyException = false;
         try {
-            service.insertList(expectedList);
+            service.insertList(employees);
         } catch (DuplicateKeyException e) {
+            isDuplicateKeyException = true;
             e.printStackTrace();
         }
+
+        assertThat(isDuplicateKeyException, is(true));
 
         List<Employee> actualList = service.getAll();
 

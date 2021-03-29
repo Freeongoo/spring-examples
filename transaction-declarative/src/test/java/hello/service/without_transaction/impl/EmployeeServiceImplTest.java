@@ -1,11 +1,9 @@
 package hello.service.without_transaction.impl;
 
 import hello.model.Employee;
-import hello.service.without_transaction.EmployeeService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
@@ -16,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 @ContextConfiguration(classes = EmployeeServiceImplTestConfig.class)
@@ -24,9 +23,9 @@ import static org.junit.Assert.assertThat;
         @Sql("/db.sql"),
 })
 public class EmployeeServiceImplTest {
+
     @Autowired
-    @Qualifier("EmployeeServiceWithoutTransaction")
-    private EmployeeService service;
+    private EmployeeServiceWithoutTransactional service;
 
     @Test
     public void insertList() {
@@ -45,23 +44,31 @@ public class EmployeeServiceImplTest {
     }
 
     @Test
-    public void insertList_WhenDuplicateByEmail() {
+    public void insertList_WhenDuplicateByEmail_ShouldInsertOnlyOne() {
         String sameEmail = "email@email.com";
         Employee employee1 = new Employee(1, "dd", sameEmail);
         Employee employee2 = new Employee(2, "dd2", sameEmail);
 
-        List<Employee> expectedList = new ArrayList<>();
-        expectedList.add(employee1);
+        List<Employee> employees = new ArrayList<>();
+        employees.add(employee1);
+        employees.add(employee2);
 
         // will not rollback
+        boolean isDuplicateKeyException = false;
         try {
-            service.insertList(expectedList);
+            service.insertList(employees);
         } catch (DuplicateKeyException e) {
+            isDuplicateKeyException = true;
             e.printStackTrace();
         }
 
+        assertThat(isDuplicateKeyException, is(true));
+
         List<Employee> actualList = service.getAll();
 
-        assertThat(actualList, containsInAnyOrder(expectedList.toArray()));
+        List<Employee> expected = new ArrayList<>();
+        expected.add(employee1);
+
+        assertThat(actualList, containsInAnyOrder(expected.toArray()));
     }
 }
