@@ -5,7 +5,7 @@
 1. cp src/main/resources/application.properties.dist src/main/resources/application.properties
 2. cp src/test/resources/application.properties.dist src/test/resources/application.properties
 
-### 1. Pitfalls - Calling an external method without a transaction calls an internal method with a transaction
+## 1. Pitfalls - Calling an external method without a transaction calls an internal method with a transaction
 
 When call inner method in same class
 
@@ -36,8 +36,8 @@ public class EmployeeServiceWithTransactional implements EmployeeService {
 
 `hello.service.transaction.impl.EmployeeServiceImplTest.insertListWithoutTransactional_ButCallInsertListWithTransactional_ShouldNotCallTransactional`
 
-### Solutions
-#### 1. Self inject
+## 1. Solutions for Pitfalls #1
+#### 1.1. Self inject
 
 ```
 @Service
@@ -63,3 +63,5 @@ public class EmployeeServiceSelfInject implements EmployeeService {
 
 #### Example test 
 `hello.service.self.inject.EmployeeServiceSelfInjectTest.insertListWithoutTransactional_ButCallInsertListWithTransactional_ShouldCallTransactional`
+
+#### 1.2. Using AspectJ see project: `transaction-declarative-aspectj`
