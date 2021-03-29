@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AjcSettings">
+    <option name="ajcPath" value="$MAVEN_REPOSITORY$/org/aspectj/aspectjtools/1.9.2/aspectjtools-1.9.2.jar" />
+    <option name="cmdLineParams" value="-Xlint:ignore -showWeaveInfo" />
+  </component>
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="spring-examples" />
+        <module name="file-upload" />
+        <module name="jdbc-template" />
+        <module name="gs-serving-web-content" />
+        <module name="file-upload-simple" />
+        <module name="form-with-validate" />
+        <module name="transaction-declarative-aspectj" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="transaction-declarative-aspectj" target="11" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="transaction-declarative-aspectj" options="-parameters" />
+    </option>
+  </component>
+</project>
